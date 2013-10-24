@@ -81,7 +81,8 @@ package com.croco2dMGE
 		 * @param crocoEngineImplCls
 		 * 
 		 */		
-		public static function startUp(flashStage:flash.display.Stage, crocoStarling:Starling,
+		public static function startUp(flashStage:flash.display.Stage, crocoStarling:Starling, 
+									   width:uint, height:uint,
 									   startUpConfig:Object = null,
 									   data:Object = null, 
 									   crocoEngineImplCls:Class = null):CrocoEngine
@@ -95,8 +96,9 @@ package com.croco2dMGE
 			CrocoEngine.crocoStarling = crocoStarling;
 			CrocoEngine.starlingStage = crocoStarling.stage;
 			CrocoEngine.flashStage = flashStage;
-			CrocoEngine.width = flashStage.stageWidth;
-			CrocoEngine.height = flashStage.stageHeight;
+			
+			CrocoEngine.width = width;
+			CrocoEngine.height = height;
 			CrocoEngine.data = data;
 			
 			//you can extend the CrocoEngin and override the default engine logic

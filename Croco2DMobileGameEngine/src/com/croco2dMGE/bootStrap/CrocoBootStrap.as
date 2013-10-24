@@ -1,18 +1,18 @@
-package com.croco2dMGE
+package com.croco2dMGE.bootStrap
 {
+	import com.croco2dMGE.CrocoEngine;
 	import com.fireflyLib.core.SystemGlobal;
 	import com.fireflyLib.debug.Logger;
 	import com.fireflyLib.utils.ClassFactory;
 	
-	import flash.display.Loader;
+	import flash.desktop.NativeApplication;
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.filesystem.File;
-	import flash.filesystem.FileMode;
-	import flash.filesystem.FileStream;
-	import flash.utils.ByteArray;
+	import flash.geom.Rectangle;
 	
 	import feathers.controls.ScreenNavigator;
 	import feathers.controls.ScreenNavigatorItem;
@@ -26,12 +26,12 @@ package com.croco2dMGE
 	{
 		public static const BOOT_STRAP_COMPLETE:String = "bootStrapComplete";
 		
-		public var mStarling:Starling;
-		public var crocoEngine:CrocoEngine;
-		public var starlingRoot:ScreenNavigator;
+		protected var mStarling:Starling;
+		protected var mCrocoEngine:CrocoEngine;
+		protected var mStarlingRoot:ScreenNavigator;
+		protected var mLaunchImage:ICrocoLaunchImage;
 		
 		protected var mDefaultScreenName:String;
-		protected var mLunchImage:Loader;
 		
 		public function CrocoBootStrap()
 		{
@@ -39,14 +39,13 @@ package com.croco2dMGE
 			
 			SystemGlobal.stage = stage;
 			
-			onInitConfig();
+			onBootStrapConfigInit();
 			
-			this.visible = false;
 			this.mouseEnabled = this.mouseChildren = false;
 			this.addEventListener(Event.ADDED_TO_STAGE, addToStageHandler);
 		}
 		
-		protected function onInitConfig():void 
+		protected function onBootStrapConfigInit():void 
 		{
 			Logger.info(this, "onInitConfig", "onInitConfig");
 		}
@@ -66,7 +65,10 @@ package com.croco2dMGE
 			
 			onStageInit();
 			
-			if(CrocoBootStrapConfig.launchImage) onLaunchImageInit();
+			if(CrocoBootStrapConfig.launchImageClass) 
+			{
+				onLaunchImageInit();
+			}
 			
 			onStarlingInit();
 		}
@@ -82,25 +84,17 @@ package com.croco2dMGE
 			stage.color = CrocoBootStrapConfig.backgroundColor;
 			stage.frameRate = CrocoBootStrapConfig.frameRate;
 			
-			stage.addEventListener(Event.ACTIVATE, stageActivateHandler,true, int.MAX_VALUE);
-			stage.addEventListener(Event.DEACTIVATE, stageDeactivateHandler,true, int.MAX_VALUE);
+			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, appActivateHandler);
+			NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, appDeactivateHandler);
+			
+			stage.addEventListener(Event.RESIZE, stageResizeHandler);
 		}
 		
 		protected function onLaunchImageInit():void
 		{
-			var launchImageFile:File = File.applicationDirectory.resolvePath(CrocoBootStrapConfig.launchImage);
-			if(launchImageFile.exists)
-			{
-				var bytes:ByteArray = new ByteArray();
-				var stream:FileStream = new FileStream();
-				stream.open(launchImageFile, FileMode.READ);
-				stream.readBytes(bytes, 0, stream.bytesAvailable);
-				stream.close();
-				
-				mLunchImage = new Loader();
-				mLunchImage.loadBytes(bytes);
-				this.stage.addChild(mLunchImage);
-			}
+			mLaunchImage = ClassFactory.classInstance(CrocoBootStrapConfig.launchImageClass);
+			mLaunchImage.launch(CrocoBootStrapConfig.launchImagePath);
+			this.stage.addChild(DisplayObject(mLaunchImage));
 		}
 		
 		protected function onStarlingInit():void
@@ -113,7 +107,7 @@ package com.croco2dMGE
 			
 			mStarling = new Starling(CrocoBootStrapConfig.starlingRootClass, 
 				stage, 
-				CrocoBootStrapConfig.screenViewPort, 
+				null,
 				stage.stage3Ds[0],
 				"auto", 
 				CrocoBootStrapConfig.starlingProfile);
@@ -126,7 +120,7 @@ package com.croco2dMGE
 		{
 			Logger.info(this, "onFeathersInit", "onFeathersInit");
 			
-			if(CrocoBootStrapConfig.themeClass)
+			if(CrocoBootStrapConfig.feathersThemeClass)
 			{
 				new CrocoBootStrapConfig.themeClass();
 			}
@@ -136,8 +130,8 @@ package com.croco2dMGE
 		{
 			Logger.info(this, "onCrocoEngineInit", "onCrocoEngineInit");
 			
-			crocoEngine = CrocoEngine.startUp(stage, mStarling);
-			crocoEngine.start();
+			mCrocoEngine = CrocoEngine.startUp(stage, mStarling, CrocoBootStrapConfig.designWidth, CrocoBootStrapConfig.designHeight);
+			mCrocoEngine.start();
 		}
 		
 		protected function onScreenNavigatorInit():void
@@ -162,7 +156,7 @@ package com.croco2dMGE
 				
 				if(i == 0) mDefaultScreenName = screenName;
 				
-				starlingRoot.addScreen(screenName,
+				mStarlingRoot.addScreen(screenName,
 					ClassFactory.classInstance(ScreenNavigatorItem, screenConstructorParameters));
 			}
 		}
@@ -195,15 +189,19 @@ package com.croco2dMGE
 		{
 			Logger.info(this, "onAssetsPreload", "onAssetsPreload");
 			
-			var preLoadAssetsFile:File = File.applicationDirectory.resolvePath("assets/preload");
-			
+			var preLoadAssetsFile:File = File.applicationDirectory.resolvePath(CrocoBootStrapConfig.preLoadAssetsPath);
 			var assetManager:AssetManager = AssetManager(SystemGlobal.get("AssetManager"));
 			assetManager.enqueue(preLoadAssetsFile);
-			assetManager.loadQueue(onAssetsPreloadProgress);
+			assetManager.loadQueue(onAssetsPreloadProgress);	
 		}
 		
 		protected function onAssetsPreloadProgress(progress:Number):void
 		{
+			if(mLaunchImage)
+			{
+				mLaunchImage.onAssetsPreloadProgress(progress);
+			}
+			
 			if(progress == 1)
 			{
 				onAssetsPreloadComplete();
@@ -224,20 +222,69 @@ package com.croco2dMGE
 			dispatchEvent(new Event(BOOT_STRAP_COMPLETE));
 		}
 		
-		protected function stageDeactivateHandler(event:*):void
+		protected function appDeactivateHandler(event:*):void
 		{
 			Logger.info(this, "stageDeactivateHandler", "stageDeactivateHandler");
 			
 			if(mStarling) mStarling.stop();
-			if(crocoEngine) crocoEngine.stop();
+			if(mCrocoEngine) mCrocoEngine.stop();
 		}
 		
-		protected function stageActivateHandler(event:*):void
+		protected function appActivateHandler(event:*):void
 		{
 			Logger.info(this, "stageDeactivateHandler", "stageDeactivateHandler");
 			
 			if(mStarling) mStarling.start();
-			if(crocoEngine) crocoEngine.start();
+			if(mCrocoEngine) mCrocoEngine.start();
+		}
+		
+		protected function stageResizeHandler(event:Event):void
+		{
+			if(mStarling)
+			{
+				updateStarlingViewPort();
+			}
+		}
+		
+		protected function updateStarlingViewPort():void
+		{
+			var viewPortX:Number = 0;
+			var viewPortY:Number = 0;
+			var viewPortWidth:Number = 0;
+			var viewPortHeight:Number = 0;
+			
+			var designWidth:int = CrocoBootStrapConfig.designWidth;
+			var desighHeight:int = CrocoBootStrapConfig.designHeight;
+			
+			var deviceWidth:int = stage.stageWidth;
+			var deviceHeight:int = stage.stageHeight;
+			
+			var designWHRatio:Number = designWidth / desighHeight;
+			var deviceWHRatio:Number = deviceWidth / deviceHeight;
+			
+			if(designWHRatio > deviceWHRatio)
+			{
+				viewPortWidth = deviceWidth;
+				viewPortHeight = viewPortWidth / designWHRatio;
+				
+				viewPortX = 0;
+				viewPortY = (deviceHeight - viewPortHeight) >> 1;
+			}
+			else
+			{
+				viewPortHeight = deviceHeight;
+				viewPortWidth = viewPortHeight * designWHRatio;
+				
+				viewPortY = 0;
+				viewPortX = (deviceWidth - viewPortWidth) >> 1;
+			}
+			
+			var viewPort:Rectangle = mStarling.viewPort;
+			viewPort.setTo(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
+			
+			mStarling.stage.stageWidth = deviceWidth;
+			mStarling.stage.stageHeight = deviceHeight;
+			mStarling.viewPort = viewPort;
 		}
 		
 		protected function starlingRootCreatedHandler(event:*):void
@@ -246,7 +293,7 @@ package com.croco2dMGE
 			
 			mStarling.removeEventListener("rootCreated", starlingRootCreatedHandler);
 			
-			starlingRoot = mStarling.root as ScreenNavigator;
+			mStarlingRoot = mStarling.root as ScreenNavigator;
 			
 			onFeathersInit();
 			
@@ -256,7 +303,8 @@ package com.croco2dMGE
 			
 			onExtentionsInit();
 			
-			if(CrocoBootStrapConfig.assetsPreLoad)
+			if(CrocoBootStrapConfig.preLoadAssetsPath && 
+				File.applicationDirectory.resolvePath(CrocoBootStrapConfig.preLoadAssetsPath).exists)
 			{
 				onAssetsPreload();
 			}
@@ -272,16 +320,16 @@ package com.croco2dMGE
 			
 			this.removeEventListener(BOOT_STRAP_COMPLETE, appBootStrapCompleteHandler);
 			
-			if(mLunchImage)
+			if(mLaunchImage)
 			{
-				mLunchImage.unloadAndStop(false);
-				this.stage.removeChild(mLunchImage);
-				mLunchImage = null;
+				this.stage.removeChild(DisplayObject(mLaunchImage));
+				mLaunchImage.dispose();
+				mLaunchImage = null;
 			}
 			
 			if(mDefaultScreenName)
 			{
-				starlingRoot.showScreen(mDefaultScreenName);
+				mStarlingRoot.showScreen(mDefaultScreenName);
 				mDefaultScreenName = null;
 			}
 		}
