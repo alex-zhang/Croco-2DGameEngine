@@ -4,6 +4,7 @@ package com.croco2dMGE.bootStrap
 
 	public class CrocoBootStrapConfig
 	{
+		//1.777~1.3333
 		public static var designWidth:int = 960;
 		public static var designHeight:int = 640;
 

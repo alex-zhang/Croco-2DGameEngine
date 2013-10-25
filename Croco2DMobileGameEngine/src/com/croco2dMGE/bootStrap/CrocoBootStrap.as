@@ -282,8 +282,8 @@ package com.croco2dMGE.bootStrap
 			var viewPort:Rectangle = mStarling.viewPort;
 			viewPort.setTo(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
 			
-			mStarling.stage.stageWidth = deviceWidth;
-			mStarling.stage.stageHeight = deviceHeight;
+			mStarling.stage.stageWidth = designWidth;
+			mStarling.stage.stageHeight = desighHeight;
 			mStarling.viewPort = viewPort;
 		}
 		

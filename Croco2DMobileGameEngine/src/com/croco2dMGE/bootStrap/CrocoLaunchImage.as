@@ -6,6 +6,7 @@ package com.croco2dMGE.bootStrap
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 
 	public class CrocoLaunchImage extends Sprite implements ICrocoLaunchImage
@@ -22,14 +23,15 @@ package com.croco2dMGE.bootStrap
 			var launchImageFile:File = File.applicationDirectory.resolvePath(imagePath);
 			if(launchImageFile.exists)
 			{
-				var bytes:ByteArray = new ByteArray();
-				var stream:FileStream = new FileStream();
-				stream.open(launchImageFile, FileMode.READ);
-				stream.readBytes(bytes, 0, stream.bytesAvailable);
-				stream.close();
+//				var bytes:ByteArray = new ByteArray();
+//				var stream:FileStream = new FileStream();
+//				stream.open(launchImageFile, FileMode.READ);
+//				stream.readBytes(bytes, 0, stream.bytesAvailable);
+//				stream.close();
 				
 				launchImageLoader = new Loader();
-				launchImageLoader.loadBytes(bytes);
+				launchImageLoader.load(new URLRequest(imagePath));
+//				launchImageLoader.loadBytes(bytes);
 				this.addChild(launchImageLoader);
 			}
 		}
