@@ -171,7 +171,7 @@ package com.croco2dMGE.world
 			}
 		}
 		
-		public function mouseHitTest(screenX:Number, screenY:Number):DisplayObject
+		public function hitTest(screenX:Number, screenY:Number):DisplayObject
 		{
 			if(currentScene && currentScene.exists && currentScene.visible)
 			{
@@ -219,7 +219,7 @@ final class CameraDisplayStage extends DisplayObject
 	{
 		if(mCamera.exists)
 		{
-			return mCamera.mouseHitTest(localPoint.x, localPoint.y);
+			return mCamera.hitTest(localPoint.x, localPoint.y);
 		}
 		
 		return null;

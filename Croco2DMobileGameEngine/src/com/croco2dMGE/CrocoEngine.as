@@ -45,8 +45,8 @@ package com.croco2dMGE
 		 */
 		public static var camera:SceneCamera;
 		
-		public static var starlingStage:starling.display.Stage;
 		public static var flashStage:flash.display.Stage;
+		public static var starlingStage:starling.display.Stage;
 		
 		public static var crocoStarling:Starling;
 		
@@ -94,8 +94,8 @@ package com.croco2dMGE
 			
 			//default setting
 			CrocoEngine.crocoStarling = crocoStarling;
-			CrocoEngine.starlingStage = crocoStarling.stage;
 			CrocoEngine.flashStage = flashStage;
+			CrocoEngine.starlingStage
 			
 			CrocoEngine.width = width;
 			CrocoEngine.height = height;
@@ -186,19 +186,16 @@ package com.croco2dMGE
 //				trace(mTickTime, tickCount, maxTicksPerFrame);
 			}
 			
-			tick(deltaTime);
-			
 			//game rendering.
 			if(graphicsDebug)
 			{
 				debugGraphics.clear();
-			}
-			
-			crocoStarling.render();
-			
-			if(graphicsDebug)
-			{
+				crocoStarling.render();
 				debugGraphics.endFill();
+			}
+			else
+			{
+				crocoStarling.render();
 			}
 		}
 		
@@ -213,8 +210,7 @@ package com.croco2dMGE
 				return;
 			}
 			
-			var deltaTime:Number = (currentTime - lastTime) * 0.001 * timeScale;
-			onAdvance(deltaTime);
+			onAdvance((currentTime - lastTime) * 0.001 * timeScale);
 			
 			lastTime = currentTime;
 		}
