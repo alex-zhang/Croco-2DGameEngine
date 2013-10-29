@@ -162,13 +162,6 @@ package com.croco2dMGE.world
 			
 			mCameraDisplayStage.scaleX = mCameraDisplayStage.scaleY = 1 /  zoom;
 			mCameraDisplayStage.alpha = alpha;
-			
-			//screen size test
-			if(CrocoEngine.graphicsDebug)
-			{
-				CrocoEngine.debugGraphics.lineStyle(4, 0xFF0000);
-				CrocoEngine.debugGraphics.drawRect(0, 0, viewPortWidth, viewPortHeight);	
-			}
 		}
 		
 		public function hitTest(screenX:Number, screenY:Number):DisplayObject

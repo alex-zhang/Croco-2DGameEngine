@@ -84,8 +84,11 @@ package com.croco2dMGE.bootStrap
 			stage.color = CrocoBootStrapConfig.backgroundColor;
 			stage.frameRate = CrocoBootStrapConfig.frameRate;
 			
-			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, appActivateHandler);
-			NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, appDeactivateHandler);
+			if(!CrocoEngine.debug)
+			{
+				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, appActivateHandler);
+				NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, appDeactivateHandler);	
+			}
 			
 			stage.addEventListener(Event.RESIZE, stageResizeHandler);
 		}
@@ -113,7 +116,7 @@ package com.croco2dMGE.bootStrap
 				CrocoBootStrapConfig.starlingProfile);
 			
 			mStarling.addEventListener("rootCreated", starlingRootCreatedHandler);
-			mStarling.start();
+//			mStarling.start();//no need.
 		}
 		
 		protected function onFeathersInit():void
@@ -130,7 +133,10 @@ package com.croco2dMGE.bootStrap
 		{
 			Logger.info(this, "onCrocoEngineInit", "onCrocoEngineInit");
 			
-			mCrocoEngine = CrocoEngine.startUp(stage, mStarling, CrocoBootStrapConfig.designWidth, CrocoBootStrapConfig.designHeight);
+			mCrocoEngine = CrocoEngine.startUp(stage, 
+				mStarling, 
+				CrocoBootStrapConfig.designWidth, 
+				CrocoBootStrapConfig.designHeight);
 			mCrocoEngine.start();
 		}
 		
@@ -226,7 +232,6 @@ package com.croco2dMGE.bootStrap
 		{
 			Logger.info(this, "stageDeactivateHandler", "stageDeactivateHandler");
 			
-			if(mStarling) mStarling.stop();
 			if(mCrocoEngine) mCrocoEngine.stop();
 		}
 		
@@ -234,16 +239,12 @@ package com.croco2dMGE.bootStrap
 		{
 			Logger.info(this, "stageDeactivateHandler", "stageDeactivateHandler");
 			
-			if(mStarling) mStarling.start();
 			if(mCrocoEngine) mCrocoEngine.start();
 		}
 		
 		protected function stageResizeHandler(event:Event):void
 		{
-			if(mStarling)
-			{
-				updateStarlingViewPort();
-			}
+			if(mStarling) updateStarlingViewPort();
 		}
 		
 		protected function updateStarlingViewPort():void

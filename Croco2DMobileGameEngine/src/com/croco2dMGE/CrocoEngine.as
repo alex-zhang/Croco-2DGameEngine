@@ -35,7 +35,7 @@ package com.croco2dMGE
 		 * Whether to show visual debug displays or not.
 		 * Default = false.
 		 */
-		public static var graphicsDebug:Boolean = false;
+		public static var debug:Boolean = false;
 		
 		public static var debugGraphics:Graphics = null;
 		
@@ -155,7 +155,7 @@ package com.croco2dMGE
 		{
 			addItem(camera ||= new SceneCamera());
 			
-			if(graphicsDebug && !debugGraphics)
+			if(debug && !debugGraphics)
 			{
 				var shape:Shape = new Shape();
 				SystemGlobal.stage.addChild(shape);
@@ -187,7 +187,7 @@ package com.croco2dMGE
 			}
 			
 			//game rendering.
-			if(graphicsDebug)
+			if(debug)
 			{
 				debugGraphics.clear();
 				crocoStarling.render();

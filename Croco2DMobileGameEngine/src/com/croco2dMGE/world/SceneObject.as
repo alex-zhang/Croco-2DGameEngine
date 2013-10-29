@@ -178,7 +178,7 @@ package com.croco2dMGE.world
 		
 		override public function draw(support:RenderSupport, parentAlpha:Number):void
 		{
-			if(debug && CrocoEngine.graphicsDebug)
+			if(debug && CrocoEngine.debug)
 			{
 				drawDebug(CrocoEngine.debugGraphics);
 			}
