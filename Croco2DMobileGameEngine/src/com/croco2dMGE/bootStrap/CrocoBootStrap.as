@@ -115,6 +115,7 @@ package com.croco2dMGE.bootStrap
 				"auto", 
 				CrocoBootStrapConfig.starlingProfile);
 			
+			mStarling.start();
 			mStarling.addEventListener("rootCreated", starlingRootCreatedHandler);
 //			mStarling.start();//no need.
 		}
@@ -233,6 +234,7 @@ package com.croco2dMGE.bootStrap
 			Logger.info(this, "stageDeactivateHandler", "stageDeactivateHandler");
 			
 			if(mCrocoEngine) mCrocoEngine.stop();
+			if(mStarling) mStarling.stop();
 		}
 		
 		protected function appActivateHandler(event:*):void
@@ -240,6 +242,7 @@ package com.croco2dMGE.bootStrap
 			Logger.info(this, "stageDeactivateHandler", "stageDeactivateHandler");
 			
 			if(mCrocoEngine) mCrocoEngine.start();
+			if(mStarling) mStarling.start();
 		}
 		
 		protected function stageResizeHandler(event:Event):void

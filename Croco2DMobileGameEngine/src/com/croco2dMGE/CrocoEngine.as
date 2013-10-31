@@ -95,7 +95,7 @@ package com.croco2dMGE
 			//default setting
 			CrocoEngine.crocoStarling = crocoStarling;
 			CrocoEngine.flashStage = flashStage;
-			CrocoEngine.starlingStage
+			CrocoEngine.starlingStage = crocoStarling.stage;
 			
 			CrocoEngine.width = width;
 			CrocoEngine.height = height;
