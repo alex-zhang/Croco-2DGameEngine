@@ -76,7 +76,7 @@ package com.croco2dMGE.world
 			return layer;
 		}
 		
-		public function mouseHitTest(sceneX:Number, sceneY:Number):DisplayObject
+		public function hitTest(sceneX:Number, sceneY:Number):DisplayObject
 		{
 			var item:DisplayObject;
 			
@@ -86,11 +86,11 @@ package com.croco2dMGE.world
 			{
 				sceneLayer = mLayers[i];
 				
-				if(sceneLayer.mouseEnable && 
-					sceneLayer.exists && 
-					sceneLayer.visible)
+				if(sceneLayer.exists && 
+					sceneLayer.visible &&
+					sceneLayer.touchAble)
 				{
-					item = sceneLayer.mouseHitTest(sceneX, sceneY);
+					item = sceneLayer.hitTest(sceneX, sceneY);
 					if(item) return item;
 				}
 			}

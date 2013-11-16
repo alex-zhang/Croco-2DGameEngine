@@ -2,7 +2,7 @@ package com.croco2dMGE
 {
 	import com.croco2dMGE.core.CrocoListGroup;
 	import com.croco2dMGE.world.SceneCamera;
-	import com.fireflyLib.core.SystemGlobal;
+	import com.fireflyLib.utils.GlobalPropertyBag;
 	
 	import flash.display.Graphics;
 	import flash.display.Shape;
@@ -88,9 +88,10 @@ package com.croco2dMGE
 									   crocoEngineImplCls:Class = null):CrocoEngine
 		{
 			if(instance) throw new Error("CrocoEngine::static method 'startUp': CrocoEngine is a singleton mode Class!");
+			
 			if (!flashStage  || !crocoStarling) throw new ArgumentError("Stage must not be null");
 			
-			SystemGlobal.stage = flashStage;
+			GlobalPropertyBag.stage = flashStage;
 			
 			//default setting
 			CrocoEngine.crocoStarling = crocoStarling;
@@ -158,7 +159,7 @@ package com.croco2dMGE
 			if(debug && !debugGraphics)
 			{
 				var shape:Shape = new Shape();
-				SystemGlobal.stage.addChild(shape);
+				GlobalPropertyBag.stage.addChild(shape);
 				debugGraphics = shape.graphics;
 			}
 		}

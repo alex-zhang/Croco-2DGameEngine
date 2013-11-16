@@ -17,13 +17,26 @@ package com.croco2dMGE.core
 			var item:CrocoBasic = myItems.moveFirst();
 			while(item)
 			{
-				if(item.exists && item.active)
+				if(item.alive)
 				{
-					onItemTick(item, deltaTime);
+					if(item.exists && item.active)
+					{
+						onItemTick(item, deltaTime);
+					}	
+				}
+				else
+				{
+					onItemKill(item);
 				}
 				
 				item = myItems.moveNext();
 			}
+		}
+		
+		protected function onItemKill(item:CrocoBasic):void
+		{
+			removeItem(item);
+			item.dispose();
 		}
 		
 		protected function onItemTick(item:CrocoBasic, deltaTime:Number):void
@@ -60,17 +73,12 @@ package com.croco2dMGE.core
 			
 			while(item)
 			{
-				onItemDispose(item);
+				item.dispose();
 				
 				item = myItems.moveNext();
 			}
 			
 			super.dispose();
-		}
-		
-		protected function onItemDispose(item:CrocoBasic):void
-		{
-			item.dispose();
 		}
 		
 		override protected function onItemAdded(item:CrocoBasic):void

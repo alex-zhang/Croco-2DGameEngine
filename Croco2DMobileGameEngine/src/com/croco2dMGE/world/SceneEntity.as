@@ -6,31 +6,24 @@ package com.croco2dMGE.world
 	
 	public class SceneEntity extends SceneObject
 	{
-		public var mouseEnable:Boolean = false;
+		public var touchAble:Boolean = false;
+		public var display:DisplayObject;
 		
-		protected var mDisplayObject:DisplayObject;
-		
-		protected var mIsValidDisplayObject:Boolean = false;
+		protected var mIsValiddisplay:Boolean = false;
 		
 		public function SceneEntity()
 		{
 			super();
 		}
-		
-		public function get displayObject():DisplayObject { return mDisplayObject; };
-		public function set displayObject(value:DisplayObject):void 
-		{
-			mDisplayObject = value;
-		}
-		
+
 		override public function dispose():void
 		{
 			super.dispose();
 			
-			if(mDisplayObject)
+			if(display)
 			{
-				mDisplayObject.dispose();
-				mDisplayObject = null;
+				display.dispose();
+				display = null;
 			}
 		}
 		
@@ -38,43 +31,44 @@ package com.croco2dMGE.world
 		{
 			super.tick(deltaTime);
 			
-			mIsValidDisplayObject = checkIsNeedDrawDisplayObject();
+			mIsValiddisplay = checkIsNeedDrawdisplay();
 		}
 		
 		override public function draw(support:RenderSupport, parentAlpha:Number):void
 		{
 			super.draw(support, parentAlpha);
 			
-			if(mIsValidDisplayObject)
+			if(mIsValiddisplay)
 			{
-				drawDisplayObject();
-				presentDisplayObject(support, parentAlpha);
+				drawDisplay();
+
+				presentDisplay(support, parentAlpha);
 			}
 		}
 		
-		protected function checkIsNeedDrawDisplayObject():Boolean
+		protected function checkIsNeedDrawdisplay():Boolean
 		{
-			return mDisplayObject && mDisplayObject.hasVisibleArea && isOverlapCamera();
+			return display && display.hasVisibleArea && isOverlapCamera();
 		}
 		
-		protected function drawDisplayObject():void
+		protected function drawDisplay():void
 		{
-			mDisplayObject.x = screenX;
-			mDisplayObject.y = screenY;
+			display.x = screenX;
+			display.y = screenY;
 		}
 		
-		protected function presentDisplayObject(support:RenderSupport, parentAlpha:Number):void
+		protected function presentDisplay(support:RenderSupport, parentAlpha:Number):void
 		{
 			var blendMode:String = support.blendMode;
 			
-			var filter:FragmentFilter = mDisplayObject.filter;
+			var filter:FragmentFilter = display.filter;
 			
 			support.pushMatrix();
-			support.transformMatrix(mDisplayObject);
-			support.blendMode = mDisplayObject.blendMode;
+			support.transformMatrix(display);
+			support.blendMode = display.blendMode;
 			
-			if (filter) filter.render(mDisplayObject, support, parentAlpha);
-			else        mDisplayObject.render(support, parentAlpha);
+			if (filter) filter.render(display, support, parentAlpha);
+			else        display.render(support, parentAlpha);
 			
 			support.blendMode = blendMode;
 			support.popMatrix();

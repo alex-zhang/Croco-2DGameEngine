@@ -2,6 +2,7 @@ package com.croco2dMGE.graphics
 {
 	import flash.geom.Matrix;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import starling.core.RenderSupport;
 	import starling.display.Quad;
@@ -20,13 +21,12 @@ package com.croco2dMGE.graphics
 		private var mVertexDataCache:VertexData;
 		private var mVertexDataCacheInvalid:Boolean;
 		
-		public function CrocoImage(width:Number, height:Number)
+		private var mFitSizeToTexture:Boolean = false;
+		
+		public function CrocoImage()
 		{
-			super(width, height);
+			super(0, 0);
 
-			mImageWidth = width;
-			mImageHeight = height;
-			
 			mVertexData.setTexCoords(0, 0.0, 0.0);
 			mVertexData.setTexCoords(1, 1.0, 0.0);
 			mVertexData.setTexCoords(2, 0.0, 1.0);
@@ -48,6 +48,16 @@ package com.croco2dMGE.graphics
 				if(mTexture)
 				{
 					mVertexData.setPremultipliedAlpha(mTexture.premultipliedAlpha);
+					
+					var frame:Rectangle = texture.frame;
+					var width:Number  = frame ? frame.width  : texture.width;
+					var height:Number = frame ? frame.height : texture.height;
+					
+					mVertexData.setPosition(0, 0.0, 0.0);
+					mVertexData.setPosition(1, width, 0.0);
+					mVertexData.setPosition(2, 0.0, height);
+					mVertexData.setPosition(3, width, height); 
+					
 					mVertexDataCache.setPremultipliedAlpha(mTexture.premultipliedAlpha, false);
 					onVertexDataChanged();
 				}
@@ -114,19 +124,22 @@ package com.croco2dMGE.graphics
 			{
 				mVertexDataCacheInvalid = false;
 				mVertexData.copyTo(mVertexDataCache);
+				
 				mTexture.adjustVertexData(mVertexDataCache, 0, 4);
 			}
 			
 			mVertexDataCache.copyTransformedTo(targetData, targetVertexID, matrix, 0, 4);
 		}
 		
+		override public function get hasVisibleArea():Boolean
+		{
+			return mTexture != null && super.hasVisibleArea;
+		}
+		
 		/** @inheritDoc */
 		public override function render(support:RenderSupport, parentAlpha:Number):void
 		{
-			if(mTexture)
-			{
-				support.batchQuad(this, parentAlpha, mTexture, mSmoothing);
-			}
+			support.batchQuad(this, parentAlpha, mTexture, mSmoothing);
 		}
 	}
 }

@@ -14,7 +14,7 @@ package com.croco2dMGE.graphics.map
 		
 		public function TileMapCell(cellWidth:int, cellHeight:int)
 		{
-			super(cellWidth, cellHeight);
+			super();
 			
 			mCellWidth = cellWidth;
 			mCellHeight = cellHeight;

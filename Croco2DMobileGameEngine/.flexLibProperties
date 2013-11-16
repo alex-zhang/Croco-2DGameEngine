@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
   <includeClasses>
-    <classEntry path="com.croco2dMGE.bootStrap.CrocoLaunchImage"/>
-    <classEntry path="com.croco2dMGE.bootStrap.ICrocoLaunchImage"/>
+    <classEntry path="com.croco2dMGE.graphics.screens.CrocoBootStrapScreen"/>
+    <classEntry path="com.croco2dMGE.graphics.screens.ICrocoBootStrapScreen"/>
+    <classEntry path="com.fireflyLib.utils.pfile.PFile"/>
+    <classEntry path="com.fireflyLib.utils.pfile.PDir"/>
+    <classEntry path="com.croco2dMGE.graphics.FrameAnimationPlayer"/>
+    <classEntry path="com.croco2dMGE.graphics.sprite.AnimationSetSprite"/>
+    <classEntry path="com.croco2dMGE.utils.CrocoAssetsManager"/>
+    <classEntry path="com.croco2dMGE.graphics.screens.CrocoScreenNavigator"/>
+    <classEntry path="com.croco2dMGE.graphics.screens.CrocoScreen"/>
+    <classEntry path="com.croco2dMGE.graphics.screens.CrocoHubScreen"/>
+    <classEntry path="com.croco2dMGE.graphics.screens.AssetsPreloadHubScreen"/>
+    <classEntry path="com.croco2dMGE.graphics.screens.CrocoScreenNavigatorItem"/>
+    <classEntry path="com.croco2dMGE.graphics.screens.CrocoScreenTransition"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

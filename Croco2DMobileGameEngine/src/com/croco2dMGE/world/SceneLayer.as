@@ -12,32 +12,36 @@ package com.croco2dMGE.world
 		public static function defaultDepthSortFunction(a:SceneEntity, b:SceneEntity):int
 		{
 			//-1 means the top depth than the other
-			if(a.y > b.y) return 1;
-			else if(a.y < b.y) return -1;
+			if(a.layerIndex > b.layerIndex) return -1;
+			else if(a.layerIndex < b.layerIndex) return 1;
 			else//相等时
 			{
-				//左边的排在下面
-				if(a.x > b.x) return 1;
-				else if(a.x < b.x) return -1;
+				if(a.y > b.y) return 1;
+				else if(a.y < b.y) return -1;
+				else//相等时
 				{
-					if(a.zFighting > b.zFighting) return 1;
-					else if(a.zFighting < b.zFighting) return -1;
-					else
+					//左边的排在下面
+					if(a.x > b.x) return 1;
+					else if(a.x < b.x) return -1;
 					{
-						a.zFighting++;
-						return 1;
+						if(a.zFighting > b.zFighting) return 1;
+						else if(a.zFighting < b.zFighting) return -1;
+						else
+						{
+							a.zFighting++;
+							return 1;
+						}
 					}
 				}
 			}
 		}
 		
 		public var layerIndex:int = 0;
-		
 		public var needDepthsort:Boolean = true;
 		public var needRealTimeDepthSort:Boolean = false;
 		public var depthSortFunction:Function = null;
 		public var layerAlpha:Number = 1.0;
-		public var mouseEnable:Boolean = false;
+		public var touchAble:Boolean = false;
 		
 		/**
 		 * A point that can store numbers from 0 to 1 (for X and Y independently)
@@ -69,17 +73,18 @@ package com.croco2dMGE.world
 		}
 		
 		//collision
-		public function mouseHitTest(pointX:Number, pointY:Number):DisplayObject
+		public function hitTest(pointX:Number, pointY:Number):DisplayObject
 		{
 			var item:SceneEntity = myItems.moveFirst() as SceneEntity;
 			while(item)
 			{
 				if(item.exists && item.visible &&
-					item.displayObject && 
-					item.displayObject.hasVisibleArea && 
+					item.touchAble &&
+					item.display && 
+					item.display.hasVisibleArea && 
 					item.isOverlapPoint(pointX, pointY))
 				{
-					return item.displayObject;
+					return item.display;
 				}
 				
 				item = myItems.moveNext() as SceneEntity;

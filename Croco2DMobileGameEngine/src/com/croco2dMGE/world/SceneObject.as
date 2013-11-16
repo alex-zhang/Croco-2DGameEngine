@@ -47,25 +47,15 @@ package com.croco2dMGE.world
 		 */
 		public var debug:Boolean = false;
 		
-		protected var mScene:CrocoScene;
-		protected var mSceneLayer:SceneLayer;
-		protected var mCamera:SceneCamera;
-		protected var mInScene:Boolean = false;
-		protected var mLayerIndex:int = 0;
+		public var layerIndex:int = 0;
 		
 		public function SceneObject()
 		{
 			super();
 		}
 		
-		public function get scene():CrocoScene { return mScene};
-		public function get sceneLayer():SceneLayer { return mSceneLayer};
-		
-		public function get layerIndex():int { return mLayerIndex; };
-		public function set layerIndex(value:int):void 
-		{
-			mLayerIndex = value;
-		}
+		public function get scene():CrocoScene { return owner ? CrocoScene(owner.owner) : null};
+		public function get sceneLayer():SceneLayer { return SceneLayer(owner)};
 		
 		//collision
 		public function isOverlapCamera():Boolean
@@ -75,19 +65,19 @@ package com.croco2dMGE.world
 				return CroroMathUtil.isOverlapRectangleAndRectangle(screenX + visibleTestRect.x, 
 					screenY + visibleTestRect.y, 
 					visibleTestRect.width, visibleTestRect.height,
-					0, 0, mCamera.width, mCamera.height);
+					0, 0, CrocoEngine.camera.width, CrocoEngine.camera.height);
 			}
 			else
 			{
 				return CroroMathUtil.isOverlapPointAndRectangle(screenX, screenY, 
-					0, 0, mCamera.width, mCamera.height);
+					0, 0, CrocoEngine.camera.width, CrocoEngine.camera.height);
 			}
 		}
 		
 		public function isOverlapPoint(pointX:Number, pointY:Number):Boolean
 		{
-			var targetScreenPointX:Number = pointX - mCamera.scrollX;
-			var targetScreenPointY:Number = pointY - mCamera.scrollY;
+			var targetScreenPointX:Number = pointX - CrocoEngine.camera.scrollX;
+			var targetScreenPointY:Number = pointY - CrocoEngine.camera.scrollY;
 			
 			if(visibleTestRect != null)
 			{
@@ -97,14 +87,15 @@ package com.croco2dMGE.world
 			}
 			else
 			{
-				return CroroMathUtil.isOverlapPointAndPoint(screenX, screenY, targetScreenPointX, targetScreenPointY);
+				return CroroMathUtil.isOverlapPointAndPoint(screenX, screenY, 
+					targetScreenPointX, targetScreenPointY);
 			}
 		}
 		
 		public function isOverlapRect(rectX:Number, rectY:Number, rectWidth:Number, rectHeight:Number):Boolean
 		{
-			var targetScreenRectX:Number = rectX - mCamera.scrollX;
-			var targetScreenRectY:Number = rectY - mCamera.scrollY;
+			var targetScreenRectX:Number = rectX - CrocoEngine.camera.scrollX;
+			var targetScreenRectY:Number = rectY - CrocoEngine.camera.scrollY;
 			
 			if(visibleTestRect != null)
 			{
@@ -121,8 +112,8 @@ package com.croco2dMGE.world
 		
 		public function isOverlapCircle(circleCenterX:Number, circleCenterY:Number, circleRadius:Number):Boolean
 		{
-			var targetScreenCircleCenterX:Number = circleCenterX - mCamera.scrollX;
-			var targetScreenCircleCenterY:Number = circleCenterY - mCamera.scrollY;
+			var targetScreenCircleCenterX:Number = circleCenterX - CrocoEngine.camera.scrollX;
+			var targetScreenCircleCenterY:Number = circleCenterY - CrocoEngine.camera.scrollY;
 			
 			if(visibleTestRect != null)
 			{
@@ -172,8 +163,8 @@ package com.croco2dMGE.world
 		
 		override public function tick(deltaTime:Number):void
 		{
-			screenX = x - mCamera.scrollX * scrollFactorX;
-			screenY = y - mCamera.scrollY * scrollFactorY;
+			screenX = x - CrocoEngine.camera.scrollX * scrollFactorX;
+			screenY = y - CrocoEngine.camera.scrollY * scrollFactorY;
 		}
 		
 		override public function draw(support:RenderSupport, parentAlpha:Number):void
@@ -195,24 +186,10 @@ package com.croco2dMGE.world
 			debugGraphics.lineTo(screenX, screenY + offset);
 		}
 		
-		override public function onActive():void
-		{
-			super.onActive();
-			
-			mSceneLayer = SceneLayer(owner);
-			mScene = CrocoScene(mSceneLayer.owner);
-			mCamera = CrocoEngine.camera;
-			mInScene = true;
-		}
-		
 		override public function onDeactive():void
 		{
 			super.onDeactive();
 			
-			mSceneLayer = null;
-			mScene = null;
-			mCamera = null;
-			mInScene = false;
 			zFighting = 0;
 		}
 	}

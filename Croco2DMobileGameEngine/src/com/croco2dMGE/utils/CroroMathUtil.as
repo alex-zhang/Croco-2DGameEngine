@@ -12,6 +12,11 @@ package com.croco2dMGE.utils
 		
 		//Abount angle
 		//======================================================================
+		public static function caculateRadianByTwoPoint(startX:Number, startY:Number, endX:Number, endY:Number):Number
+		{
+			return Math.atan2(endY - startY, endX - startX);
+		}
+		
 		/**
 		 * Take a radian measure and make sure it is between -pi..pi. 
 		 */

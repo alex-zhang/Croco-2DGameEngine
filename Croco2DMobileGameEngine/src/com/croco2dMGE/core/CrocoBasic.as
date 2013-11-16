@@ -11,6 +11,7 @@ package com.croco2dMGE.core
 		public var active:Boolean = true;
 		public var visible:Boolean = true;
 		public var exists:Boolean = true;
+		public var alive:Boolean = true;
 		
 		public var owner:CrocoBasic;
 
@@ -46,12 +47,16 @@ package com.croco2dMGE.core
 			exists = false;
 		}
 		
+		public function kill():void
+		{
+		}
+		
 		public function dispose():void 
 		{
 			uid = null;
 			name = null;
 			type = null;
-			
+
 			mInited = false;
 			exists = false;
 			visible = false;

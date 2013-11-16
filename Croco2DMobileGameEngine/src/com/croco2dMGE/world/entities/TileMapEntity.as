@@ -1,5 +1,6 @@
 package com.croco2dMGE.world.entities
 {
+	import com.croco2dMGE.CrocoEngine;
 	import com.croco2dMGE.graphics.map.TileMap;
 	import com.croco2dMGE.utils.CrocoRect;
 	import com.croco2dMGE.world.SceneEntity;
@@ -26,7 +27,7 @@ package com.croco2dMGE.world.entities
 		{
 			tileMapCls ||= TileMap;
 			mTileMap = new tileMapCls(cellWidth, cellHeight, maxColCount, maxRowCount, minColStartIndex, minRowStartIndex);
-			displayObject = mTileMap;
+			display = mTileMap;
 			
 			visibleTestRect = new CrocoRect(minColStartIndex * cellWidth, minRowStartIndex * cellHeight, 
 				cellWidth * (maxColCount - minColStartIndex + 1), cellHeight * (maxRowCount - minRowStartIndex + 1));
@@ -36,9 +37,9 @@ package com.croco2dMGE.world.entities
 		{
 			super.tick(deltaTime);
 			
-			mTileMap.setViewPort(mCamera.scrollX * scrollFactorX, 
-				mCamera.scrollY * scrollFactorY, 
-				mCamera.width, mCamera.height);
+			mTileMap.setViewPort(CrocoEngine.camera.scrollX * scrollFactorX, 
+				CrocoEngine.camera.scrollY * scrollFactorY, 
+				CrocoEngine.camera.width, CrocoEngine.camera.height);
 			
 			mTileMap.tick(deltaTime);
 		}

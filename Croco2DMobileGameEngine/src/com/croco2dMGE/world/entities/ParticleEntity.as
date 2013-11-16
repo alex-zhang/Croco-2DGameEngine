@@ -27,7 +27,7 @@ package com.croco2dMGE.world.entities
 			particleSystemCls ||= PDParticleSystem;
 			
 			mParticleSystem = new particleSystemCls(particleConfig, particleTexture);
-			displayObject = mParticleSystem;
+			display = mParticleSystem;
 		}
 		
 		override public function dispose():void
@@ -52,7 +52,7 @@ package com.croco2dMGE.world.entities
 			if(mParticleSystem) mParticleSystem.clear();
 		}
 		
-		override protected function drawDisplayObject():void
+		override protected function drawDisplay():void
 		{
 			mParticleSystem.advanceTime(CrocoEngine.deltaTime);
 			

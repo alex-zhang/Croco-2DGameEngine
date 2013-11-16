@@ -171,7 +171,7 @@ package com.croco2dMGE.world
 				var sceneX:Number = screenX + scrollX;
 				var sceneY:Number = screenY + scrollY;
 				
-				return currentScene.mouseHitTest(sceneX, sceneY);
+				return currentScene.hitTest(sceneX, sceneY);
 			}
 			
 			return null;

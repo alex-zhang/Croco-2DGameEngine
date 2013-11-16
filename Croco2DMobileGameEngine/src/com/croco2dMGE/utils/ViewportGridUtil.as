@@ -102,7 +102,7 @@ package com.croco2dMGE.utils
 		private function updateValidCellsRangeByViewPort(viewPortX:Number, viewPortY:Number, 
 														 viewPortWidth:Number, viewPortHeight:Number):void
 		{
-			validColStartIndex = Math.floor(viewPortX / mCellWidth)
+			validColStartIndex = Math.floor(viewPortX / mCellWidth);
 			
 			var mValidColEndIndex:int = Math.floor((viewPortX + viewPortWidth) / mCellWidth);
 			validColCount = mValidColEndIndex - validColStartIndex + 1;
