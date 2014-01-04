@@ -1,6 +1,8 @@
 package com.croco2dMGE.utils.flow
 {
-	public class QueueFlow extends BasicGroupFlow
+	import com.croco2dMGE.core.CrocoBasic;
+
+	public class QueueFlow extends GroupFlowBasic
 	{
 		public function QueueFlow()
 		{
@@ -9,40 +11,24 @@ package com.croco2dMGE.utils.flow
 
 		override protected function onExcuteFlow():void
 		{
-			if(childrenFlows != null && childrenFlows.length > 0)
+			var item:CrocoBasic = myItems.moveFirst();
+			if(item)
 			{
-				var childFlow:IFlow = childrenFlows.moveFirst();
-				childFlow.excuteFlow();
-			}
-			else
-			{
-				onExcuteFlowComplete();
+				item.tickable = true;
+				IFlow(item).excuteFlow();
 			}
 		}
 		
-		override public function pushFlow(childFlow:IFlow):void
+		override protected function onItemDispose(item:CrocoBasic):void
 		{
-			super.pushFlow(childFlow);
+			super.onItemDispose(item);
 			
-			if(isExcuted && getChildFlowCount() == 1)//the last one so excute
+			//here need to the next one. excute.
+			var nextItem:CrocoBasic = myItems.moveFirst();
+			if(nextItem)
 			{
-				childFlow.excuteFlow();
-			}
-		}
-		
-		override public function notifyChildFlowComplete(childFlow:IFlow):void
-		{
-			var findChildFlow:IFlow = childrenFlows.moveFirst();
-			childrenFlows.remove(findChildFlow);
-
-			if(childrenFlows.length == 0)
-			{
-				onExcuteFlowComplete();
-			}
-			else
-			{
-				findChildFlow = childrenFlows.moveFirst();
-				findChildFlow.excuteFlow();
+				nextItem.tickable = true;
+				IFlow(nextItem).excuteFlow();
 			}
 		}
 	}

@@ -23,22 +23,24 @@ package com.croco2dMGE.graphics.sprite
 		
 		public function get currentAniamtionName():String { return mCurrentAniamtionName; }
 		
-		public function gotoAndPlay(animationName:String, loop:Boolean = false):void
+		public function gotoAndPlay(animationName:String, loop:Boolean = false, duration:Number = NaN):void
 		{
-			if(mCurrentAniamtionName != animationName)
-			{
-				if(!mAnimationSetInfo || !mAnimationSetInfo.hasAnimation(animationName)) return;
-				
-				mCurrentAniamtionName = animationName;
-				
-				var animationInfo:AnimationInfo = mAnimationSetInfo.getAnimationInfoByName(mCurrentAniamtionName);
-				
-				this.frames = animationInfo.getFrames();
-				this.fps = animationInfo.frameRate;
-				this.loop = loop;
-				this.currentFrame = 1;
-				this.play();
-			}
+			if(!mAnimationSetInfo || !mAnimationSetInfo.hasAnimation(animationName)) return;
+			
+			mCurrentAniamtionName = animationName;
+			
+			var animationInfo:AnimationInfo = mAnimationSetInfo.getAnimationInfoByName(mCurrentAniamtionName);
+			
+			this.frames = animationInfo.getFrames();
+			this.currentFrame = 1;
+			
+			this.fps = !isNaN(duration) ?
+				animationInfo.getFrameCount() / duration :
+				animationInfo.frameRate;
+			
+			this.loop = loop;
+			
+			this.play();
 		}
 	}
 }

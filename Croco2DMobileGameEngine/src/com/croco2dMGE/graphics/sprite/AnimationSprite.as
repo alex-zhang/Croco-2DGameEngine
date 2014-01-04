@@ -4,9 +4,9 @@ package com.croco2dMGE.graphics.sprite
 	import com.fireflyLib.utils.EventEmitter;
 	import com.fireflyLib.utils.MathUtil;
 	
-	import starling.core.RenderSupport;
+	import starling.animation.IAnimatable;
 	
-	public class AnimationSprite extends CrocoImage
+	public class AnimationSprite extends CrocoImage implements IAnimatable
 	{
 		private var mCurrentFrame:int;
 		private var mTotalFrame:uint;
@@ -63,6 +63,8 @@ package com.croco2dMGE.graphics.sprite
 				{
 					mCurrentFrame = 1;
 					mTotalFrame = mFrames.length;
+					
+					super.texture = mFrames[mCurrentFrame - 1].texture;
 				}
 				else
 				{
@@ -89,7 +91,7 @@ package com.croco2dMGE.graphics.sprite
 		
 		public function set fps(value:Number):void
 		{
-			if (value <= 0) throw new ArgumentError("Invalid fps: " + value);
+			if (isNaN(value) || value <= 0) throw new ArgumentError("Invalid fps: " + value);
 			
 			mFrameDuration = 1 / value;
 		}
@@ -147,7 +149,14 @@ package com.croco2dMGE.graphics.sprite
 				//current animation loop complete
 				if(mCurrentFrame == mTotalFrame)
 				{
-					if(mLoop) mCurrentFrame = 1;
+					if(mLoop) 
+					{
+						mCurrentFrame = 1;
+					}
+					else
+					{
+						mPlaying = false;
+					}
 				}
 				else
 				{
@@ -156,13 +165,8 @@ package com.croco2dMGE.graphics.sprite
 				
 				mAnimationTime -= mFrameDuration;
 			}
-			
+
 			onRenderFrame(mCurrentFrame);
-		}
-		
-		override public function render(support:RenderSupport, parentAlpha:Number):void
-		{
-			super.render(support, parentAlpha);
 		}
 		
 		protected function onRenderFrame(frame:int):void
@@ -171,7 +175,7 @@ package com.croco2dMGE.graphics.sprite
 			
 			if(frameInfo.eventName && eventEmitter.hasEventListener(frameInfo.eventName))
 			{
-				eventEmitter.dispatchEvent(frameInfo.eventName);
+				eventEmitter.dispatchEvent(frameInfo.eventName, frameInfo.eventParams);
 			}
 			
 			super.texture = frameInfo.texture;

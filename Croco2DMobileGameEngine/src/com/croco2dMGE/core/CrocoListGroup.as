@@ -17,23 +17,23 @@ package com.croco2dMGE.core
 			var item:CrocoBasic = myItems.moveFirst();
 			while(item)
 			{
-				if(item.alive)
+				if(item.__alive)
 				{
-					if(item.exists && item.active)
+					if(item.actived && item.tickable)
 					{
 						onItemTick(item, deltaTime);
-					}	
+					}
 				}
 				else
 				{
-					onItemKill(item);
+					onItemDispose(item);
 				}
 				
 				item = myItems.moveNext();
 			}
 		}
 		
-		protected function onItemKill(item:CrocoBasic):void
+		protected function onItemDispose(item:CrocoBasic):void
 		{
 			removeItem(item);
 			item.dispose();
@@ -49,7 +49,7 @@ package com.croco2dMGE.core
 			var item:CrocoBasic = myItems.moveFirst();
 			while(item)
 			{
-				if(item.exists && item.visible)
+				if(item.actived && item.visible)
 				{
 					onItemDraw(item, support, parentAlpha);
 				}

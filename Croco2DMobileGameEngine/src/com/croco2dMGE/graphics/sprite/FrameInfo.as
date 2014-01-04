@@ -6,6 +6,7 @@ package com.croco2dMGE.graphics.sprite
 	{
 		public var frame:int;
 		public var eventName:String;
+		public var eventParams:Object;
 		public var texture:Texture;
 		
 		public function FrameInfo()
@@ -16,6 +17,7 @@ package com.croco2dMGE.graphics.sprite
 		{
 			texture = null;
 			eventName = null;
+			eventParams = null;
 		}
 	}
 }

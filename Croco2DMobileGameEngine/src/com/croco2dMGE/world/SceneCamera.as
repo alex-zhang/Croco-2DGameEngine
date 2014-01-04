@@ -1,8 +1,8 @@
 package com.croco2dMGE.world
 {
+	import com.croco2dMGE.AppConfig;
 	import com.croco2dMGE.CrocoEngine;
 	import com.croco2dMGE.core.CrocoBasic;
-	import com.croco2dMGE.utils.CrocoPoint;
 	import com.croco2dMGE.utils.CrocoRect;
 	import com.fireflyLib.utils.MathUtil;
 	
@@ -17,7 +17,7 @@ package com.croco2dMGE.world
 		public var scrollX:Number = 0;
 
 		public var scrollY:Number = 0;
-
+		
 		public var alpha:Number = 1.0;
 		
 		/**
@@ -51,9 +51,11 @@ package com.croco2dMGE.world
 		public var viewPortHeight:uint = 0;
 		
 		/**
+		 * any type which has the x and y property Object. 
+		 * 
 		 * Tells the camera to follow this <code>FlxObject</code> object around.
 		 */
-		public var target:CrocoPoint;
+		public var target:Object;
 		
 		public var currentScene:CrocoScene;
 		
@@ -63,7 +65,7 @@ package com.croco2dMGE.world
 		{
 			super();
 
-			this.name = "SceneCamera";
+			this.name = AppConfig.KEY_SCENE_CAMERA;
 		}
 		
 		public function setCurrentScene(value:CrocoScene):void
@@ -127,7 +129,7 @@ package com.croco2dMGE.world
 			width = viewPortWidth * zoom;
 			height = viewPortHeight * zoom;
 			
-			if(currentScene && currentScene.exists && currentScene.active)
+			if(currentScene && currentScene.actived && currentScene.tickable)
 			{
 				currentScene.tick(deltaTime);
 			}
@@ -148,14 +150,14 @@ package com.croco2dMGE.world
 			//Make sure we didn't go outside the camera's bounds
 			if(bounds != null)
 			{
-				scrollX = MathUtil.clamp(scrollX, bounds.left, bounds.right - width);
-				scrollY = MathUtil.clamp(scrollY, bounds.top, bounds.bottom - height);
+				scrollX = MathUtil.clamp(scrollX, bounds.x, bounds.width - width);
+				scrollY = MathUtil.clamp(scrollY, bounds.y, bounds.height - height);
 			}
 		}
 		
 		override public function draw(support:RenderSupport, parentAlpha:Number):void
 		{
-			if(currentScene && currentScene.exists && currentScene.visible)
+			if(currentScene && currentScene.actived && currentScene.visible)
 			{
 				currentScene.draw(support, parentAlpha);
 			}
@@ -166,7 +168,7 @@ package com.croco2dMGE.world
 		
 		public function hitTest(screenX:Number, screenY:Number):DisplayObject
 		{
-			if(currentScene && currentScene.exists && currentScene.visible)
+			if(currentScene && currentScene.actived && currentScene.visible)
 			{
 				var sceneX:Number = screenX + scrollX;
 				var sceneY:Number = screenY + scrollY;
@@ -197,7 +199,7 @@ final class CameraDisplayStage extends DisplayObject
 	
 	override public function render(support:RenderSupport, parentAlpha:Number):void
 	{
-		if(mCamera.exists)
+		if(mCamera.actived)
 		{
 			support.pushMatrix();
 			support.transformMatrix(this);
@@ -210,7 +212,7 @@ final class CameraDisplayStage extends DisplayObject
 	
 	override public function hitTest(localPoint:Point, forTouch:Boolean=false):DisplayObject
 	{
-		if(mCamera.exists)
+		if(mCamera.actived)
 		{
 			return mCamera.hitTest(localPoint.x, localPoint.y);
 		}

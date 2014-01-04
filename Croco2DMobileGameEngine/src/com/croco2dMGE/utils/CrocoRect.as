@@ -177,6 +177,14 @@ package com.croco2dMGE.utils
 				(rect.top < bottom);
 		}
 		
+		public function center(result:CrocoPoint = null):CrocoPoint
+		{
+			result ||= new CrocoPoint();
+			result.x = x + width * 0.5;
+			result.y = y + height * 0.5;
+			return result;
+		}
+		
 		public function clone():CrocoRect
 		{
 			return new CrocoRect(x, y, width, height);

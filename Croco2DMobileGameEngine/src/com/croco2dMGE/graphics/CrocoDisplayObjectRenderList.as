@@ -12,7 +12,7 @@ package com.croco2dMGE.graphics
 	public class CrocoDisplayObjectRenderList extends DisplayObject
 	{
 		// members
-		private var mChildren:Vector.<DisplayObject>;
+		protected var mChildren:Vector.<DisplayObject>;
 		
 		/** Helper objects. */
 		private static var sHelperMatrix:Matrix = new Matrix();
@@ -256,7 +256,7 @@ package com.croco2dMGE.graphics
 			var numChildren:int = mChildren.length;
 			var blendMode:String = support.blendMode;
 			
-			for (var i:int=0; i<numChildren; ++i)
+			for (var i:int = 0; i < numChildren; ++i)
 			{
 				var child:DisplayObject = mChildren[i];
 				
@@ -266,12 +266,14 @@ package com.croco2dMGE.graphics
 					
 					support.pushMatrix();
 					support.transformMatrix(child);
+					
 					support.blendMode = child.blendMode;
 					
 					if (filter) filter.render(child, support, alpha);
 					else        child.render(support, alpha);
 					
 					support.blendMode = blendMode;
+
 					support.popMatrix();
 				}
 			}

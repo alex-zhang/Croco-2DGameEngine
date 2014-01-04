@@ -4,11 +4,10 @@
     <compilerSourcePath>
       <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/Firefly-Lib/FireflyLib/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/Starling-Framework/starling/src"/>
-      <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/PonyMVC-Framework/PonyMVC/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/feathers/source"/>
-      <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/SkeletonAnimationLibrary/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/Starling-Extension-Graphics/extension/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/Starling-Extension-Particle-System/src"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/PonyMVC-Framework/PonyMVC/src"/>
     </compilerSourcePath>
     <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">
@@ -52,4 +51,3 @@
   <buildCSSFiles/>
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
 </actionScriptProperties>
-

@@ -1,5 +1,9 @@
 package com.croco2dMGE.core
 {
+	import com.fireflyLib.utils.PropertyBag;
+	
+	import flash.utils.getQualifiedClassName;
+	
 	import starling.core.RenderSupport;
 
 	public class CrocoBasic
@@ -8,35 +12,40 @@ package com.croco2dMGE.core
 		public var name:String;
 		public var type:String;
 		
-		public var active:Boolean = true;
+		public var __alive:Boolean = true;
+		public var __inited:Boolean = false;
+		
+		public var actived:Boolean = true;
+		public var tickable:Boolean = true;
 		public var visible:Boolean = true;
-		public var exists:Boolean = true;
-		public var alive:Boolean = true;
 		
 		public var owner:CrocoBasic;
-
-		private var mInited:Boolean = false;
+		
+		public var propertyBag:PropertyBag;
 		
 		public function CrocoBasic()
 		{
 			super();
 		}
 		
-		public final function get inited():Boolean { return mInited; };
 		public final function init():void 
 		{
-			if(!mInited)
+			if(!__inited)
 			{
 				onInit();
-				mInited = true;
+				
+				__inited = true;
 			}
 		}
 		
-		protected function onInit():void {};
+		protected function onInit():void 
+		{
+			propertyBag ||= new PropertyBag();
+		}
 		
 		public function onActive():void
 		{ 
-			exists = true;
+			actived = true;
 		}
 		
 		public function tick(deltaTime:Number):void {};
@@ -44,11 +53,12 @@ package com.croco2dMGE.core
 		
 		public function onDeactive():void 
 		{ 
-			exists = false;
+			actived = false;
 		}
 		
-		public function kill():void
+		public function __kill():void
 		{
+			__alive = false;
 		}
 		
 		public function dispose():void 
@@ -57,10 +67,33 @@ package com.croco2dMGE.core
 			name = null;
 			type = null;
 
-			mInited = false;
-			exists = false;
+			__alive = false;
+			__inited = false;
+			
+			actived = false;
+			tickable = false;
 			visible = false;
-			active = false;
+			
+			if(propertyBag)
+			{
+				propertyBag.clear();
+				propertyBag = null;
+			}
+		}
+		
+		public function toString():String
+		{
+			return getQualifiedClassName(this) + " " + 
+						"uid: " + uid + " " +
+						"name: " + name + " " +
+						"type: " + type + " " +
+						"__alive: " + __alive + " " +
+						"__inited: " + __inited + " " +
+						"actived: " + actived + " " +
+						"tickable: " + tickable + " " +
+						"visible: " + visible + " " + 
+						"owner: " + owner + " " +
+						"propertyBag: " + propertyBag;
 		}
 	}
 }

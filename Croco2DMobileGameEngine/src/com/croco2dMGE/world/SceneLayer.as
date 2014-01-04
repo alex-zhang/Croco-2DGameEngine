@@ -11,9 +11,9 @@ package com.croco2dMGE.world
 	{
 		public static function defaultDepthSortFunction(a:SceneEntity, b:SceneEntity):int
 		{
-			//-1 means the top depth than the other
-			if(a.layerIndex > b.layerIndex) return -1;
-			else if(a.layerIndex < b.layerIndex) return 1;
+			//-1 means the bottom depth than the other
+			if(a.layerZIndex > b.layerZIndex) return 1;
+			else if(a.layerZIndex < b.layerZIndex) return -1;
 			else//相等时
 			{
 				if(a.y > b.y) return 1;
@@ -67,6 +67,8 @@ package com.croco2dMGE.world
 			this.name = "SceneLayer";
 		}
 		
+		public function get scene():CrocoScene { return owner ? CrocoScene(owner) : null};
+		
 		public function markDepthDirty():void
 		{
 			mDepthSortDirty = true;
@@ -78,7 +80,7 @@ package com.croco2dMGE.world
 			var item:SceneEntity = myItems.moveFirst() as SceneEntity;
 			while(item)
 			{
-				if(item.exists && item.visible &&
+				if(item.actived && item.visible &&
 					item.touchAble &&
 					item.display && 
 					item.display.hasVisibleArea && 

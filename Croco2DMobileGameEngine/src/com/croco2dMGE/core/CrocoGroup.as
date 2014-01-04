@@ -37,9 +37,22 @@ package com.croco2dMGE.core
 				}); 
 		}
 		
+		public function findItemsByField(field:String, value:*):Array
+		{ 
+			return findItemsByFunction(
+				function(item:CrocoBasic):Boolean {
+					return item[field] == value;
+				}); 
+		}
+		
 		public function findItemByFunction(func:Function):CrocoBasic 
 		{ 
 			return myItems.findItemByFunction(func); 
+		}
+		
+		public function findItemsByFunction(func:Function):Array 
+		{ 
+			return myItems.findItemsByFunction(func); 
 		}
 		
 		public function addItem(item:CrocoBasic):CrocoBasic 
@@ -90,21 +103,5 @@ package com.croco2dMGE.core
 		protected function onItemSwitchTo(item:CrocoBasic, from:CrocoGroup, target:CrocoGroup):void {};
 		
 		public function sortItems(compareFunction:Function):void { myItems.sort(compareFunction); };
-		
-//		override public function overlaps(target:CrocoBasic):Boolean
-//		{
-//			var item:CrocoBasic = myItems.moveFirst();
-//			while(item)
-//			{
-//				if(item.exists && item.active && item.visible && target.overlaps(target))
-//				{
-//					return true;
-//				}
-//				
-//				item = myItems.moveNext();
-//			}
-//			
-//			return false;
-//		}
 	}
 }

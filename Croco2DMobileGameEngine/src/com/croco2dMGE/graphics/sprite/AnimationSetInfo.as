@@ -7,24 +7,24 @@ package com.croco2dMGE.graphics.sprite
 		public var name:String;
 		public var pivotX:int = 0;
 		public var pivotY:int = 0;
+		public var width:int = 0;
+		public var height:int = 0;
 		public var metadata:Object;
 
 		private var mAnimationInfos:Array = null;//<AnimationInfo>;
 		private var mAnimationInfoCount:int = 0;
 		
-		private var mTextureAtlas:TextureAtlas;
+		private var mDefaultAnimationName:String;
 		
-		public function AnimationSetInfo(textureAtlas:TextureAtlas)
+		private var mAnimationSetTextureAtlas:TextureAtlas;
+		
+		public function AnimationSetInfo(animationSetTextureAtlas:TextureAtlas, animationSetXML:XML)
 		{
-			mTextureAtlas = textureAtlas;
+			mAnimationSetTextureAtlas = animationSetTextureAtlas;
+			deserializeFromXML(animationSetXML);
 		}
 		
-		public function get textureAtlas():TextureAtlas
-		{
-			return mTextureAtlas;
-		}
-		
-		public function deserializeFromXML(xml:XML):void
+		private function deserializeFromXML(xml:XML):void
 		{
 			this.metadata = {};
 			
@@ -34,6 +34,8 @@ package com.croco2dMGE.graphics.sprite
 			
 			pivotX = parseInt(xml.@pivotX);
 			pivotY = parseInt(xml.@pivotY);
+			width = parseInt(xml.@width);
+			height = parseInt(xml.@height);
 			
 			//metadata
 			var metadataElements:XMLList = xml.Metadata.elements();
@@ -53,12 +55,17 @@ package com.croco2dMGE.graphics.sprite
 			for(i = 0; i < n; i++)
 			{
 				aniamtionXML = animationXMLs[i];
-				animationInfo = new AnimationInfo(mTextureAtlas);
+
+				animationInfo = new AnimationInfo(mAnimationSetTextureAtlas);
 				animationInfo.deserializeFromXML(aniamtionXML);
 				
-				mAnimationInfos[animationInfo.name] = animationInfo;
+				mDefaultAnimationName = animationInfo.name;
+				
+				mAnimationInfos[mDefaultAnimationName] = animationInfo;
 			}
 		}
+		
+		public function get defaultAniamtionName():String { return mDefaultAnimationName; };
 		
 		public function getAnimationCount():uint { return mAnimationInfoCount };
 		
@@ -79,8 +86,8 @@ package com.croco2dMGE.graphics.sprite
 				animationInfo.dispose();
 			}
 			mAnimationInfos = null;
-			
-			mTextureAtlas = null;
+			mDefaultAnimationName = null;
+			mAnimationSetTextureAtlas = null;
 		}
 	}
 }

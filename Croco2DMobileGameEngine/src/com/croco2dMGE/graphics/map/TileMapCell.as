@@ -18,6 +18,9 @@ package com.croco2dMGE.graphics.map
 			
 			mCellWidth = cellWidth;
 			mCellHeight = cellHeight;
+			
+			this.width = mCellWidth;
+			this.height = mCellHeight;
 		}
 		
 		public function get colIndex():int { return mColIndex; };

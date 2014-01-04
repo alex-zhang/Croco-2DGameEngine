@@ -1,6 +1,7 @@
 package com.croco2dMGE.world
 {
 	import com.croco2dMGE.core.CrocoListGroup;
+	import com.croco2dMGE.screens.CrocoScreen;
 	
 	import starling.display.DisplayObject;
 	
@@ -16,6 +17,8 @@ package com.croco2dMGE.world
 		 */
 		public var layers:Array;//SceneLayer
 		
+		public var screen:CrocoScreen;
+		
 		protected var mLayers:Array;
 		
 		public function CrocoScene()
@@ -25,12 +28,13 @@ package com.croco2dMGE.world
 		
 		override protected function onInit():void
 		{
-			initLayers();
+			onInitLayers();
 		}
 		
-		protected function initLayers():void
+		protected function onInitLayers():void
 		{
 			mLayers = [];
+			
 			var sceneLayer:SceneLayer;
 			
 			var n:int = layers ? layers.length : 0;
@@ -86,7 +90,7 @@ package com.croco2dMGE.world
 			{
 				sceneLayer = mLayers[i];
 				
-				if(sceneLayer.exists && 
+				if(sceneLayer.actived && 
 					sceneLayer.visible &&
 					sceneLayer.touchAble)
 				{
@@ -104,6 +108,7 @@ package com.croco2dMGE.world
 			
 			mLayers = null;
 			layers = null;
+			screen = null;
 		}
 	}
 }

@@ -8,8 +8,7 @@ package com.croco2dMGE.world
 	{
 		public var touchAble:Boolean = false;
 		public var display:DisplayObject;
-		
-		protected var mIsValiddisplay:Boolean = false;
+		public var isValidDisplay:Boolean = false;
 		
 		public function SceneEntity()
 		{
@@ -31,14 +30,14 @@ package com.croco2dMGE.world
 		{
 			super.tick(deltaTime);
 			
-			mIsValiddisplay = checkIsNeedDrawdisplay();
+			isValidDisplay = checkIsNeedDrawdisplay();
 		}
 		
 		override public function draw(support:RenderSupport, parentAlpha:Number):void
 		{
 			super.draw(support, parentAlpha);
 			
-			if(mIsValiddisplay)
+			if(isValidDisplay)
 			{
 				drawDisplay();
 
@@ -53,10 +52,11 @@ package com.croco2dMGE.world
 		
 		protected function drawDisplay():void
 		{
-			display.x = screenX;
-			display.y = screenY;
+			display.x = int(screenX);
+			display.y = int(screenY);
 		}
 		
+		//u can override here to iml your custom present
 		protected function presentDisplay(support:RenderSupport, parentAlpha:Number):void
 		{
 			var blendMode:String = support.blendMode;

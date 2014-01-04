@@ -41,6 +41,21 @@ package com.croco2dMGE.utils
 			return r;
 		}
 		
+		public static function mirrorRadinByYAxe(r:Number):Number
+		{
+			r = clampRadian(r);
+			
+			//-pi-pi
+			if(r < 0)
+			{
+				return -Math.PI - r;
+			}
+			else
+			{
+				return Math.PI - r;
+			}
+		}
+		
 		/**
 		 * Return the shortest distance to get from from to to, in radians.
 		 */

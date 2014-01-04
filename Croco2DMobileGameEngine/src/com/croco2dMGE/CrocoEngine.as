@@ -1,6 +1,9 @@
 package com.croco2dMGE
 {
+	import com.croco2dMGE.core.CrocoBasic;
 	import com.croco2dMGE.core.CrocoListGroup;
+	import com.croco2dMGE.input.InputManager;
+	import com.croco2dMGE.sound.SoundManager;
 	import com.croco2dMGE.world.SceneCamera;
 	import com.fireflyLib.utils.GlobalPropertyBag;
 	
@@ -10,7 +13,6 @@ package com.croco2dMGE
 	import flash.utils.getTimer;
 	
 	import starling.core.Starling;
-	import starling.display.Stage;
 	
 	public class CrocoEngine extends CrocoListGroup
 	{
@@ -45,12 +47,11 @@ package com.croco2dMGE
 		 */
 		public static var camera:SceneCamera;
 		
-		public static var flashStage:flash.display.Stage;
-		public static var starlingStage:starling.display.Stage;
+		public static var input:InputManager;
+		
+		public static var soundManager:SoundManager;
 		
 		public static var crocoStarling:Starling;
-		
-		public static var data:Object;
 		
 		/**
 		 * The rate at which ticks are fired, in seconds.
@@ -83,8 +84,8 @@ package com.croco2dMGE
 		 */		
 		public static function startUp(flashStage:flash.display.Stage, crocoStarling:Starling, 
 									   width:uint, height:uint,
-									   startUpConfig:Object = null,
-									   data:Object = null, 
+									   startUpParams:Object = null,
+									   startUpExtensions:Object = null,
 									   crocoEngineImplCls:Class = null):CrocoEngine
 		{
 			if(instance) throw new Error("CrocoEngine::static method 'startUp': CrocoEngine is a singleton mode Class!");
@@ -95,23 +96,26 @@ package com.croco2dMGE
 			
 			//default setting
 			CrocoEngine.crocoStarling = crocoStarling;
-			CrocoEngine.flashStage = flashStage;
-			CrocoEngine.starlingStage = crocoStarling.stage;
 			
 			CrocoEngine.width = width;
 			CrocoEngine.height = height;
-			CrocoEngine.data = data;
 			
 			//you can extend the CrocoEngin and override the default engine logic
 			crocoEngineImplCls ||= CrocoEngine;
 			instance = new crocoEngineImplCls();
 
-			for(var key:String in startUpConfig)
+			var key:String;
+			for(key in startUpParams)
 			{
-				crocoEngineImplCls[key] = startUpConfig[key];
+				crocoEngineImplCls[key] = startUpParams[key];
 			}
 			
 			instance.init();
+			
+			for each(var extension:CrocoBasic in startUpExtensions)
+			{
+				instance.addItem(extension);
+			}
 			
 			trace("[CrocoEngine] startUp Complete.")
 			
@@ -124,7 +128,7 @@ package com.croco2dMGE
 		{
 			super();
 			
-			this.name = "CrocoEngine";
+			this.name = AppConfig.KEY_CROCO_ENGINE;
 		}
 		
 		public function start():void 
@@ -133,9 +137,9 @@ package com.croco2dMGE
 			
 			mRunning = true;
 			
-			lastTime = -1;
+			mLastTime = -1;
 			
-			flashStage.addEventListener(Event.ENTER_FRAME, enterFrameHandler);
+			GlobalPropertyBag.stage.addEventListener(Event.ENTER_FRAME, enterFrameHandler);
 		}
 		
 		public function stop():void 
@@ -144,10 +148,10 @@ package com.croco2dMGE
 			
 			mRunning = false;
 			
-			flashStage.removeEventListener(Event.ENTER_FRAME, enterFrameHandler);
+			GlobalPropertyBag.stage.removeEventListener(Event.ENTER_FRAME, enterFrameHandler);
 		}
 		
-		public function get running():Boolean 
+		public function get running():Boolean
 		{ 
 			return mRunning;
 		}
@@ -155,6 +159,8 @@ package com.croco2dMGE
 		override protected function onInit():void
 		{
 			addItem(camera ||= new SceneCamera());
+			addItem(input ||= new InputManager());
+			addItem(soundManager ||= new SoundManager());
 			
 			if(debug && !debugGraphics)
 			{
@@ -171,8 +177,12 @@ package com.croco2dMGE
 		
 		protected function onAdvance(deltaTime:Number, suppressSafety:Boolean = false):void
 		{
-			CrocoEngine.deltaTime = deltaTime;
+			if(debug)
+			{
+				debugGraphics.clear();
+			}
 			
+			CrocoEngine.deltaTime = deltaTime;
 			crocoStarling.advanceTime(deltaTime);
 			
 //			gaming ticking.
@@ -188,32 +198,27 @@ package com.croco2dMGE
 			}
 			
 			//game rendering.
+			crocoStarling.render();
+			
 			if(debug)
 			{
-				debugGraphics.clear();
-				crocoStarling.render();
 				debugGraphics.endFill();
-			}
-			else
-			{
-				crocoStarling.render();
 			}
 		}
 		
-		protected static var lastTime:int = -1;
+		protected static var mLastTime:int = -1;
 		
 		protected function enterFrameHandler(event:Event):void
 		{
 			var currentTime:int = getTimer();
-			if(lastTime < 0)
+			if(mLastTime < 0)
 			{
-				lastTime = currentTime;
+				mLastTime = currentTime;
 				return;
 			}
 			
-			onAdvance((currentTime - lastTime) * 0.001 * timeScale);
-			
-			lastTime = currentTime;
+			onAdvance((currentTime - mLastTime) * 0.001 * timeScale);
+			mLastTime = currentTime;
 		}
 	}
 }

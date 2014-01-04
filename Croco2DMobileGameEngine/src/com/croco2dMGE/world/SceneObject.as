@@ -47,15 +47,15 @@ package com.croco2dMGE.world
 		 */
 		public var debug:Boolean = false;
 		
-		public var layerIndex:int = 0;
+		public var layerZIndex:int = 0;
 		
 		public function SceneObject()
 		{
 			super();
 		}
 		
-		public function get scene():CrocoScene { return owner ? CrocoScene(owner.owner) : null};
-		public function get sceneLayer():SceneLayer { return SceneLayer(owner)};
+		public function get sceneLayer():SceneLayer { return owner as SceneLayer};
+		public function get scene():CrocoScene { return owner ? SceneLayer(owner).scene : null};
 		
 		//collision
 		public function isOverlapCamera():Boolean

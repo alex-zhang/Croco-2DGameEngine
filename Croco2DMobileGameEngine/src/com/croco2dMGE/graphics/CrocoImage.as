@@ -37,6 +37,48 @@ package com.croco2dMGE.graphics
 			mVertexDataCacheInvalid = true;
 		}
 		
+		private var mExplicitWidth:Number = NaN;
+		private var mMeasuredWidth:Number = 0;
+		
+		private var mExplicitHeight:Number = NaN;
+		private var mMeasuredHeight:Number = 0;
+		
+		override public function get width():Number { return isNaN(mExplicitWidth) ? mMeasuredWidth : mExplicitWidth }
+		override public function set width(value:Number):void
+		{
+			if(value < 0) return;
+			
+			if(mExplicitWidth != value)
+			{
+				mExplicitWidth = value;
+				
+				mVertexData.setPosition(0, 0.0, 0.0);
+				mVertexData.setPosition(1, width, 0.0);
+				mVertexData.setPosition(2, 0.0, height);
+				mVertexData.setPosition(3, width, height); 
+				
+				onVertexDataChanged();
+			}
+		}
+		
+		override public function get height():Number { return isNaN(mExplicitHeight) ? mMeasuredHeight : mExplicitHeight }
+		override public function set height(value:Number):void
+		{
+			if(value < 0) return;
+			
+			if(mExplicitHeight != value)
+			{
+				mExplicitHeight = value;
+				
+				mVertexData.setPosition(0, 0.0, 0.0);
+				mVertexData.setPosition(1, width, 0.0);
+				mVertexData.setPosition(2, 0.0, height);
+				mVertexData.setPosition(3, width, height); 
+				
+				onVertexDataChanged();
+			}
+		}
+		
 		/** The texture that is displayed on the quad. */
 		public function get texture():Texture { return mTexture; }
 		public function set texture(value:Texture):void 
@@ -50,8 +92,9 @@ package com.croco2dMGE.graphics
 					mVertexData.setPremultipliedAlpha(mTexture.premultipliedAlpha);
 					
 					var frame:Rectangle = texture.frame;
-					var width:Number  = frame ? frame.width  : texture.width;
-					var height:Number = frame ? frame.height : texture.height;
+					
+					mMeasuredWidth  = frame ? frame.width  : texture.width;
+					mMeasuredHeight = frame ? frame.height : texture.height;
 					
 					mVertexData.setPosition(0, 0.0, 0.0);
 					mVertexData.setPosition(1, width, 0.0);

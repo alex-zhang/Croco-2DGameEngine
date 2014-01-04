@@ -1,5 +1,7 @@
 package com.croco2dMGE.graphics.sprite
 {
+	import com.fireflyLib.utils.StringUtil;
+	
 	import starling.textures.TextureAtlas;
 
 	public class AnimationInfo
@@ -52,6 +54,10 @@ package com.croco2dMGE.graphics.sprite
 				
 				frameInfo.frame = i + 1;
 				frameInfo.eventName = frameXML.hasOwnProperty("@event") ? frameXML.@event : null;
+				if(frameXML.hasOwnProperty("@eventParams"))
+				{
+					frameInfo.eventParams = StringUtil.decodeSimpleKeyValueStr(frameXML.@eventParams);
+				}
 				frameInfo.texture = mTextureAtlas.getTexture(frameXML.@textureName);
 			}
 			
