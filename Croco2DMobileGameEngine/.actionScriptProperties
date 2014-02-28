@@ -5,9 +5,11 @@
       <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/Firefly-Lib/FireflyLib/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/Starling-Framework/starling/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/feathers/source"/>
-      <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/Starling-Extension-Graphics/extension/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/Starling-Extension-Particle-System/src"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/Starling-Extension-Graphics/extension/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/PonyMVC-Framework/PonyMVC/src"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/GitHub/Starling-Filters/src"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/Github/Starling-Extension-Ribbon-Trail/RibbonTrail/src"/>
     </compilerSourcePath>
     <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">
@@ -40,6 +42,7 @@
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_agent.swc" useDefaultLinkType="false"/>
         </excludedEntries>
       </libraryPathEntry>
+      <libraryPathEntry kind="1" linkType="1" path="libs"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
