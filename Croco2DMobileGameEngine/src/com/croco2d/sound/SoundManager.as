@@ -34,11 +34,10 @@ package com.croco2d.sound
             createCategory(SFX_MIXER_CATEGORY);
         }
         
-        public function play(sound:Sound, 
+        public function play(sound:Sound, category:String = "sfx",
 							 pan:Number = 0.0, 
 							 loopCount:int = 0, 
-							 startDelay:Number = 0.0,
-							 category:String = "sfx"):ISoundHandle
+							 startDelay:Number = 0.0):ISoundHandle
         {
             // Cap sound playback.
             if(playingSounds.length > maxConcurrentSounds)

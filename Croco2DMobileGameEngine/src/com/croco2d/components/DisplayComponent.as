@@ -5,6 +5,7 @@ package com.croco2d.components
 	
 	import flash.geom.Point;
 	
+	import starling.animation.IAnimatable;
 	import starling.core.RenderSupport;
 	import starling.core.starling_internal;
 	import starling.display.DisplayObject;
@@ -14,6 +15,7 @@ package com.croco2d.components
 		public var touchable:Boolean = true;
 
 		private var mDisplayStage:DisplayStage;
+		private var mIsAnimatableDisplayObject:Boolean;
 		
 		public function DisplayComponent()
 		{
@@ -40,6 +42,7 @@ package com.croco2d.components
 		public function set displayObject(value:DisplayObject):void
 		{
 			mDisplayStage.displayObject = value;
+			mIsAnimatableDisplayObject = mDisplayStage.displayObject is IAnimatable;
 		}
 		
 		override protected function onInit():void
@@ -54,6 +57,16 @@ package com.croco2d.components
 			super.draw(support, parentAlpha);
 			
 			mDisplayStage.render(support, parentAlpha);
+		}
+		
+		override public function tick(deltaTime:Number):void
+		{
+			super.tick(deltaTime);
+			
+			if(mIsAnimatableDisplayObject)
+			{
+				IAnimatable(mDisplayStage.displayObject).advanceTime(deltaTime);
+			}
 		}
 		
 		override public function dispose():void

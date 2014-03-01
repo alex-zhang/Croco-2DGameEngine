@@ -1,5 +1,6 @@
 package com.croco2d.core
 {
+	import com.fireflyLib.debug.Logger;
 	import com.fireflyLib.utils.EventEmitter;
 	import com.fireflyLib.utils.PropertyBag;
 	
@@ -48,7 +49,13 @@ package com.croco2d.core
 		
 		public function pluginComponent(component:CrocoObject):CrocoObject
 		{
-			if(!component.name) throw new Error("pluginComponent: component must has a name.");
+			if(!component.name) 
+			{
+				Logger.warn(this, "pluginComponent", "component must has a name.");
+				
+				component.name = "component_" + getPluginComponentsCount();				
+			}
+			
 			if(hasPluginComponent(component.name)) throw new Error("pluginComponent: " + component.name + " already exist!");
 			
 			return __pluinComponentsGroup.addChild(component);

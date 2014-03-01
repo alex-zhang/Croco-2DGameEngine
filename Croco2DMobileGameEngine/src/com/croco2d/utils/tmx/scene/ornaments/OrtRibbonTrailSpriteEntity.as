@@ -4,15 +4,13 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.assets.ImageAsset;
 	import com.croco2d.assets.SpriteSheetAsset;
-	import com.croco2d.components.DisplayComponent;
-	import com.croco2d.display.CrocoImage;
 	import com.croco2d.entities.SceneEntity;
 	
 	import starling.textures.Texture;
 
-	public class OrtImageEntity extends SceneEntity
+	public class OrtRibbonTrailSpriteEntity extends SceneEntity
 	{
-		public function OrtImageEntity()
+		public function OrtRibbonTrailSpriteEntity()
 		{
 			super();
 		}
@@ -26,7 +24,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 			//		     path/a.sprsres:textureNme(纹理集中的纹理名称)
 			//
 			//==================================================================
-			
+		
 			//assets
 			var assetPath:String = propertyBag.read("assetPath");
 			
@@ -53,18 +51,6 @@ package com.croco2d.utils.tmx.scene.ornaments
 				var textureAsset:ImageAsset = assetsManager.getImageAsset(assetPath);
 				texture = textureAsset.texture;
 			}
-			
-			//display
-			var image:CrocoImage = new CrocoImage();
-			image.texture = texture;
-			
-			//display component.
-			var displayComponent:DisplayComponent = new DisplayComponent();
-			displayComponent.displayObject = image;
-			
-			initComponents = [displayComponent];
-			
-			super.onInit();
 		}
 	}
 }

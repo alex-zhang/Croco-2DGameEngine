@@ -1,6 +1,7 @@
 package com.croco2d.utils.tmx.data
 {
 	import com.croco2d.AppConfig;
+	import com.croco2d.assets.CrocoAssetsManager;
 	
 	import starling.textures.Texture;
 
@@ -67,7 +68,8 @@ package com.croco2d.utils.tmx.data
 			imageSource = imageXML.@source;
 			imageSource = AppConfig.findTargetScenePathResource(mapData.tmxMapScene.name, imageSource);
 			
-//			imageTexture = mapData.tmxMapScene.screen.screenPreLoadAssetsManager.getImageAsset(imageSource).texture;
+			var assetsManager:CrocoAssetsManager = mapData.tmxMapScene.screen.screenAssetsManager;
+			imageTexture = assetsManager.getImageAsset(imageSource).texture;
 			
 			var imageWidth:int = parseInt(imageXML.@width);
 			var imageHeight:int = parseInt(imageXML.@height);

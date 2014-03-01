@@ -1,19 +1,22 @@
 package com.croco2d.utils.tmx.display
 {
 	import com.croco2d.display.map.TileMap;
+	import com.croco2d.utils.tmx.data.TMXMapData;
 	import com.croco2d.utils.tmx.data.TMXTileGridData;
 	import com.croco2d.utils.tmx.scene.TMXMapScene;
 
 	public class TMXTileMap extends TileMap
 	{
-		public var tmxMapScene:TMXMapScene;
 		public var tmxGridData:TMXTileGridData;
 		
-		public function TMXTileMap(cellWidth:int, cellHeight:int,
-								   maxColCount:int, maxRowCount:int,
-								   minColStartIndex:int = 0, minRowStartIndex:int = 0)
+		public function TMXTileMap(tmxGridData:TMXTileGridData)
 		{
-			super(cellWidth, cellHeight, maxColCount, maxRowCount, minColStartIndex, minRowStartIndex);
+			this.tmxGridData = tmxGridData;
+			
+			var tmxMapData:TMXMapData = tmxGridData.mapData;
+			
+			super(tmxMapData.tileWidth, tmxMapData.tileHeight, 
+				tmxMapData.numCol, tmxMapData.numRow);
 			
 			mapCellCls = TMXTileMapCell;
 		}
@@ -39,13 +42,13 @@ package com.croco2d.utils.tmx.display
 			super.dispose();
 			
 			tmxGridData = null;
-			tmxMapScene = null;
 		}
 	}
 }
 
-import com.croco2d.display.map.TileMapCell;
 import com.croco2d.assets.CrocoAssetsManager;
+import com.croco2d.display.map.TileMapCell;
+import com.croco2d.utils.tmx.data.TMXMapData;
 import com.croco2d.utils.tmx.data.TMXTileGridData;
 import com.croco2d.utils.tmx.data.TMXTileSheet;
 import com.croco2d.utils.tmx.display.TMXTileMap;
@@ -63,9 +66,11 @@ class TMXTileMapCell extends TileMapCell
 		super.onActive();
 		
 		var tmxTileMap:TMXTileMap = owner as TMXTileMap;
-		var tmxMapScene:TMXMapScene = tmxTileMap.tmxMapScene;
-		var assetsManager:CrocoAssetsManager// = tmxMapScene.screen.screenPreLoadAssetsManager;
 		var tileGridData:TMXTileGridData = tmxTileMap.tmxGridData;
+		var tmxMapData:TMXMapData = tileGridData.mapData;
+		var tmxMapScene:TMXMapScene = tmxMapData.tmxMapScene;
+		
+		var assetsManager:CrocoAssetsManager = tmxMapScene.screen.screenAssetsManager;
 		
 		var tileMapCellGID:int = tileGridData.getTileGIDValue(colIndex, rowIndex);
 		var tileSheet:TMXTileSheet = tileGridData.mapData.getTileSheetByGID(tileMapCellGID);
@@ -92,8 +97,7 @@ class TMXTileMapCell extends TileMapCell
 		this.setTexCoordsTo(0, tileMapTextureCellU0, tileMapTextureCellV0);
 		this.setTexCoordsTo(1, tileMapTextureCellU1, tileMapTextureCellV0);
 		this.setTexCoordsTo(2, tileMapTextureCellU0, tileMapTextureCellV1);
-		this.setTexCoordsTo(3, tileMapTextureCellU1, tileMapTextureCellV1);
-		
+		this.setTexCoordsTo(3, tileMapTextureCellU1, tileMapTextureCellV1);	
 	}
 }
 

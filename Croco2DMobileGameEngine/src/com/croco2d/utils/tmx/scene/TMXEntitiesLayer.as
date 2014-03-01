@@ -1,142 +1,107 @@
 package com.croco2d.utils.tmx.scene
 {
+	import com.croco2d.entities.SceneEntity;
+	import com.croco2d.utils.tmx.data.TMXPropertySet;
+	import com.fireflyLib.utils.TypeUtility;
+	
+	import flash.geom.Rectangle;
+
 	public class TMXEntitiesLayer extends TMXBasicLayer
 	{
-//		public function TMXEntitiesLayer()
-//		{
-//			super();
-//		}
-//		
-//		protected var mDeserializedEntities:Array;
-//		
-//		protected var mTMXEntitiesNameMap:Array;
-//		
-//		override protected function onInit():void
-//		{
-//			super.onInit();
-//			
-//			if(mDeserializedEntities)
-//			{
-//				mTMXEntitiesNameMap = [];
-//				
-//				var n:int = mDeserializedEntities.length;
-//				var objectInstance:SceneObject;
-//				for(var i:int = 0; i < n; i++)
-//				{
-//					objectInstance = mDeserializedEntities[i];
-//					
-//					if(objectInstance.name && objectInstance.name.length > 0)
-//					{
-//						mTMXEntitiesNameMap[objectInstance.name] = objectInstance;
-//					}
-//					
-//					addChild(objectInstance);
-//				}
-//				
-//				mDeserializedEntities = null;
-//			}
-//		}
-//		
-//		public function getTMXEntityByName(name:String):SceneObject
-//		{
-//			return mTMXEntitiesNameMap[name];
-//		}
-//		
-//		override public function dispose():void
-//		{
-//			super.dispose();
-//			
-//			if(mDeserializedEntities)
-//			{
-//				var n:int = mDeserializedEntities.length;
-//				var objectInstance:SceneObject;
-//				for(var i:int = 0; i < n; i++)
-//				{
-//					objectInstance = mDeserializedEntities[i];
-//					objectInstance.dispose();
-//				}
-//				
-//				mDeserializedEntities = null;
-//			}
-//			
-//			mTMXEntitiesNameMap = null;
-//		}
-//		
-//		override public function deserialize(xml:XML):void
-//		{
-//			super.deserialize(xml);	
-//			
-//			mDeserializedEntities = [];
-//			var objectXMLs:XMLList = xml.object; 
-//			for each(var objectXML:XML in objectXMLs)
-//			{
-//				deserializeForObject(objectXML);
-//			}
-//		}
-//		
-//		protected function deserializeForObject(objectXML:XML):void
-//		{
-//			var objectType:String;
-//			var objectTypeCls:Class;
-//			var objectInstance:SceneObject;
-//			var objectInstancePropertySet:TMXPropertySet;
-//			var objectVisibleTestRect:CrocoRect;
-//			
-//			if(objectXML.hasOwnProperty("@type"))
-//			{
-//				objectType = objectXML.@type;
-//				
-//				objectTypeCls = TypeUtility.getClassFromName(objectType);
-//				
-//				objectInstance = new objectTypeCls();
-//				objectInstance.type = objectType;
-//				objectInstance.x = parseInt(objectXML.@x);
-//				objectInstance.y = parseInt(objectXML.@y);
-//				objectInstance.visibleTestRect = new CrocoRect(0, 0, parseInt(objectXML.@width), parseInt(objectXML.@height)); 
-//				
-//				objectInstancePropertySet = new TMXPropertySet();
-//				objectInstancePropertySet.deserialize(objectXML.properties[0]);
-////				objectInstance.propertyBag = objectInstancePropertySet;
-//				
-//				if(objectXML.hasOwnProperty("ellipse"))
-//				{
-//					objectInstancePropertySet.write("ellipse", true);
-//				}
-//				else if(objectXML.hasOwnProperty("polyline"))
-//				{
-//					objectInstancePropertySet.write("points", deserializeForPolylinePoints(objectXML.polyline[0]));
-//				}
-//				
-//				mDeserializedEntities.push(objectInstance);
-//			}
-//		}
-//		
+		public function TMXEntitiesLayer()
+		{
+			super();
+		}
+		
+		override public function deserialize(xml:XML):void
+		{
+			super.deserialize(xml);	
+			
+			initSceneEnetities = [];
+			
+			var sceneEntity:SceneEntity;
+			
+			var objectXMLs:XMLList = xml.object; 
+			for each(var objectXML:XML in objectXMLs)
+			{
+				sceneEntity = deserializeForTMXObject(objectXML);
+				if(sceneEntity)
+				{
+					initSceneEnetities.push(sceneEntity);
+				}
+			}
+		}
+
+		protected function deserializeForTMXObject(objectXML:XML):SceneEntity
+		{
+			var entityClsType:String;
+			var entityCls:Class;
+			var entity:SceneEntity;
+			var entityTMXPropertySet:TMXPropertySet;
+			
+			if(objectXML.hasOwnProperty("@type"))
+			{
+				entityClsType = objectXML.@type;
+				entityCls = TypeUtility.getClassFromName(entityClsType);
+				
+				entity = new SceneEntity();
+				entity.type = entityClsType;
+				
+				entityTMXPropertySet = new TMXPropertySet();
+				entityTMXPropertySet.deserialize(objectXML.properties[0]);
+				entity.__propertyBag = entityTMXPropertySet;
+				
+				entity.x = parseInt(objectXML.@x);
+				entity.y = parseInt(objectXML.@y);
+				
+				entity.aabb = new Rectangle(0, 0, parseInt(objectXML.@width), parseInt(objectXML.@height));
+				
+				if(objectXML.hasOwnProperty("ellipse"))
+				{
+					entityTMXPropertySet.write("shapeType", "ellipse");
+				}
+				else if(objectXML.hasOwnProperty("polyline"))
+				{
+					entityTMXPropertySet.write("shapeType", "polyline");
+					entityTMXPropertySet.write("points", deserializeForLinePoints(objectXML.polyline[0]));
+				}
+				else if(objectXML.hasOwnProperty("polygon"))
+				{
+					entityTMXPropertySet.write("shapeType", "polygon");
+					entityTMXPropertySet.write("points", deserializeForLinePoints(objectXML.polygon[0]));
+				}
+			}
+			
+			return null;
+		}
+
 //		//object.x,.y...
-//		private function deserializeForPolylinePoints(polylineXML:XML):Array
-//		{
-//			var polylinePointsStr:String = polylineXML.@points;
-//			var polylinePointsStrArr:Array = polylinePointsStr.split(" ");
-//			
-//			var pointsLen:int = polylinePointsStrArr.length;
-//			
-//			var pointStr:String;
-//			var pointStrArr:Array;
-//			
-//			var point:Object;
-//			var results:Array = [];
-//			for(var i:int = 0; i < pointsLen; i++)
-//			{
-//				pointStr = polylinePointsStrArr[i];
-//				pointStrArr = pointStr.split(",");
-//				
-//				results.push({
-//					x:parseInt(pointStrArr[0]),
-//					y:parseInt(pointStrArr[1])
-//				});
-//				
-//			}
-//			return results;
-//			
-//		}
+		protected function deserializeForLinePoints(pointsXML:XML):Array
+		{
+			var pointsStr:String = pointsXML.@points;
+			var pointsStrArr:Array = pointsStr.split(" ");
+			
+			var pointsLen:int = pointsStrArr.length;
+			
+			var pointStr:String;
+			var pointStrArr:Array;
+			
+			var point:Object;
+			var results:Array = [];
+			
+			for(var i:int = 0; i < pointsLen; i++)
+			{
+				pointStr = pointStrArr[i];
+				pointStrArr = pointStr.split(",");
+				
+				results.push(
+					{
+					x:parseInt(pointStrArr[0]),
+					y:parseInt(pointStrArr[1])
+				});
+			}
+			return results;
+			
+		}
 	}
 }

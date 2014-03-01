@@ -1,63 +1,71 @@
 package com.croco2d.utils.tmx.scene
 {
+	import com.croco2d.AppConfig;
+	import com.croco2d.assets.CrocoAssetsManager;
+	import com.croco2d.components.DisplayComponent;
+	import com.croco2d.display.CrocoImage;
+	import com.croco2d.entities.SceneEntity;
+
 	public class TMXImageLayer extends TMXBasicLayer
 	{
-//		public var tmxImageSource:String;
-//		
-//		protected var mBackgroundImage:CrocoImage;
-//		
-//		public function TMXImageLayer()
-//		{
-//			super();
-//		}
-//		
-//		override public function deserialize(xml:XML):void
-//		{
-//			super.deserialize(xml);
-//			
-//			//must has the image XML tag.
-//			var imageXML:XML = xml.image[0];
-//			tmxImageSource = imageXML.@source;
-//		}
-//		
-//		override public function addChild(child:CrocoObject):CrocoObject
-//		{
-//			throw new Error("TMXImageLayer:: U can not add any things to this layer.");
-//		}
-//		
-//		override protected function onInit():void
-//		{
-//			super.onInit();
-//			
-//			var assetsManager:CrocoAssetsManager = scene.screen.screenPreLoadAssetsManager;
-//			
-//			var assetURL:String = AppConfig.findTargetScenePathResource(scene.name, tmxImageSource);
-//			
-//			mBackgroundImage = new CrocoImage();
-//			mBackgroundImage.texture = assetsManager.getImageAsset(assetURL).texture;
-//		}
-//		
-//		override public function draw(support:RenderSupport, parentAlpha:Number):void
-//		{
-//			mBackgroundImage.x = int(-CrocoEngine.camera.scrollX * scrollFactorX);
-//			mBackgroundImage.y = int(-CrocoEngine.camera.scrollY * scrollFactorY);
-//			
-//			//render
-//			support.pushMatrix();
-//			support.transformMatrix(mBackgroundImage);
-//			mBackgroundImage.render(support, parentAlpha * layerAlpha);
-//			support.popMatrix();
-//		}
-//		
-//		override public function dispose():void
-//		{
-//			super.dispose();
-//			
-//			if(mBackgroundImage)
-//			{
-//				mBackgroundImage.dispose();
-//				mBackgroundImage = null;
-//			}
-//		}
+		public var backgroundImageEntity:SceneEntity;
+
+		private var mImageWidth:Number;
+		private var mImageHeight:Number;
+		private var mImageSourcePath:String;
+		
+		public function TMXImageLayer()
+		{
+			super();
+		}
+		
+		override public function deserialize(xml:XML):void
+		{
+			super.deserialize(xml);
+			
+			mImageWidth = parseFloat(xml.@width);
+			mImageHeight = parseFloat(xml.@height);
+				
+			//must has the image XML tag.
+			var imageXML:XML = xml.image[0];
+			if(imageXML)
+			{
+				mImageSourcePath = imageXML.@source;
+			}
+		}
+		
+		override protected function onInit():void
+		{
+			var assetsManager:CrocoAssetsManager = scene.screen.screenAssetsManager;
+			
+			//image.
+			var crocoImage:CrocoImage = new CrocoImage();
+			var assetURL:String = AppConfig.findTargetScenePathResource(scene.name, mImageSourcePath);
+			crocoImage.texture = assetsManager.getImageAsset(assetURL).texture;
+			
+			//display component.
+			var displayComponent:DisplayComponent = new DisplayComponent();
+			displayComponent.displayObject = crocoImage;
+
+			//entity.
+			backgroundImageEntity = new SceneEntity();
+			backgroundImageEntity.initComponents = [displayComponent];
+			
+			initSceneEnetities = [backgroundImageEntity];
+			
+			super.onInit();
+		}
+		
+		override public function dispose():void
+		{
+			super.dispose();
+			
+			mImageWidth = NaN;
+			mImageHeight = NaN;
+			
+			mImageSourcePath = null;
+			
+			backgroundImageEntity = null;
+		}
 	}
 }

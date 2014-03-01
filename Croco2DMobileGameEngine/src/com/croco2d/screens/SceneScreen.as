@@ -62,7 +62,7 @@ package com.croco2d.screens
 		
 		protected function onInitScene():void
 		{
-			scene.uid = sceneId;
+			scene.name = sceneId;
 			scene.screen = this;
 			scene.screenAssetsManager = screenAssetsManager;
 		}

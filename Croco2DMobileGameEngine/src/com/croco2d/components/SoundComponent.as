@@ -1,25 +1,44 @@
 package com.croco2d.components
 {
+	import com.croco2d.CrocoEngine;
 	import com.croco2d.core.CrocoObject;
 	import com.croco2d.sound.ISoundHandle;
+	
+	import flash.media.Sound;
 
 	public class SoundComponent extends CrocoObject
 	{
-		public var __soundHandle:ISoundHandle;
+		protected var mSoundHandle:ISoundHandle;
 		
 		public function SoundComponent()
 		{
 			super();
 		}
 		
-		public function get soundHandle():ISoundHandle
+		public function playSound(sound:Sound, category:String):void
 		{
-			return __soundHandle;
+			stopSound();
+			
+			if(sound)
+			{
+				mSoundHandle = CrocoEngine.soundManager.play(sound, category);
+			}
 		}
 		
-		public function set soundHandle(value:ISoundHandle):void
+		public function stopSound():void
 		{
-			__soundHandle = value;
+			if(mSoundHandle)
+			{
+				mSoundHandle.stop();
+				mSoundHandle = null;
+			}
+		}
+		
+		override public function dispose():void
+		{
+			super.dispose();
+			
+			stopSound();
 		}
 	}
 }
