@@ -3,6 +3,7 @@ package com.croco2d.entities
 	import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.CrocoObjectEntity;
 	import com.croco2d.core.CrocoObjectGroup;
+	import com.croco2d.core.CrocoObjectSet;
 	
 	import flash.geom.Point;
 	
@@ -15,13 +16,6 @@ package com.croco2d.entities
 		public static const EVENT_ADD_SCENE_ENTITY:String = "addSceneEntity";
 		public static const EVENT_REMOVE_SCENE_ENTITY:String = "removeSceneEntity";
 		
-		public static function defaultDepthSortFunction(a:SceneEntity, b:SceneEntity):int
-		{
-			//-1 means the bottom depth than the other
-			if(a.sortPriority > b.sortPriority) return 1;
-			else return -1;
-		}
-		
 		//----------------------------------------------------------------------
 		
 		public var initSceneEnetities:Array;
@@ -30,7 +24,7 @@ package com.croco2d.entities
 		public var blendMode:String = BlendMode.AUTO;
 		public var touchAble:Boolean = true;
 		public var needRealTimeDepthSort:Boolean = false;
-		public var depthSortFunction:Function = defaultDepthSortFunction;
+		public var depthSortFunction:Function = CrocoObjectSet.defaultDepthSortFunction;
 		
 		public var __sceneEntitiesGroup:CrocoObjectGroup;
 		public var __onAddChildSceneEntityCallback:Function = onAddSceneEntity;
@@ -94,7 +88,7 @@ package com.croco2d.entities
 		
 		public function removeSceneEntity(sceneEntity:SceneEntity, needDispose:Boolean = false):SceneEntity
 		{
-			return __sceneEntitiesGroup.removeChild(sceneEntity, false) as SceneEntity;
+			return __sceneEntitiesGroup.removeChild(sceneEntity, needDispose) as SceneEntity;
 		}
 		
 		protected function onRemoveSceneEntity(sceneEntity:SceneEntity, needDispose:Boolean = false):void
@@ -129,47 +123,47 @@ package com.croco2d.entities
 		
 		public function findSceneEntityByField(field:String, value:*, filterFunc:Function = null):SceneEntity
 		{
-			return __pluinComponentsGroup.findChildByField(field, value, filterFunc) as SceneEntity;
+			return __sceneEntitiesGroup.findChildByField(field, value, filterFunc) as SceneEntity;
 		}
 		
 		public function findSceneEntitiesByField(field:String, value:*, results:Array = null, filterFunc:Function = null):Array
 		{
-			return __pluinComponentsGroup.findChildrenByField(field, value, results, filterFunc);
+			return __sceneEntitiesGroup.findChildrenByField(field, value, results, filterFunc);
 		}
 		
 		public function findSceneEntityByTypeCls(typeCls:Class, filterFunc:Function = null):SceneEntity
 		{
-			return __pluinComponentsGroup.findChildByTypeCls(typeCls, filterFunc) as SceneEntity;
+			return __sceneEntitiesGroup.findChildByTypeCls(typeCls, filterFunc) as SceneEntity;
 		}
 		
 		public function findSceneEntitiesByTypeCls(typeCls, results:Array = null):Array
 		{
-			return __pluinComponentsGroup.findChildrenByTypeCls(typeCls, results);
+			return __sceneEntitiesGroup.findChildrenByTypeCls(typeCls, results);
 		}
 		
 		public function findSceneEntityByFilterFunc(filterFunc:Function):CrocoObject 
 		{
-			return __pluinComponentsGroup.findChildByFilterFunc(filterFunc);
+			return __sceneEntitiesGroup.findChildByFilterFunc(filterFunc);
 		}
 		
 		public function findSceneEntitiesByFilterFunc(results:Array = null, filterFunc:Function = null):Array 
 		{
-			return __pluinComponentsGroup.findChildrenByFilterFunc(results, filterFunc);
+			return __sceneEntitiesGroup.findChildrenByFilterFunc(results, filterFunc);
 		}
 		
 		public function findAllSceneEntities(results:Array = null):Array
 		{
-			return __pluinComponentsGroup.findAllChildren(results);
+			return __sceneEntitiesGroup.findAllChildren(results);
 		}
 		
 		public function forEachSceneEntity(callback:Function):void
 		{
-			__pluinComponentsGroup.forEach(callback);
+			__sceneEntitiesGroup.forEach(callback);
 		}
 		
 		public function forEach2SceneEntity(callback:Function):void
 		{
-			__pluinComponentsGroup.forEach2(callback);
+			__sceneEntitiesGroup.forEach2(callback);
 		}
 		
 		override protected function onInit():void

@@ -49,7 +49,7 @@ package com.croco2d.core
 		
 		public function pluginComponent(component:CrocoObject):CrocoObject
 		{
-			if(!component.name) 
+			if(!component.name)
 			{
 				Logger.warn(this, "pluginComponent", "component must has a name.");
 				
