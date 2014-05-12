@@ -1,6 +1,5 @@
 .DS_Store
 Thumbs.db
-*.swc
 *.stackdump
 ._*
 *.local.properties
@@ -13,8 +12,6 @@ signing/
 .flexLibProperties
 .project
 .settings/
-bin-debug/
-bin-release/
 html-template/
 .metadata/
 *.iml

@@ -3,9 +3,9 @@ package com.croco2d
 	import com.croco2d.core.croco_internal;
 	import com.croco2d.screens.CrocoScreenNavigator;
 	import com.croco2d.screens.IBootStrapScreen;
-	import com.fireflyLib.debug.Logger;
 	import com.fireflyLib.utils.GlobalPropertyBag;
 	import com.fireflyLib.utils.ObjectFactoryUtil;
+	import com.llamaDebugger.Logger;
 	
 	import flash.desktop.NativeApplication;
 	import flash.display.DisplayObject;
@@ -22,7 +22,6 @@ package com.croco2d
 	import starling.display.DisplayObject;
 
 	[Event(name="bootStrapComplete", type="flash.events.Event")]
-	
 	public class AppBootStrap extends Sprite
 	{
 		public static const EVENT_BOOT_STRAP_COMPLETE:String = "bootStrapComplete";
@@ -46,7 +45,6 @@ package com.croco2d
 			
 			//default
 			this.visible = this.mouseEnabled = this.mouseChildren = false;
-			
 			this.addEventListener(Event.ADDED_TO_STAGE, firstAddToStageHandler);
 		}
 
@@ -57,10 +55,10 @@ package com.croco2d
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, firstAddToStageHandler);
 			
+			croco_internal::preInit();
+			
 			//listen the event for the whole bootstap process has completed.
 			this.addEventListener(EVENT_BOOT_STRAP_COMPLETE, appBootStrapCompleteHandler);
-			
-			croco_internal::preInit();
 		}
 		
 		//this is init process logic u'd better don't modify it. 
@@ -100,7 +98,7 @@ package com.croco2d
 		
 		protected function onAppPreInit():void
 		{
-			Logger.info(this, "onAppPreInit");
+			Logger.info("onAppPreInit");
 			
 			//the appConfigConfig the before all.
 			ObjectFactoryUtil.newInstance(appConfigCls, 
@@ -131,7 +129,7 @@ package com.croco2d
 		
 		protected function onGlobalObjectsInit():void
 		{
-			Logger.info(this, "onGlobalObjectsInit");
+			Logger.info("onGlobalObjectsInit");
 			
 			const globalObjectsConfig:Array = AppConfig.globalObjectsConfig;
 			var n:int = globalObjectsConfig.length;
@@ -152,7 +150,7 @@ package com.croco2d
 		
 		protected function onStarlingInit():void
 		{
-			Logger.info(this, "onStarlingInit");
+			Logger.info("onStarlingInit");
 
 			const starlingConfig:Object = AppConfig.starlingConfig;
 			__starling = ObjectFactoryUtil.newInstanceFromConfig(starlingConfig);
@@ -164,7 +162,7 @@ package com.croco2d
 		
 		protected function onAppPreInitComplete():void
 		{
-			Logger.info(this, "onAppPreInitComplete");
+			Logger.info("onAppPreInitComplete");
 		}
 		
 		//init part after starling created.
@@ -253,12 +251,12 @@ package com.croco2d
 		
 		protected function onAppInit():void
 		{
-			Logger.info(this, "onAppInit");
+			Logger.info("onAppInit");
 		}
 		
 		protected function onFeathersInit():void
 		{
-			Logger.info(this, "onFeathersInit");
+			Logger.info("onFeathersInit");
 			
 			const feathersConfig:Object = AppConfig.feathersConfig;
 			
@@ -267,7 +265,7 @@ package com.croco2d
 
 		protected function onBootStrapScreenInit():void
 		{
-			Logger.info(this, "onBootStrapScreenInit");
+			Logger.info("onBootStrapScreenInit");
 			
 			const bootStrapSceenConfig:Object = AppConfig.bootStrapSceenConfig;
 			__bootStrapScreen = ObjectFactoryUtil.newInstanceFromConfig(bootStrapSceenConfig) as IBootStrapScreen;
@@ -291,7 +289,7 @@ package com.croco2d
 		
 		protected function onScreensInit():void
 		{
-			Logger.info(this, "onScreensInit");
+			Logger.info("onScreensInit");
 			
 			var screensConfig:Array = AppConfig.screensConfig;
 			var n:int = screensConfig ? screensConfig.length : 0;
@@ -317,7 +315,7 @@ package com.croco2d
 		
 		protected function onCrocoEngineInit():void
 		{
-			Logger.info(this, "onCrocoEngineInit");
+			Logger.info("onCrocoEngineInit");
 			
 			const crocoEngineConfig:Object = AppConfig.crocoEngineConfig;
 			__crocoEngine = ObjectFactoryUtil.newInstanceFromConfig(crocoEngineConfig);
@@ -336,7 +334,7 @@ package com.croco2d
 		
 		protected function onAppAssetsPreloadInit():void
 		{
-			Logger.info(this, "onAppAssetsPreload");
+			Logger.info("onAppAssetsPreload");
 			
 			var appPreLoadAssetsFile:File = File.applicationDirectory.resolvePath(AppConfig.PATH_PRELOAD_URL);
 			CrocoEngine.globalAssetsManager.enqueue(appPreLoadAssetsFile);
@@ -344,14 +342,14 @@ package com.croco2d
 		
 		protected function onAppAssetsPreloadStart():void
 		{
-			Logger.info(this, "onAppAssetsPreloadStart");
+			Logger.info("onAppAssetsPreloadStart");
 			
 			CrocoEngine.globalAssetsManager.loadQueue(onAppAssetsPreloadProgress);
 		}
 		
 		protected function onAppInitComplete():void
 		{
-			Logger.info(this, "onAppInitComplete");
+			Logger.info("onAppInitComplete");
 		}
 		
 		//assets preload part.
@@ -384,7 +382,7 @@ package com.croco2d
 
 		protected function onAppAssetsPreloadComplete():void
 		{
-			Logger.info(this, "onAppAssetsPreloadComplete");
+			Logger.info("onAppAssetsPreloadComplete");
 		}
 		
 		
@@ -522,12 +520,12 @@ package com.croco2d
 		
 		protected function onAppBootStrapComplete():void
 		{
-			Logger.info(this, "onAppBootStrapComplete");
+			Logger.info("onAppBootStrapComplete");
 		}
 		
 		protected function onAppBootStrapCompletedThenReady2EntryScreen():void
 		{
-			Logger.info(this, "onAppBootStrapCompletedThenReady2GoEntryScreen");
+			Logger.info("onAppBootStrapCompletedThenReady2GoEntryScreen");
 			
 			const systemEventCallbackConfig:Object = AppConfig.systemCallbackConfig.systemEventCallbackConfig;
 			if(systemEventCallbackConfig.onAppBootStrapEntryScreenCallback != null)
@@ -545,7 +543,7 @@ package com.croco2d
 		
 		protected function onAppBootStrapCompletedAndClearSomethingsBefor():void
 		{
-			Logger.info(this, "onAppBootStrapCompletedAndClearSomethingsBefor");
+			Logger.info("onAppBootStrapCompletedAndClearSomethingsBefor");
 			
 			if(__bootStrapScreen)
 			{

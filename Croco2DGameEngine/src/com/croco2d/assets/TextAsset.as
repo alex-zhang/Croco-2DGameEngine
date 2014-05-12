@@ -16,10 +16,9 @@ package com.croco2d.assets
 			text = null;
 		}
 		
-		override protected function onBinaryBasedAssetDeserialize():void
+		override protected function onBinAssetDeserialize():void
 		{
 			text = new String(byteArray);
-			
 			byteArray.clear();
 			byteArray = null;
 		}

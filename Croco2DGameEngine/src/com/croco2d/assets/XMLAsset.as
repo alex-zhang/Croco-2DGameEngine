@@ -22,12 +22,14 @@ package com.croco2d.assets
 			}
 		}
 		
-		override protected function onBinaryBasedAssetDeserialize():void
+		override protected function onBinAssetDeserialize():void
 		{
 			xml = new XML(byteArray);
 			
 			byteArray.clear();
 			byteArray = null;
+			
+			onAssetLoadedCompeted();
 		}
 	}
 }

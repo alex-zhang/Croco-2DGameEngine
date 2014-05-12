@@ -2,8 +2,6 @@ package com.croco2d.assets
 {
 	import flash.display.Bitmap;
 	import flash.display.Loader;
-	import flash.system.ImageDecodingPolicy;
-	import flash.system.LoaderContext;
 	
 	import starling.events.Event;
 	import starling.textures.Texture;
@@ -17,48 +15,46 @@ package com.croco2d.assets
 			super(name, type, extention, url);
 		}
 		
-		override protected function onBinaryBasedAssetDeserialize():void
+		override public function dispose():void
+		{
+			super.dispose();
+			
+			if(texture)
+			{
+				texture.dispose();
+				texture = null;
+			}
+		}
+		
+		override protected function onBinAssetDeserialize():void
 		{
 			if(extention == "atf")
 			{
 				texture = Texture.fromAtfData(byteArray, assetsManager.scaleFactor, assetsManager.useMipMaps);
-				
-				byteArray.clear();
-				byteArray = null;
+
+				//don't clear the bytes for restore when lost context3d
+				//byteArray.clear();
+				//byteArray = null;
+
+				onAssetLoadedCompeted();
 			}
 			else//jpge, jpg, png
 			{
-				var imageLoaderContext:LoaderContext = new LoaderContext();
-				imageLoaderContext.imageDecodingPolicy = ImageDecodingPolicy.ON_LOAD;
+				var bitmapLoader:Loader = new Loader();
+				bitmapLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, 
+					function():void {
+						bitmapLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, arguments.callee);
+						texture = Texture.fromBitmap(bitmapLoader.content as Bitmap, assetsManager.useMipMaps, false, assetsManager.scaleFactor);
+						
+						//don't clear the bytes for restore when lost context3d
+						//byteArray.clear();
+						//byteArray = null;
+						
+						onAssetLoadedCompeted();
+				});
 				
-				var imageLoader:Loader = new Loader();
-				imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imageLoaderLoadCompleteHandler);
-				imageLoader.loadBytes(byteArray, imageLoaderContext);
-				var self:* = this;
-				function imageLoaderLoadCompleteHandler():void
-				{
-					imageLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, imageLoaderLoadCompleteHandler);
-					texture = Texture.fromBitmap(imageLoader.content as Bitmap, assetsManager.useMipMaps, false, assetsManager.scaleFactor);
-					
-					$onAssetDeserializeComplete();
-					
-					byteArray.clear();
-					byteArray = null;
-				}
+				bitmapLoader.loadBytes(byteArray);
 			}
-		}
-		
-		override protected function onAssetDeserializeComplete():void
-		{
-			if(extention == "atf")
-			{
-				$onAssetDeserializeComplete();
-			}
-		}
-		
-		private function $onAssetDeserializeComplete():void
-		{
-			super.onAssetDeserializeComplete();
 		}
 	}
 }

@@ -4,6 +4,7 @@
     <classEntry path="com.croco2d.components.DistanceSoundComponent"/>
     <classEntry path="com.croco2d.components.PathMovingComponent"/>
     <classEntry path="com.croco2d.utils.tmx.scene.ornaments.OrtRibbonTrailSpriteEntity"/>
+    <classEntry path="com.fireflyLib.utils.PathUtil"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

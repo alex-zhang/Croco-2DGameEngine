@@ -9,6 +9,9 @@
       <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/GitHub/feathers/source"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/GitHub/Starling-Filters/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/GitHub/Starling-Extension-Graphics/extension/src"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/GitHub/fzip/src"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/GitHub/as3corelib/src"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="D:/work/GitHub/LlamaDebugger-Lib/LlamaDebugger/src"/>
     </compilerSourcePath>
     <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">
@@ -41,6 +44,7 @@
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_agent.swc" useDefaultLinkType="false"/>
         </excludedEntries>
       </libraryPathEntry>
+      <libraryPathEntry kind="1" linkType="1" path="libs"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
@@ -52,5 +56,3 @@
   <buildCSSFiles/>
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
 </actionScriptProperties>
-
-

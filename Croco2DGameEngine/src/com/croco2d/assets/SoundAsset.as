@@ -10,15 +10,15 @@ package com.croco2d.assets
 		{
 			super(name, type, extention, url);
 		}
-	
-		override protected function onBinaryBasedAssetDeserialize():void
+		
+		override protected function onBinAssetDeserialize():void
 		{
-			sound = new Sound();
-			
 			sound.loadCompressedDataFromByteArray(byteArray, byteArray.length);
 			
 			byteArray.clear();
 			byteArray = null;
+			
+			onAssetLoadedCompeted();
 		}
 	}
 }

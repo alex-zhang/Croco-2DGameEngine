@@ -67,12 +67,8 @@ package com.croco2d.assets
 		//asset loaded but need to init.
 		protected function onAssetDeserialize():void
 		{
-			onAssetDeserializeComplete();
-		}
-		
-		protected function onAssetDeserializeComplete():void
-		{
-			onAssetLoadedCompeted();
+			//should call in sub clss.
+//			onAssetLoadedCompeted();
 		}
 		
 		protected function onLoadErrorHandler(event:Event):void 

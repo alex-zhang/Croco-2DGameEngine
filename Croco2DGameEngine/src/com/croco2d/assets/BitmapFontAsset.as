@@ -1,38 +1,20 @@
 package com.croco2d.assets
 {
-	import flash.system.System;
-	import flash.utils.ByteArray;
+	import deng.fzip.FZipFile;
 	
 	import starling.text.BitmapFont;
 	import starling.text.TextField;
-	import starling.textures.Texture;
 
-	public class BitmapFontAsset extends CoralDirPackAsset
+	public class BitmapFontAsset extends ZipPackAsset
 	{
+		//ImageAsset(*.atf, *.png, *.jpg) + font.fnt
 		public var bitmapFont:BitmapFont;
+		
+		private var mImageAsset:ImageAsset;
 		
 		public function BitmapFontAsset(name:String, type:String, extention:String, url:String)
 		{
 			super(name, type, extention, url);
-		}
-		
-		override protected function onBinaryBasedAssetDeserialize():void
-		{
-			super.onBinaryBasedAssetDeserialize();
-			
-			var fontXMlBytes:ByteArray = coralPackDirFile.getFile("font.fnt").contentBytes;
-			var fontAtfBytes:ByteArray = coralPackDirFile.getFile("font.atf").contentBytes;
-			
-			var fontXML:XML = new XML(fontXMlBytes);
-			var fontTexture:Texture = Texture.fromAtfData(fontAtfBytes, 
-				assetsManager.scaleFactor, 
-				assetsManager.useMipMaps);
-			
-			bitmapFont = new BitmapFont(fontTexture, fontXML);
-			
-			TextField.registerBitmapFont(bitmapFont, bitmapFont.name);
-			
-			System.disposeXML(fontXML);
 		}
 		
 		override public function dispose():void
@@ -45,6 +27,55 @@ package com.croco2d.assets
 				bitmapFont.dispose();
 				bitmapFont = null;
 			}
+			
+			if(mImageAsset)
+			{
+				mImageAsset.dispose();
+				mImageAsset = null;
+			}
+		}
+		
+		override protected function onZipAssetDeserialize():void
+		{
+			var fontXMLZipFile:FZipFile = zipPackFile.getFileByName("font.fnt");
+			var fontXML:XML = new XML(fontXMLZipFile.content);
+			
+			var imageZipFile:FZipFile;
+			
+			var zipFile:FZipFile;
+			var n:int = zipPackFile.getFileCount();
+			for(var i:int = 0; i < n; i++)
+			{
+				zipFile = zipPackFile.getFileAt(i);
+				if(zipFile !== fontXMLZipFile)
+				{
+					imageZipFile = zipFile;
+					break;
+				}
+			}
+			
+			var imageZipFileFullName:String = imageZipFile.filename;
+			var imageZipFileExtension:String = null;
+			var indexOfDot:int = imageZipFileFullName.lastIndexOf(".");
+			if(indexOfDot != -1)
+			{
+				imageZipFileExtension = imageZipFileFullName.substr(indexOfDot + 1);
+			}
+			
+			//keey the image asset fot texture restore.
+			mImageAsset = new ImageAsset(imageZipFileFullName, 
+				CrocoAssetsManager.IMAGE_TYPE, 
+				imageZipFileExtension, null);
+			
+			mImageAsset.loadBytes(imageZipFile.content, function():void {
+
+				bitmapFont = new BitmapFont(mImageAsset.texture, fontXML);
+				
+				//for void texture double dispose. and keep the texture bytes for restore.
+				mImageAsset.texture = null
+				
+				onAssetLoadedCompeted();
+			});
 		}
 	}
 }

@@ -152,7 +152,7 @@ package com.croco2d.components
 				{
 					angle = MathUtil.twoPointToRadian(x, y, pathNode.x, pathNode.y);
 				}
-			}			
+			}
 		}
 		
 		/**

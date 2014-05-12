@@ -14,7 +14,7 @@ package com.croco2d
 	import com.croco2d.utils.tmx.scene.ornaments.OrtLineUVAnimationEntity;
 	import com.croco2d.utils.tmx.scene.ornaments.OrtParticalSpriteEntity;
 	import com.croco2d.utils.tmx.scene.ornaments.OrtSurroundingSoundEntity;
-	import com.fireflyLib.debug.Logger;
+	import com.llamaDebugger.Logger;
 
 	//data format see ObjectFactoryUtil.newInstanceFromConfig
 	public class AppConfig
@@ -283,7 +283,7 @@ package com.croco2d
 		//----------------------------------------------------------------------
 		public function AppConfig()
 		{
-			Logger.info(this, "appConfigInit.");
+			Logger.info("appConfigInit.");
 		}
 		
 		
@@ -325,9 +325,6 @@ package com.croco2d
 			return AppConfig.findScenesPathResource(sceneName + "/" + relativeURL);
 		}
 		//----------------------------------------------------------------------
-		
-		//the context.	
-		public static var appBootStrap:AppBootStrap; 
 		
 		//Strong Reference Clsses.
 		//----------------------------------------------------------------------

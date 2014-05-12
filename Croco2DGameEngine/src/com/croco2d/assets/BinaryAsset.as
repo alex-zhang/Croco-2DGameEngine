@@ -37,8 +37,15 @@ package com.croco2d.assets
 			mBytesLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onLoadErrorHandler);
 			mBytesLoader.addEventListener(ProgressEvent.PROGRESS, onLoadProgressHandler);
 			mBytesLoader.addEventListener(Event.COMPLETE, onLoadCompletedHandler);
-			
+
 			mBytesLoader.load(new URLRequest(url));
+		}
+		
+		public function loadBytes(bytes:ByteArray, loadCompletedCallback:Function):void
+		{
+			this.byteArray = bytes;
+			super.load(null, loadCompletedCallback);
+			onBinAssetDeserialize();
 		}
 		
 		override protected function onLoadCompletedHandler(event:Event):void 
@@ -52,18 +59,18 @@ package com.croco2d.assets
 			mBytesLoader = null;
 		}
 		
-		override protected function onAssetDeserialize():void
+		//onBinAssetDeserialize instead.
+		override protected final function onAssetDeserialize():void
 		{
 			byteArray = new ByteArray();
 			mBytesLoader.readBytes(byteArray);
-			
-			onBinaryBasedAssetDeserialize();
-			
-			onAssetDeserializeComplete();
+
+			onBinAssetDeserialize();
 		}
 		
-		protected function onBinaryBasedAssetDeserialize():void
+		protected function onBinAssetDeserialize():void
 		{
+			onAssetLoadedCompeted();
 		}
 		
 		override protected function onLoadErrorHandler(event:Event):void 

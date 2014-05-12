@@ -1,8 +1,8 @@
 package com.croco2d.utils.tmx.data
 {
 	import com.croco2d.utils.tmx.scene.TMXMapScene;
-	import com.fireflyLib.debug.Logger;
 	import com.fireflyLib.utils.TypeUtility;
+	import com.llamaDebugger.Logger;
 
 	public class TMXMapData extends TMXDataBasic
 	{

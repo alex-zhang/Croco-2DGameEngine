@@ -4,8 +4,8 @@ package com.croco2d.entities
 	import com.croco2d.CrocoEngine;
 	import com.croco2d.core.CrocoObjectEntity;
 	import com.croco2d.utils.CrocoMathUtil;
-	import com.fireflyLib.debug.Logger;
 	import com.fireflyLib.utils.MathUtil;
+	import com.llamaDebugger.Logger;
 	
 	import flash.display.Graphics;
 	import flash.geom.Matrix;
@@ -78,7 +78,7 @@ package com.croco2d.entities
 		public var __currentScene:CrocoScene;//Scene, SceneLayer SceneEnity.
 		
 		public var __displayStage:DisplayObjectContainer;
-
+		
 		public function CrocoCamera()
 		{
 			super();

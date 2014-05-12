@@ -1,10 +1,9 @@
 package com.croco2d.assets
 {
-	
 	import com.croco2d.AppConfig;
 	import com.croco2d.core.CrocoObject;
-	import com.fireflyLib.debug.Logger;
 	import com.fireflyLib.utils.TypeUtility;
+	import com.llamaDebugger.Logger;
 	
 	import flash.utils.clearTimeout;
 	import flash.utils.getQualifiedClassName;
@@ -25,15 +24,16 @@ package com.croco2d.assets
 		
 		public static const IMAGE_TYPE:String = "image";
 		
-		public static const EXCEL_DATA_REPOSITORY_TYPE:String = "excelDataRepository";
+		public static const DATA_REPOSITORY_TYPE:String = "DataRepo";
+//		public static const CORAL_DIR_PACK_RES_TYPE:String = "coralDirPackRes";
+		public static const ANIMATION_SET_TYPE:String = "AnimationSet";
+		public static const SPRIT_SHEET_TYPE:String = "SpritSheet";
+		public static const PARTICLE_SET_TYPE:String = "ParticleSet";
+		public static const BITMAP_FONT_TYPE:String = "BitmapFont";
 		
-		public static const CORAL_DIR_PACK_RES_TYPE:String = "coralDirPackRes";
-		public static const ANIMATION_SET_RES_TYPE:String = "animationSetRes";
-		public static const SPRIT_SHEET_RES_TYPE:String = "spritsheetRes";
-		public static const PARTICLE_SET_RES_TYPE:String = "particleSetRes";
-		public static const BITMAP_FONT_RES_TYPE:String = "bitmapFontRes";
+		public static const BINARY_TYPE:String = "bin";
 		
-		public static const BINARY_TYPE:String = "binary";
+		//=================================================================================================
 		
 		//tmx is tiled map editor export.
 		public static const TEXT_EXTENSIONS:Array = ["txt", "ini", "text", "js", "php", "asp", "py"];
@@ -45,15 +45,19 @@ package com.croco2d.assets
 		
 		public static const IMAGE_TYPE_EXTENTION:Array = ["jpg", "jpeg", "png", "atf"];
 		
-		public static const EXCEL_DATA_REPOSITORY_EXTENTION:String = "drp";
+		public static const DATA_REPOSITORY_EXTENTION:String = "drp";
 		
-		public static const CORAL_DIR_PACK_RES_EXTENTION:String = "crdirpacres";
-		public static const ANIMATION_SET_RES_EXTENTION:String = "anisetres";
-		public static const SPRIT_SHEET_RES_EXTENTION:String = "sprsres";
-		public static const PARTICLE_SET_RES_EXTENTION:String = "parsetres";
-		public static const BITMAP_FONT_RES_EXTENTION:String = "bfntres";
+//		public static const CORAL_DIR_PACK_RES_EXTENTION:String = "crdirpacres";
+		public static const ANIMATION_SET_EXTENTION:String = "AnimationSet";
+		public static const SPRIT_SHEET_EXTENTION:String = "SpritSheet";
+		public static const PARTICLE_SET_EXTENTION:String = "ParticleSet";
+		public static const BITMAP_FONT_EXTENTION:String = "BitmapFont";
 		
 		public static const BINARY_EXTENTION:String = "bin";//or other can'r read binary file.
+		
+		
+		
+		//====================================================================================================
 		
 		private var mAssetsTypeClassMap:Array = [];//type->AssetTypeClass
 		private var mAssetsExtentionToTypeMap:Array = [];//extention->AssetTypeClass
@@ -197,23 +201,23 @@ package com.croco2d.assets
 				registAssetTypeExtention(CrocoAssetsManager.IMAGE_TYPE, extention);
 			}
 			
-			registAssetTypeClass(CrocoAssetsManager.EXCEL_DATA_REPOSITORY_TYPE, ExcelDataRepositoryAsset);
-			registAssetTypeExtention(CrocoAssetsManager.EXCEL_DATA_REPOSITORY_TYPE, CrocoAssetsManager.EXCEL_DATA_REPOSITORY_EXTENTION);
+			registAssetTypeClass(CrocoAssetsManager.DATA_REPOSITORY_TYPE, DataRepositoryAsset);
+			registAssetTypeExtention(CrocoAssetsManager.DATA_REPOSITORY_TYPE, CrocoAssetsManager.DATA_REPOSITORY_EXTENTION);
 			
-			registAssetTypeClass(CrocoAssetsManager.CORAL_DIR_PACK_RES_TYPE, CoralDirPackAsset);
-			registAssetTypeExtention(CrocoAssetsManager.CORAL_DIR_PACK_RES_TYPE, CrocoAssetsManager.CORAL_DIR_PACK_RES_EXTENTION);
+//			registAssetTypeClass(CrocoAssetsManager.CORAL_DIR_PACK_RES_TYPE, ZipPackAsset);
+//			registAssetTypeExtention(CrocoAssetsManager.CORAL_DIR_PACK_RES_TYPE, CrocoAssetsManager.CORAL_DIR_PACK_RES_EXTENTION);
 			
-			registAssetTypeClass(CrocoAssetsManager.ANIMATION_SET_RES_TYPE, AnimationSetAsset);
-			registAssetTypeExtention(CrocoAssetsManager.ANIMATION_SET_RES_TYPE, CrocoAssetsManager.ANIMATION_SET_RES_EXTENTION);
+			registAssetTypeClass(CrocoAssetsManager.ANIMATION_SET_TYPE, AnimationSetAsset);
+			registAssetTypeExtention(CrocoAssetsManager.ANIMATION_SET_TYPE, CrocoAssetsManager.ANIMATION_SET_EXTENTION);
 			
-			registAssetTypeClass(CrocoAssetsManager.SPRIT_SHEET_RES_TYPE, SpriteSheetAsset);
-			registAssetTypeExtention(CrocoAssetsManager.SPRIT_SHEET_RES_TYPE, CrocoAssetsManager.SPRIT_SHEET_RES_EXTENTION);
+			registAssetTypeClass(CrocoAssetsManager.SPRIT_SHEET_TYPE, SpriteSheetAsset);
+			registAssetTypeExtention(CrocoAssetsManager.SPRIT_SHEET_TYPE, CrocoAssetsManager.SPRIT_SHEET_EXTENTION);
 			
-			registAssetTypeClass(CrocoAssetsManager.PARTICLE_SET_RES_TYPE, ParticleSetAsset);
-			registAssetTypeExtention(CrocoAssetsManager.PARTICLE_SET_RES_TYPE, CrocoAssetsManager.PARTICLE_SET_RES_EXTENTION);
-			
-			registAssetTypeClass(CrocoAssetsManager.BITMAP_FONT_RES_TYPE, BitmapFontAsset);
-			registAssetTypeExtention(CrocoAssetsManager.BITMAP_FONT_RES_TYPE, CrocoAssetsManager.BITMAP_FONT_RES_EXTENTION);
+			registAssetTypeClass(CrocoAssetsManager.PARTICLE_SET_TYPE, ParticleSetAsset);
+			registAssetTypeExtention(CrocoAssetsManager.PARTICLE_SET_TYPE, CrocoAssetsManager.PARTICLE_SET_EXTENTION);
+
+			registAssetTypeClass(CrocoAssetsManager.BITMAP_FONT_TYPE, BitmapFontAsset);
+			registAssetTypeExtention(CrocoAssetsManager.BITMAP_FONT_TYPE, CrocoAssetsManager.BITMAP_FONT_EXTENTION);
 			
 			registAssetTypeClass(CrocoAssetsManager.BINARY_TYPE, BinaryAsset);
 			registAssetTypeExtention(CrocoAssetsManager.BINARY_TYPE, CrocoAssetsManager.BINARY_EXTENTION);
@@ -254,34 +258,34 @@ package com.croco2d.assets
 			return getAssetByTypeAndName(IMAGE_TYPE, name) as ImageAsset;
 		}
 		
-		public function getExcelDataRepositoryAsset(name:String):ExcelDataRepositoryAsset
+		public function getDataRepositoryAsset(name:String):DataRepositoryAsset
 		{
-			return getAssetByTypeAndName(EXCEL_DATA_REPOSITORY_TYPE, name) as ExcelDataRepositoryAsset;
+			return getAssetByTypeAndName(DATA_REPOSITORY_TYPE, name) as DataRepositoryAsset;
 		}
 		
 		public function getAniSetResAsset(name:String):AnimationSetAsset
 		{
-			return getAssetByTypeAndName(ANIMATION_SET_RES_TYPE, name) as AnimationSetAsset;
+			return getAssetByTypeAndName(ANIMATION_SET_TYPE, name) as AnimationSetAsset;
 		}
 		
-		public function getCoralDirPackAsset(name:String):CoralDirPackAsset
-		{
-			return getAssetByTypeAndName(CORAL_DIR_PACK_RES_TYPE, name) as CoralDirPackAsset;
-		}
+//		public function getCoralDirPackAsset(name:String):ZipPackAsset
+//		{
+//			return getAssetByTypeAndName(CORAL_DIR_PACK_RES_TYPE, name) as ZipPackAsset;
+//		}
 		
 		public function getSpriteSheetAsset(name:String):SpriteSheetAsset
 		{
-			return getAssetByTypeAndName(SPRIT_SHEET_RES_TYPE, name) as SpriteSheetAsset;
+			return getAssetByTypeAndName(SPRIT_SHEET_TYPE, name) as SpriteSheetAsset;
 		}
 		
 		public function getParticleSetAsset(name:String):ParticleSetAsset
 		{
-			return getAssetByTypeAndName(PARTICLE_SET_RES_TYPE, name) as ParticleSetAsset;
+			return getAssetByTypeAndName(PARTICLE_SET_TYPE, name) as ParticleSetAsset;
 		}
 		
 		public function getBitmapFontAsset(name:String):BitmapFontAsset
 		{
-			return getAssetByTypeAndName(BITMAP_FONT_RES_TYPE, name) as BitmapFontAsset;
+			return getAssetByTypeAndName(BITMAP_FONT_TYPE, name) as BitmapFontAsset;
 		}
 		
 		public function getBinaryAsset(name:String):BinaryAsset

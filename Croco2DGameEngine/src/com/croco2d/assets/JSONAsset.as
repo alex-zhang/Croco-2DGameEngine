@@ -9,20 +9,22 @@ package com.croco2d.assets
 			super(name, type, extention, url);
 		}
 		
-		override public function dispose():void
-		{
-			super.dispose();
-			
-			json = null;
-		}
-		
-		override protected function onBinaryBasedAssetDeserialize():void
+		override protected function onBinAssetDeserialize():void
 		{
 			var jsonStr:String = new String(byteArray);
 			json = JSON.parse(jsonStr);
 			
 			byteArray.clear();
 			byteArray = null;
+			
+			onAssetLoadedCompeted();
+		}
+		
+		override public function dispose():void
+		{
+			super.dispose();
+			
+			json = null;
 		}
 	}
 }

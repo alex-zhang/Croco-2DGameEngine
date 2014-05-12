@@ -1,7 +1,6 @@
 package com.croco2d.sound
 {
-    import com.croco2d.sound.ISoundHandle;
-    import com.fireflyLib.debug.Logger;
+    import com.llamaDebugger.Logger;
     
     import flash.events.Event;
     import flash.media.Sound;
@@ -126,7 +125,7 @@ package com.croco2d.sound
             }
             catch(e:Error)
             {
-                Logger.error("SoundHandle", "resume Error starting sound playback: " + e.toString());
+                Logger.error("resume Error starting sound playback: " + e.toString(), "resume", "SoundHandle");
             }
         }
         

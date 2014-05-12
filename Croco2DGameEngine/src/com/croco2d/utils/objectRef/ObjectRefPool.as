@@ -1,7 +1,7 @@
 package com.croco2d.utils.objectRef
 {
 	import com.croco2d.core.CrocoObject;
-	import com.fireflyLib.debug.Logger;
+	import com.llamaDebugger.Logger;
 	
 	import flash.sampler.getSize;
 
@@ -35,7 +35,7 @@ package com.croco2d.utils.objectRef
 			}
 			else
 			{
-				Logger.warn(this, "addObjectRef", "key " + key + " has already exist!");
+				Logger.warn("key " + key + " has already exist!", "addObjectRef", "ObjectRefPool");
 			}
 		}
 		
@@ -70,7 +70,7 @@ package com.croco2d.utils.objectRef
 				return item.clone();
 			}
 			
-			Logger.error(this, "fetchObjectRef", "there is no IObjectRefData in cache pool. key: " + key);
+			Logger.error("there is no IObjectRefData in cache pool. key: " + key, "fetchObjectRef", "ObjectRefPool");
 			
 			return null;
 		}
@@ -80,7 +80,7 @@ package com.croco2d.utils.objectRef
 			var item:ObjectRefData = __activedObjects[key];
 			if(!item)
 			{
-				Logger.error(this, "releaseObjectReference", "key: " +  key + "is not in the actived cache pool.");
+				Logger.error("key: " +  key + "is not in the actived cache pool.", "releaseObjectReference", "ObjectRefPool");
 				return;
 			}
 			
@@ -137,7 +137,8 @@ package com.croco2d.utils.objectRef
 			if(debug)
 			{
 				logMsg += "count: " + itemCount;
-				Logger.info(this, "swipDeActivedObjects", logMsg);
+				
+				Logger.info(logMsg, "swipDeActivedObjects", "ObjectRefPool");
 			}
 		}
 		
@@ -148,7 +149,7 @@ package com.croco2d.utils.objectRef
 
 			if(debug)
 			{
-				Logger.info(this, "onDisposeContent", this.name + "");
+				Logger.info(this.name, "onDisposeContent", "ObjectRefPool");
 			}
 		}
 		

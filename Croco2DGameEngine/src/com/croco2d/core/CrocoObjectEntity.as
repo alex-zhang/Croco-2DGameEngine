@@ -1,8 +1,8 @@
 package com.croco2d.core
 {
-	import com.fireflyLib.debug.Logger;
 	import com.fireflyLib.utils.EventEmitter;
 	import com.fireflyLib.utils.PropertyBag;
+	import com.llamaDebugger.Logger;
 	
 	use namespace croco_internal;
 

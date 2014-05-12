@@ -1,6 +1,6 @@
 package com.croco2d.utils.tmx.data
 {
-	import com.fireflyLib.crypto.Base64Decoder;
+	import com.adobe.crypto.Base64Decoder;
 	
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
