@@ -1,8 +1,8 @@
 package com.croco2d.components
 {
 	import com.croco2d.CrocoEngine;
-	import com.croco2d.entities.CrocoCamera;
-	import com.croco2d.entities.SceneEntity;
+	import com.croco2d.scene.CrocoCamera;
+	import com.croco2d.scene.SceneEntity;
 	import com.fireflyLib.utils.MathUtil;
 	
 	import flash.media.Sound;

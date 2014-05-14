@@ -39,17 +39,17 @@ package com.croco2d.display
 			return mChildrenSortFunction;
 		}
 		
-		override protected function onChildRemoved(child:DisplayObject):void
-		{
-			child.starling_internal::setParent(null);
-		}
-		
-		override protected function onChildAdded(child:DisplayObject):void
-		{
-			child.starling_internal::setParent(this);
-			
-			invalidChildrenSort();
-		}
+//		override protected function onChildRemoved(child:DisplayObject):void
+//		{
+//			child.starling_internal::setParent(null);
+//		}
+//		
+//		override protected function onChildAdded(child:DisplayObject):void
+//		{
+//			child.starling_internal::setParent(this);
+//			
+//			invalidChildrenSort();
+//		}
 		
 		override public function render(support:RenderSupport, parentAlpha:Number):void
 		{

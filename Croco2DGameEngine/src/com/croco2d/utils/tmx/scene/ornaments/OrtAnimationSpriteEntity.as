@@ -9,7 +9,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import com.croco2d.display.animationSprite.AnimationSetInfo;
 	import com.croco2d.display.animationSprite.AnimationSprite;
 	import com.croco2d.display.animationSprite.FrameInfo;
-	import com.croco2d.entities.SceneEntity;
+	import com.croco2d.scene.SceneEntity;
 	
 	import starling.textures.Texture;
 
@@ -36,7 +36,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 			var assetPath:String = propertyBag.read("assetPath");
 			var fps:Number = int(parseInt(propertyBag.read("fps")));//default
 			
-			var assetsManager:CrocoAssetsManager = scene.screen.screenAssetsManager;
+			var assetsManager:CrocoAssetsManager = scene.assetsManager;
 			
 			var animationName:String;
 			var assetPathArr:Array;
@@ -52,7 +52,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 			var pivotX:Number = 0;
 			var pivotY:Number = 0;
 			
-			if(assetPath.lastIndexOf(CrocoAssetsManager.SPRIT_SHEET_RES_EXTENTION) != -1)
+			if(assetPath.lastIndexOf(CrocoAssetsManager.SPRIT_SHEET_EXTENTION) != -1)
 			{
 				var spriteSheetAsset:SpriteSheetAsset = assetsManager.getSpriteSheetAsset(assetPath);
 				
@@ -74,7 +74,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 				
 				if(fps <= 0) fps = 24;
 			}
-			else if(assetPath.lastIndexOf(CrocoAssetsManager.ANIMATION_SET_RES_EXTENTION) != -1)
+			else if(assetPath.lastIndexOf(CrocoAssetsManager.ANIMATION_SET_EXTENTION) != -1)
 			{
 				var animationSetAsset:AnimationSetAsset = assetsManager.getAniSetResAsset(assetPath);
 				

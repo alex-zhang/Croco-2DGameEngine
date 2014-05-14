@@ -1,13 +1,9 @@
 package com.croco2d
 {
 	import com.croco2d.assets.CrocoAssetsManager;
+	import com.croco2d.bootStrap.FlashBootStrapScreen;
+	import com.croco2d.bootStrap.StarlingBootStrapScreen;
 	import com.croco2d.input.controllers.KeyboardController;
-	import com.croco2d.screens.CrocoScreen;
-	import com.croco2d.screens.CrocoScreenNavigator;
-	import com.croco2d.screens.FlashBootStrapScreen;
-	import com.croco2d.screens.PreloadHubScreen;
-	import com.croco2d.screens.SceneScreen;
-	import com.croco2d.screens.StarlingBootStrapScreen;
 	import com.croco2d.utils.tmx.scene.ornaments.OrtAnimationSetSpriteEntity;
 	import com.croco2d.utils.tmx.scene.ornaments.OrtAnimationSpriteEntity;
 	import com.croco2d.utils.tmx.scene.ornaments.OrtImageEntity;
@@ -27,12 +23,7 @@ package com.croco2d
 		public static const KEY_CROCO_ENGINE:String = "crocoEngine";
 		
 		public static const KEY_GLOBAL_ASSETS_MANAGER:String = "globalAssetsManager";
-		public static const KEY_ENTRY_SCREEN_DATA:String = "entryScreenData";
-		public static const KEY_JUMP2TARGET_SCREEN_ID:String = "jump2TargetScreenId";
-		public static const KEY_SCREEN_ID:String = "screenId";
-		public static const KEY_SCENE_ID:String = "sceneId";
-		public static const KEY_HUB_SCREEN_ID:String = "hubScreenId";
-		public static const KEY_SCEEN_ASSETS_MANAGER:String = "screenAssetsManager";
+		public static const KEY_SCENE_ASSETS_MANAGER:String = "sceneAssetsManager";
 		
 		public static const KEY_CAMERA:String = "camera";
 		public static const KEY_INPUT_MANAGER:String = "inputManager";
@@ -44,19 +35,18 @@ package com.croco2d
 		//if u modify the path u'd better modify all.
 		//----------------------------------------------------------------------
 		public static var PATH_ROOT_URL:String = "";
-		public static var PATH_ASSETS_URL:String = PATH_ROOT_URL + "assets/";
-		public static var PATH_APP_URL:String = PATH_ASSETS_URL + "app/";
+		public static var PATH_ASSETS_URL:String = PATH_ROOT_URL + "/assets";
+		public static var PATH_APP_URL:String = PATH_ASSETS_URL + "/app";
 		
-		public static var PATH_PRELOAD_URL:String = PATH_APP_URL + "preload/";
-		public static var PATH_SHARED_URL:String = PATH_APP_URL + "shared/";
-		public static var PATH_SCREENS_URL:String = PATH_APP_URL + "screens/";
-		public static var PATH_SCENES_URL:String = PATH_APP_URL + "scenes/";
+		public static var PATH_PRELOAD_URL:String = PATH_APP_URL + "/preload";
+		public static var PATH_SHARED_URL:String = PATH_APP_URL + "/shared";
+		public static var PATH_SCENES_URL:String = PATH_APP_URL + "/scenes";
 		
 		//system config  Define
 		//----------------------------------------------------------------------
 		
-		//global config.
-		public static var globalParamsConfig:Object = 
+		//global evn config.
+		public static var globalEvnConfig:Object = 
 		{
 			//1.3333~ 1.777 ratio.
 			designWidth:960,
@@ -76,7 +66,7 @@ package com.croco2d
 			preInitCallbackConfig:
 			{
 				onAppPreInitedCallback:null,
-				onGlobalObjectsInitedCallback:null,
+				onGlobalPropertyBagInitCallback:null,
 				onStarlingInitedCallback:null,
 				onAppPreInitCompletedCallback:null
 			},
@@ -86,7 +76,6 @@ package com.croco2d
 				onAppInitedCallback:null,
 				onBootStrapScreenInitedCallback:null,
 				onFeathersInitedCallback:null,
-				onScreensInitedCallback:null,
 				onCrocoEngineInitedCallback:null,
 				onAppAssetsPreloadInitedCallback:null,
 				onAppAssetsPreloadStartedCallback:null,
@@ -107,25 +96,30 @@ package com.croco2d
 		//----------------------------------------------------------------------
 		/**
 		 * each item reference will write in the GlobalPropertyBag
+		 * 	
+		 * key => Instance
+		 * or
+		 * key => Json Config.
+		 * 
 		 */		
-		public static var globalObjectsConfig:Array = 
-		[
-		]
+		public static var globalPropertyBagConfig:Object = 
+		{
+		}
 			
 		//Starling framework config.
 		public static var starlingConfig:Object = 
 		{
-			clsProperties:
+			clsProps:
 			{
 				handleLostContext:false,
 				multitouchEnabled:false
 			},
 			
-			clsType:"starling.core::Starling",
+			clsType:"(class)starling.core::Starling",
 			
-			constructorParams:
+			ctorParams:
 			[
-				"(class)com.croco2d.screens::CrocoScreenNavigator",
+				"(class)starling.display::Sprite",
 				"(stage)",
 				null, 
 				null, 
@@ -133,7 +127,7 @@ package com.croco2d
 				"baselineConstrained"
 			],
 			
-			properties:
+			props:
 			{
 				enableErrorChecking:false,
 				showStats:true,
@@ -162,7 +156,7 @@ package com.croco2d
 		{
 			clsType:"com.croco2d.screens::FlashBootStrapScreen",
 			
-			properties:
+			props:
 			{
 				launchImage:"launchImage.png",
 				fadeoutTime:2
@@ -173,7 +167,7 @@ package com.croco2d
 		//data format see ObjectFactoryUtil.newInstanceFromConfig
 		public static var crocoEngineConfig:Object = 
 		{
-			clsProperties:
+			clsProps:
 			{
 				timeScale:1.0,
 				debug:true,
@@ -181,28 +175,28 @@ package com.croco2d
 				maxTicksPerFrame:5
 			},
 			
-			clsType:"com.croco2d::CrocoEngine",
+			clsType:"(class)com.croco2d::CrocoEngine",
 			
-			properties:
+			props:
 			{
 				initComponents:
 				[
 					{
-						clsType:"com.croco2d.entities::CrocoCamera",
-						properties:
+						clsType:"(class)com.croco2d.scene::CrocoCamera",
+						props:
 						{
 							name:AppConfig.KEY_CAMERA
 						}
 					},
 					{
-						clsType:"com.croco2d.input::InputManager",
-						properties:
+						clsType:"(class)com.croco2d.input::InputManager",
+						props:
 						{
 							initInputControllers:
 							[
 								{
-									clsType:"com.croco2d.input.controllers::KeyboardController",
-									properties:
+									clsType:"(class)com.croco2d.input.controllers::KeyboardController",
+									props:
 									{
 										name:AppConfig.KEY_KEY_BOARD_CONTROLLER
 									}
@@ -211,16 +205,15 @@ package com.croco2d
 						}
 					},
 					{
-						clsType:"com.croco2d.sound::SoundManager",
-						
-						properties:
+						clsType:"(class)com.croco2d.sound::SoundManager",
+						props:
 						{
 							maxConcurrentSounds:10
 						}
 					},
 					{
-						clsType:"com.croco2d.assets::CrocoAssetsManager",
-						properties:
+						clsType:"(class)com.croco2d.assets::CrocoAssetsManager",
+						props:
 						{
 							name:AppConfig.KEY_GLOBAL_ASSETS_MANAGER
 						}
@@ -233,51 +226,51 @@ package com.croco2d
 		 * [
 		 * 
 		 */	
-		public static var screensConfig:Array = [
-			//normal screens
-			{
-				screenId:"DefaultScreen",
-				
-				clsType:"feathers.controls::ScreenNavigatorItem",
-				
-				constructorParams:
-				[
-					"(class)com.croco2d.screens::CrocoScreen",
-					
-					{
-					},
-					
-					{
-						entryScreenData: 
-						{
-							hubScreenId:"PreloadHubScreen"
-						}
-					}
-				]
-			},
-			
-			//hub screens
-			{
-				screenId:"PreloadHubScreen",
-				
-				clsType:"feathers.controls::ScreenNavigatorItem",
-				
-				constructorParams:
-				[
-					"(class)com.croco2d.screens::PreloadHubScreen",
-					
-					{
-					},
-					
-					{
-						entryScreenData:
-						{
-						
-						}
-					}
-				]
-			}
-		];
+//		public static var screensConfig:Array = [
+//			//normal screens
+//			{
+//				screenId:"DefaultScreen",
+//				
+//				clsType:"feathers.controls::ScreenNavigatorItem",
+//				
+//				ctorParams:
+//				[
+//					"(class)com.croco2d.screens::CrocoScreen",
+//					
+//					{
+//					},
+//					
+//					{
+//						entryScreenData: 
+//						{
+//							hubScreenId:"PreloadHubScreen"
+//						}
+//					}
+//				]
+//			},
+//			
+//			//hub screens
+//			{
+//				screenId:"PreloadHubScreen",
+//				
+//				clsType:"feathers.controls::ScreenNavigatorItem",
+//				
+//				ctorParams:
+//				[
+//					"(class)com.croco2d.screens::PreloadHubScreen",
+//					
+//					{
+//					},
+//					
+//					{
+//						entryScreenData:
+//						{
+//						
+//						}
+//					}
+//				]
+//			}
+//		];
 		
 		//constractor.
 		//----------------------------------------------------------------------
@@ -290,35 +283,27 @@ package com.croco2d
 		//System path finding helper method.
 		//----------------------------------------------------------------------
 		public static var findRootPathResource:Function = function(relativeURL:String):String {
-			return PATH_ROOT_URL + relativeURL;
+			return PATH_ROOT_URL + "/" + relativeURL;
 		}
 		
 		public static var findAssetsPathResource:Function = function(relativeURL:String):String {
-			return PATH_ASSETS_URL + relativeURL;
+			return PATH_ASSETS_URL + "/" + relativeURL;
 		}
 		
 		public static var findAppPathResource:Function = function(relativeURL:String):String {
-			return PATH_APP_URL + relativeURL;
+			return PATH_APP_URL + "/" + relativeURL;
 		}
 		
 		public static var findPreloadPathResource:Function = function(relativeURL:String):String {
-			return PATH_PRELOAD_URL + relativeURL;
+			return PATH_PRELOAD_URL + "/" + relativeURL;
 		}
 		
 		public static var findSharedPathResource:Function = function(relativeURL:String):String {
-			return PATH_SHARED_URL + relativeURL;
-		}
-		
-		public static var findScreensPathResource:Function = function(relativeURL:String):String {
-			return PATH_SCREENS_URL + relativeURL;
-		}
-		
-		public static var findTargetScreenPathResource:Function = function(screenName:String, relativeURL:String):String {
-			return AppConfig.findScreensPathResource(screenName + "/" + relativeURL);
+			return PATH_SHARED_URL + "/" + relativeURL;
 		}
 		
 		public static var findScenesPathResource:Function = function(relativeURL:String):String {
-			return PATH_SCENES_URL + relativeURL;
+			return PATH_SCENES_URL + "/" + relativeURL;
 		}
 		
 		public static var findTargetScenePathResource:Function = function(sceneName:String, relativeURL:String):String {
@@ -329,11 +314,7 @@ package com.croco2d
 		//Strong Reference Clsses.
 		//----------------------------------------------------------------------
 		FlashBootStrapScreen;
-		PreloadHubScreen;
-		SceneScreen;
-		CrocoScreen;
 		StarlingBootStrapScreen;
-		CrocoScreenNavigator;
 		KeyboardController;
 		CrocoAssetsManager;
 		

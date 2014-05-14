@@ -1,7 +1,7 @@
 package com.croco2d.utils.tmx.scene
 {
 	import com.croco2d.CrocoEngine;
-	import com.croco2d.entities.CrocoScene;
+	import com.croco2d.scene.CrocoScene;
 	import com.croco2d.utils.tmx.data.TMXMapData;
 	import com.croco2d.utils.tmx.data.TMXPropertySet;
 	import com.fireflyLib.utils.PropertyBag;

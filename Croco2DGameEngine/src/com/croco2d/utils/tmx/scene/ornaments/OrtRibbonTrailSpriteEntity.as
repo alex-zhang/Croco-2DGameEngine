@@ -4,7 +4,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.assets.ImageAsset;
 	import com.croco2d.assets.SpriteSheetAsset;
-	import com.croco2d.entities.SceneEntity;
+	import com.croco2d.scene.SceneEntity;
 	
 	import starling.textures.Texture;
 
@@ -28,11 +28,11 @@ package com.croco2d.utils.tmx.scene.ornaments
 			//assets
 			var assetPath:String = propertyBag.read("assetPath");
 			
-			var assetsManager:CrocoAssetsManager = scene.screen.screenAssetsManager;
+			var assetsManager:CrocoAssetsManager = scene.assetsManager;
 			
 			var texture:Texture;
 			
-			if(assetPath.lastIndexOf(CrocoAssetsManager.SPRIT_SHEET_RES_EXTENTION) != -1)
+			if(assetPath.lastIndexOf(CrocoAssetsManager.SPRIT_SHEET_EXTENTION) != -1)
 			{
 				var assetPathArr:Array = assetPath.split(":");
 				assetPath = assetPathArr[0];

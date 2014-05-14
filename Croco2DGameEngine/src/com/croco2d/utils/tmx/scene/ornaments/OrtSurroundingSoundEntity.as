@@ -4,7 +4,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.assets.SoundAsset;
 	import com.croco2d.components.DistanceSoundComponent;
-	import com.croco2d.entities.SceneEntity;
+	import com.croco2d.scene.SceneEntity;
 	import com.croco2d.sound.SoundManager;
 
 	public class OrtSurroundingSoundEntity extends SceneEntity
@@ -34,7 +34,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 			//bg sound may be has a big range.
 			var soundRange:Number = aabb.width >> 1;
 
-			var assetsManager:CrocoAssetsManager = scene.screen.screenAssetsManager;
+			var assetsManager:CrocoAssetsManager = scene.assetsManager;
 			
 			var soundAsset:SoundAsset = assetsManager.getSoundAsset(
 				AppConfig.findTargetScenePathResource(scene.name, assetPath));

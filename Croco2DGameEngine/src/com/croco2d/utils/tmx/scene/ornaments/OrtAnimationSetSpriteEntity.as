@@ -5,7 +5,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.components.DisplayComponent;
 	import com.croco2d.display.animationSprite.AnimationSetSprite;
-	import com.croco2d.entities.SceneEntity;
+	import com.croco2d.scene.SceneEntity;
 
 	public class OrtAnimationSetSpriteEntity extends SceneEntity
 	{
@@ -27,7 +27,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 
 			//assets
 			var assetPath:String = propertyBag.read("assetPath");
-			var assetsManager:CrocoAssetsManager = scene.screen.screenAssetsManager;
+			var assetsManager:CrocoAssetsManager = scene.assetsManager;
 
 			var animationName:String;
 			if(assetPath.indexOf(":"))

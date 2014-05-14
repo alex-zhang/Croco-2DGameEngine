@@ -1,6 +1,5 @@
-package com.croco2d.screens
+package com.croco2d.bootStrap
 {
-	import com.croco2d.AppBootStrap;
 	import com.croco2d.AppConfig;
 	
 	import flash.display.Bitmap;

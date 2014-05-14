@@ -122,13 +122,13 @@ package com.croco2d.assets
 			
 			tickable = false;
 			
-			const globalParamsConfig:Object = AppConfig.globalParamsConfig;
+			const globalEvnConfig:Object = AppConfig.globalEvnConfig;
 			
-			mScaleFactor = globalParamsConfig.textureScaleFactor > 0 ? 
-				globalParamsConfig.textureScaleFactor : 
+			mScaleFactor = globalEvnConfig.textureScaleFactor > 0 ? 
+				globalEvnConfig.textureScaleFactor : 
 				Starling.contentScaleFactor;
 
-			mUseMipMaps = globalParamsConfig.textureUseMipmaps;
+			mUseMipMaps = globalEvnConfig.textureUseMipmaps;
 			
 			mQueue = [];
 			mTypedAssetsMap = [];

@@ -4,7 +4,7 @@ package com.croco2d.utils.tmx.scene
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.components.DisplayComponent;
 	import com.croco2d.display.CrocoImage;
-	import com.croco2d.entities.SceneEntity;
+	import com.croco2d.scene.SceneEntity;
 
 	public class TMXImageLayer extends TMXBasicLayer
 	{
@@ -36,7 +36,7 @@ package com.croco2d.utils.tmx.scene
 		
 		override protected function onInit():void
 		{
-			var assetsManager:CrocoAssetsManager = scene.screen.screenAssetsManager;
+			var assetsManager:CrocoAssetsManager = scene.assetsManager;
 			
 			//image.
 			var crocoImage:CrocoImage = new CrocoImage();

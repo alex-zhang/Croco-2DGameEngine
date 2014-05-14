@@ -3,7 +3,7 @@ package com.croco2d
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.CrocoObjectEntity;
-	import com.croco2d.entities.CrocoCamera;
+	import com.croco2d.scene.CrocoCamera;
 	import com.croco2d.input.InputManager;
 	import com.croco2d.sound.SoundManager;
 	import com.fireflyLib.utils.GlobalPropertyBag;
@@ -56,7 +56,7 @@ package com.croco2d
 		protected static var __curTime:int = -1;
 		
 		protected static var __lastTime:int = -1;
-		
+
 		//helper
 		public static var camera:CrocoCamera;
 		public static var inputManager:InputManager;
@@ -225,8 +225,11 @@ package com.croco2d
 		{
 			super.dispose();
 			
+			//just clear the reference.
 			camera = null;
-			
+			inputManager = null;
+			soundManager = null;
+			globalAssetsManager = null;
 		}
 		
 		override public function toString():String

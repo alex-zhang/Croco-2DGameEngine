@@ -1,7 +1,7 @@
 package com.croco2d.utils.tmx.scene
 {
 	import com.croco2d.components.DisplayComponent;
-	import com.croco2d.entities.SceneEntity;
+	import com.croco2d.scene.SceneEntity;
 	import com.croco2d.utils.tmx.data.TMXTileGridData;
 	import com.croco2d.utils.tmx.display.TMXTileMap;
 

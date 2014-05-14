@@ -56,7 +56,7 @@ package com.croco2d.display.animationSprite
 				frameInfo.eventName = frameXML.hasOwnProperty("@event") ? frameXML.@event : null;
 				if(frameXML.hasOwnProperty("@eventParams"))
 				{
-					frameInfo.eventParams = StringUtil.decodeSimpleKeyValueStr(frameXML.@eventParams);
+					frameInfo.eventParams = StringUtil.decodeKeyValueStr(frameXML.@eventParams);
 				}
 				frameInfo.texture = mTextureAtlas.getTexture(frameXML.@textureName);
 			}

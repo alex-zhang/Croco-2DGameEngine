@@ -68,7 +68,7 @@ package com.croco2d.utils.tmx.data
 			imageSource = imageXML.@source;
 			imageSource = AppConfig.findTargetScenePathResource(mapData.tmxMapScene.name, imageSource);
 			
-			var assetsManager:CrocoAssetsManager = mapData.tmxMapScene.screen.screenAssetsManager;
+			var assetsManager:CrocoAssetsManager = mapData.tmxMapScene.assetsManager;
 			imageTexture = assetsManager.getImageAsset(imageSource).texture;
 			
 			var imageWidth:int = parseInt(imageXML.@width);

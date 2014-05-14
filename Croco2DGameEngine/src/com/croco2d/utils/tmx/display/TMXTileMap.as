@@ -70,7 +70,7 @@ class TMXTileMapCell extends TileMapCell
 		var tmxMapData:TMXMapData = tileGridData.mapData;
 		var tmxMapScene:TMXMapScene = tmxMapData.tmxMapScene;
 		
-		var assetsManager:CrocoAssetsManager = tmxMapScene.screen.screenAssetsManager;
+		var assetsManager:CrocoAssetsManager = tmxMapScene.assetsManager;
 		
 		var tileMapCellGID:int = tileGridData.getTileGIDValue(colIndex, rowIndex);
 		var tileSheet:TMXTileSheet = tileGridData.mapData.getTileSheetByGID(tileMapCellGID);

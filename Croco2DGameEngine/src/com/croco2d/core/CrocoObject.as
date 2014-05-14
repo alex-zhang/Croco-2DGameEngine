@@ -112,6 +112,7 @@ package com.croco2d.core
 		protected function onDeactive():void {};
 		protected function onDeactived():void {};
 		
+		//will dispose in next tick.
 		public final function kill():void
 		{
 			__alive = false;

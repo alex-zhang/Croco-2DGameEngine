@@ -12,6 +12,7 @@ package com.croco2d.assets
 		
 		private var mParticleXMLMap:Array = [];//particleName->XML(.pex)
 		private var mSpriteSheetAsset:SpriteSheetAsset;
+		private var mDefaultParticleName:String;
 		
 		public function ParticleSetAsset(name:String, type:String, extention:String, url:String)
 		{
@@ -44,6 +45,11 @@ package com.croco2d.assets
 						{
 							zipFileName = zipFileFullName.slice(0, indexOfDot);
 							mParticleXMLMap[zipFileName] = new XML(zipFile.content);
+							
+							if(!mDefaultParticleName)
+							{
+								mDefaultParticleName = zipFileName;
+							}
 						}
 					}
 				}
@@ -58,27 +64,42 @@ package com.croco2d.assets
 			});
 		}
 		
-		//return 0->XML 1->Texture
-		public function getParticleConfigByName(particalName:String):Array
+		public function getDefaultParticleConfig():Array
 		{
-			//<texture name="texture.png"/>
-			var particalXML:XML = mParticleXMLMap[particalName];
-			if(particalXML)
+			if(mDefaultParticleName)
 			{
-				var textureName:String = String(particalXML.texture.@name).split(".")[0];
-				var texture:Texture = mSpriteSheetAsset.textureAtlas.getTexture(textureName);
-				if(texture)
-				{
-					return [particalXML, texture];
-				}
+				return getParticleConfigByName(mDefaultParticleName);
 			}
 			
 			return null;
 		}
 		
+		//return 0->XML 1->Texture
+		private var particleConfigCache:Array = [];
+		public function getParticleConfigByName(particalName:String):Array
+		{
+			var results:Array = particleConfigCache[particalName] as Array;
+			if(!results)
+			{
+				//<texture name="texture.png"/>
+				var particalXML:XML = mParticleXMLMap[particalName];
+				var textureName:String = String(particalXML.texture.@name).split(".")[0];
+				var texture:Texture = mSpriteSheetAsset.textureAtlas.getTexture(textureName);
+				if(texture)
+				{
+					results = [particalXML, texture];
+					particleConfigCache[particalName] = results;
+				}
+			}
+			
+			return results;
+		}
+		
 		override public function dispose():void
 		{
 			super.dispose();
+			
+			particleConfigCache = null;
 			
 			if(mParticleXMLMap)
 			{

@@ -2,7 +2,7 @@ package com.croco2d.utils.aoi
 {
 	import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.CrocoObjectSet;
-	import com.croco2d.entities.SceneEntity;
+	import com.croco2d.scene.SceneEntity;
 
 	public class LampTowerCell extends CrocoObjectSet
 	{

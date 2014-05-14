@@ -1,13 +1,10 @@
 package com.croco2d.utils.tmx.data
 {
 	import com.croco2d.utils.tmx.scene.TMXMapScene;
-	import com.fireflyLib.utils.TypeUtility;
 	import com.llamaDebugger.Logger;
 
 	public class TMXMapData extends TMXDataBasic
 	{
-		public static const REPORT_NAME:String = TypeUtility.getQualifiedClassName(TMXMapData);
-		
 		public var version:String;
 		public var orientation:String;
 		
@@ -37,7 +34,7 @@ package com.croco2d.utils.tmx.data
 			
 			if(orientation != "orthogonal")
 			{
-				Logger.error(REPORT_NAME, "deserialize orientation must be orthogonal!");
+				Logger.error("deserialize orientation must be orthogonal!", "deserialize", "TMXMapData");
 			}
 			
 			numCol = parseInt(xml.@width);

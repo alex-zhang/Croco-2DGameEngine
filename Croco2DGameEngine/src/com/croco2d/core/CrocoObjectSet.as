@@ -115,7 +115,7 @@ package com.croco2d.core
 					if(field in child)
 					{
 						return child[field] == value;
-					}	
+					}
 				}
 			}
 			

@@ -1,4 +1,4 @@
-package com.croco2d.entities
+package com.croco2d.scene
 {
 	import com.croco2d.AppConfig;
 	import com.croco2d.CrocoEngine;
@@ -84,6 +84,7 @@ package com.croco2d.entities
 			super();
 			
 			this.name = AppConfig.KEY_CAMERA;
+
 			this.eventEnable = true;
 			//draw able.
 			this.visible = true;
@@ -432,7 +433,7 @@ package com.croco2d.entities
 
 //------------------------------------------------------------------------------
 
-import com.croco2d.entities.CrocoCamera;
+import com.croco2d.scene.CrocoCamera;
 
 import flash.geom.Point;
 

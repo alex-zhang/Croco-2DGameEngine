@@ -1,6 +1,6 @@
 package com.croco2d.utils.collision
 {
-	import com.croco2d.entities.SceneEntity;
+	import com.croco2d.scene.SceneEntity;
 
 	public interface ISpatialCollisionManager
 	{

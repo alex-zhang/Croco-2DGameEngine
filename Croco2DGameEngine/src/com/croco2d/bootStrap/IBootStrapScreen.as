@@ -1,6 +1,5 @@
-package com.croco2d.screens
+package com.croco2d.bootStrap
 {
-	import com.croco2d.AppBootStrap;
 
 	public interface IBootStrapScreen
 	{

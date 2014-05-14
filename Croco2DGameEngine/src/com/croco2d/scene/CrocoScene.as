@@ -1,10 +1,11 @@
-package com.croco2d.entities
+package com.croco2d.scene
 {
+	import com.croco2d.AppConfig;
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.core.CrocoObjectEntity;
 	import com.croco2d.core.CrocoObjectGroup;
-	import com.croco2d.screens.CrocoScreen;
 	
+	import flash.filesystem.File;
 	import flash.geom.Point;
 	
 	import starling.core.RenderSupport;
@@ -15,11 +16,15 @@ package com.croco2d.entities
 	{
 		public static const EVENT_ADD_SCENE_LAYER:String = "addSceneLayer";
 		public static const EVENT_REMOVE_SCENE_LAYER:String = "removeSceneLayer";
+		
+		public static const EVENT_START_LOAD_SCENE_ASSETS:String = "startLoadSceneAssets";
+		public static const EVENT_LOAD_PROGRESS_SCENE_ASSETS:String = "loadProgressAssets";
+		public static const EVENT_COMPLETE_LOAD_SCENE_ASSETS:String = "completeLoadsceneAssets";
+		
 
 		public var initSceneLayers:Array;
 		
-		public var screen:CrocoScreen;
-		public var screenAssetsManager:CrocoAssetsManager;
+		public var assetsManager:CrocoAssetsManager;
 
 		public var touchAble:Boolean = true;
 		public var blendMode:String = BlendMode.AUTO;
@@ -45,6 +50,14 @@ package com.croco2d.entities
 		{
 			super.onInit();
 			
+			//default scene has CrocoAssetsManager.
+			if(!hasPluginComponent(AppConfig.KEY_SCENE_ASSETS_MANAGER))
+			{
+				assetsManager = new CrocoAssetsManager();
+				assetsManager.name = AppConfig.KEY_SCENE_ASSETS_MANAGER;
+				pluginComponent(assetsManager);
+			}
+			
 			__layers = [];
 			__layersNameMap = [];
 			
@@ -55,6 +68,50 @@ package com.croco2d.entities
 			__layersGroup.visible = true;
 			__layersGroup.__onAddChildCallback = __onAddSceneLayerCallback;
 			__layersGroup.__onRemoveChildCallback = __onRemoveSceneLayerCallback;
+		}
+		
+		override protected function onInited():void
+		{
+			super.onInited();
+			
+			onSceneAssetsStartLoad();
+		}
+		
+		protected function onSceneAssetsStartLoad():void
+		{
+			var scenePreLoadAssetsFilePath:String = AppConfig.findScenesPathResource(this.name);
+			var scenePreLoadAssetsFileDir:File = File.applicationDirectory.resolvePath(scenePreLoadAssetsFilePath);
+			if(scenePreLoadAssetsFileDir.isDirectory && scenePreLoadAssetsFileDir.exists)
+			{
+				assetsManager.enqueue(scenePreLoadAssetsFileDir);
+				assetsManager.loadQueue(onSceneAssetsLoadProgress);
+
+				if(eventEnable && eventEmitter.hasEventListener(EVENT_START_LOAD_SCENE_ASSETS))
+				{
+					eventEmitter.dispatchEvent(EVENT_START_LOAD_SCENE_ASSETS);
+				}
+			}
+		}
+		
+		protected function onSceneAssetsLoadProgress(progress:Number):void
+		{
+			if(eventEnable && eventEmitter.hasEventListener(EVENT_LOAD_PROGRESS_SCENE_ASSETS))
+			{
+				eventEmitter.dispatchEvent(EVENT_LOAD_PROGRESS_SCENE_ASSETS, progress);
+			}
+			
+			if(progress == 1)
+			{
+				onScreenAssetsLoadCompleted();
+			}
+		}
+		
+		protected function onScreenAssetsLoadCompleted():void
+		{
+			if(eventEnable && eventEmitter.hasEventListener(EVENT_COMPLETE_LOAD_SCENE_ASSETS))
+			{
+				eventEmitter.dispatchEvent(EVENT_COMPLETE_LOAD_SCENE_ASSETS);
+			}
 		}
 		
 		override protected function onActive():void
@@ -194,7 +251,7 @@ package com.croco2d.entities
 			
 			//front to back!
 			var displayObject:DisplayObject;
-			
+
 			var sceneLayer:SceneLayer = __layersGroup.moveLast() as SceneLayer;
 			while(sceneLayer)
 			{
@@ -217,8 +274,7 @@ package com.croco2d.entities
 			
 			initSceneLayers = null;
 			
-			screen = null;
-			screenAssetsManager = null;
+			assetsManager = null;
 			alpha = NaN;
 			
 			__layers = null;
@@ -238,7 +294,6 @@ package com.croco2d.entities
 		override public function toString():String
 		{
 			var results:String = super.toString() + "\n" +
-				"screen: " + screen + "\n" +
 				"touchAble: " + touchAble + "\n" +
 				"alpha: " + alpha + 
 				"__layersGroup: " + __layersGroup;

@@ -10,6 +10,7 @@ package com.croco2d.core
 	{
 		public static const EVENT_PLUGIN_COMPONENT:String = "pluginComponent";
 		public static const EVENT_PLUGOUT_COMPONENT:String = "plugoutComponent";
+
 		public static const EVENT_INIT:String = "init";
 		public static const EVENT_ACTIVE:String = "active";
 		public static const EVENT_DEACTIVE:String = "deActive";
@@ -182,7 +183,7 @@ package com.croco2d.core
 			var targetRemovedComponent:CrocoObject = findPluinComponent(pluginName);
 			if(!targetRemovedComponent) return undefined;
 			
-			if(filedName in targetRemovedComponent)
+			if(filedName in targetRemovedComponent && !(targetRemovedComponent[filedName] is Function))
 			{
 				return targetRemovedComponent[filedName];
 			}
@@ -201,6 +202,19 @@ package com.croco2d.core
 			}
 		}
 		
+		public function hasPluinComponentProperty(pluginName:String, filedName:String):Boolean
+		{
+			var targetRemovedComponent:CrocoObject = findPluinComponent(pluginName);
+			if(!targetRemovedComponent) return false;
+			
+			if(filedName in targetRemovedComponent && !(targetRemovedComponent[filedName] is Function))
+			{
+				return true;
+			}
+			
+			return false;
+		}
+		
 		public function callPluinComponentFunc(pluginName:String, funcName:String, args:Array = null):*
 		{
 			var targetRemovedComponent:CrocoObject = findPluinComponent(pluginName);
@@ -216,6 +230,19 @@ package com.croco2d.core
 			}
 			
 			return undefined;
+		}
+		
+		public function hasPluinComponentFunc(pluginName:String, funcName:String):Boolean
+		{
+			var targetRemovedComponent:CrocoObject = findPluinComponent(pluginName);
+			if(!targetRemovedComponent) return false;
+			
+			if(funcName in targetRemovedComponent && (targetRemovedComponent[funcName] is Function))
+			{
+				return true;
+			}
+			
+			return false;
 		}
 		
 		override protected function onInit():void

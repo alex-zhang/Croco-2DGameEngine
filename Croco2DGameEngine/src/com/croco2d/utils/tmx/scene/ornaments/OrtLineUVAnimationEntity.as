@@ -5,7 +5,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import com.croco2d.assets.ImageAsset;
 	import com.croco2d.assets.SpriteSheetAsset;
 	import com.croco2d.components.DisplayComponent;
-	import com.croco2d.entities.SceneEntity;
+	import com.croco2d.scene.SceneEntity;
 	
 	import starling.display.Shape;
 	import starling.display.materials.StandardMaterial;
@@ -59,7 +59,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 				vSpped = parseFloat(uvSpeedArr[1]);
 			}
 			
-			var assetsManager:CrocoAssetsManager = scene.screen.screenAssetsManager;
+			var assetsManager:CrocoAssetsManager = scene.assetsManager;
 			
 			var assetPathArr:Array;
 			var assetName:String;
@@ -67,7 +67,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 			var spriteSheetAsset:SpriteSheetAsset;
 			
 			var lineTexture:Texture;
-			if(assetPath.lastIndexOf(CrocoAssetsManager.SPRIT_SHEET_RES_EXTENTION) != -1)
+			if(assetPath.lastIndexOf(CrocoAssetsManager.SPRIT_SHEET_EXTENTION) != -1)
 			{
 				assetPathArr = assetPath.split(":");
 				
@@ -96,7 +96,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 			{
 				var assetPath2:String = propertyBag.read("assetPath2");
 				
-				if(assetPath2.lastIndexOf(CrocoAssetsManager.SPRIT_SHEET_RES_EXTENTION) != -1)
+				if(assetPath2.lastIndexOf(CrocoAssetsManager.SPRIT_SHEET_EXTENTION) != -1)
 				{
 					assetPathArr = assetPath.split(":");
 					

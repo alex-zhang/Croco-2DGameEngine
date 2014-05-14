@@ -1,7 +1,7 @@
 package com.croco2d.utils.collision
 {
 	import com.croco2d.core.CrocoObject;
-	import com.croco2d.entities.SceneEntity;
+	import com.croco2d.scene.SceneEntity;
 
 	public class SpatialCollisionComponent extends CrocoObject
 	{

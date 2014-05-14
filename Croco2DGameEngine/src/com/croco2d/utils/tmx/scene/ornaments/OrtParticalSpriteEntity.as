@@ -4,7 +4,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.assets.ParticleSetAsset;
 	import com.croco2d.components.DisplayComponent;
-	import com.croco2d.entities.SceneEntity;
+	import com.croco2d.scene.SceneEntity;
 	
 	import starling.extensions.PDParticleSystem;
 
@@ -26,7 +26,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 			
 			//assets
 			var assetPath:String = propertyBag.read("assetPath");
-			var assetsManager:CrocoAssetsManager = scene.screen.screenAssetsManager;
+			var assetsManager:CrocoAssetsManager = scene.assetsManager;
 			
 			var particleName:String;
 			if(assetPath.indexOf(":"))

@@ -1,10 +1,11 @@
 package com.croco2d.utils.tmx.scene
 {
-	import com.croco2d.entities.SceneEntity;
+	import com.croco2d.scene.SceneEntity;
 	import com.croco2d.utils.tmx.data.TMXPropertySet;
 	import com.fireflyLib.utils.TypeUtility;
 	
 	import flash.geom.Rectangle;
+	import flash.utils.getDefinitionByName;
 
 	public class TMXEntitiesLayer extends TMXBasicLayer
 	{
@@ -42,7 +43,7 @@ package com.croco2d.utils.tmx.scene
 			if(objectXML.hasOwnProperty("@type"))
 			{
 				entityClsType = objectXML.@type;
-				entityCls = TypeUtility.getClassFromName(entityClsType);
+				entityCls = getDefinitionByName(entityClsType) as Class;
 				
 				entity = new SceneEntity();
 				entity.type = entityClsType;
