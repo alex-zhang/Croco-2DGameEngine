@@ -1,4 +1,4 @@
-package com.croco2d.bootStrap
+package com.croco2d.screens
 {
 	import com.croco2d.AppConfig;
 	
@@ -13,6 +13,7 @@ package com.croco2d.bootStrap
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.textures.Texture;
+	import com.croco2d.AppBootStrap;
 
 	public class StarlingBootStrapScreen extends Sprite implements IBootStrapScreen
 	{
@@ -45,7 +46,7 @@ package com.croco2d.bootStrap
 		{
 			mAssetsPreloaded = false;
 			
-			var launchImageURL:String = AppConfig.findAppPathResource(launchImage);
+			var launchImageURL:String = AppConfig.findAppResourcePath(launchImage);
 			var launchImageFile:File = File.applicationDirectory.resolvePath(launchImageURL);
 			
 			if(launchImageFile.exists)

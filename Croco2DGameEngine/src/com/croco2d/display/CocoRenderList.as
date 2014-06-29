@@ -1,7 +1,6 @@
 package com.croco2d.display
 {
 	import starling.core.RenderSupport;
-	import starling.core.starling_internal;
 	import starling.display.DisplayObject;
 	import starling.display.DisplayObjectContainer;
 

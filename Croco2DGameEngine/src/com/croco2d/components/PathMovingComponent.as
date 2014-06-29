@@ -99,8 +99,6 @@ package com.croco2d.components
 		override public function tick(deltaTime:Number):void
 		{
 			super.tick(deltaTime);
-			
-			
 		}
 		
 		protected function updatePathMotion(deltaTime:Number):void

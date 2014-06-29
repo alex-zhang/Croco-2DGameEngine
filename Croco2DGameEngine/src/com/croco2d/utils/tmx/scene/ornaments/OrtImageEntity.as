@@ -38,7 +38,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 			{
 				var assetPathArr:Array = assetPath.split(":");
 				assetPath = assetPathArr[0];
-				assetPath = AppConfig.findTargetScenePathResource(scene.name, assetPath);
+				assetPath = AppConfig.findScreenResourcePath(scene.name, assetPath);
 				
 				var assetName:String = assetPathArr[1];
 				
@@ -49,7 +49,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 			}
 			else
 			{
-				assetPath = AppConfig.findTargetScenePathResource(scene.name, assetPath);
+				assetPath = AppConfig.findScreenResourcePath(scene.name, assetPath);
 				var textureAsset:ImageAsset = assetsManager.getImageAsset(assetPath);
 				texture = textureAsset.texture;
 			}

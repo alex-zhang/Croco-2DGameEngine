@@ -40,7 +40,7 @@ package com.croco2d.utils.tmx.scene
 			
 			//image.
 			var crocoImage:CrocoImage = new CrocoImage();
-			var assetURL:String = AppConfig.findTargetScenePathResource(scene.name, mImageSourcePath);
+			var assetURL:String = AppConfig.findScreenResourcePath(scene.name, mImageSourcePath);
 			crocoImage.texture = assetsManager.getImageAsset(assetURL).texture;
 			
 			//display component.

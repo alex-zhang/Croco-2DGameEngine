@@ -42,10 +42,7 @@ package com.croco2d.core
 		{
 			super.draw(support, parentAlpha);
 			
-			if(__child.visible)
-			{
-				__child.draw(support, parentAlpha);
-			}
+			if(__child.visible) __child.draw(support, parentAlpha);
 		}
 		
 		override protected function onDeactive():void

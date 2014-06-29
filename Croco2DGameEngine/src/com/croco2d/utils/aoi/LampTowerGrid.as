@@ -3,11 +3,14 @@ package com.croco2d.utils.aoi
 	import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.CrocoObjectGroup;
 	import com.croco2d.core.CrocoObjectSet;
+	import com.croco2d.core.croco_internal;
 	import com.croco2d.scene.SceneEntity;
 	import com.croco2d.utils.ViewportGridUtil;
 	import com.fireflyLib.utils.UniqueLinkList;
 	
 	import flash.geom.Rectangle;
+	
+	use namespace croco_internal;
 
 	public class LampTowerGrid extends CrocoObject
 	{

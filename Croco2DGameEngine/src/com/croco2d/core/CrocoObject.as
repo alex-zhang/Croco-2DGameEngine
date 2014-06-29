@@ -91,10 +91,7 @@ package com.croco2d.core
 		
 		public function draw(support:RenderSupport, parentAlpha:Number):void
 		{
-			if(debug && CrocoEngine.debug)
-			{
-				__onDrawDebugCallback();
-			}
+			if(debug && CrocoEngine.debug) __onDrawDebugCallback();
 		}
 		
 		protected function onDrawDebug():void {}

@@ -1,5 +1,9 @@
 package com.croco2d.utils.flow
 {
+	import com.croco2d.core.croco_internal;
+
+	use namespace croco_internal;
+	
 	public class QueueFlowNode extends GroupFlowNodeBasic
 	{
 		public function QueueFlowNode()

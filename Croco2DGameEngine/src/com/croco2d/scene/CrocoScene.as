@@ -1,17 +1,15 @@
 package com.croco2d.scene
 {
-	import com.croco2d.AppConfig;
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.core.CrocoObjectEntity;
 	import com.croco2d.core.CrocoObjectGroup;
 	
-	import flash.filesystem.File;
 	import flash.geom.Point;
 	
 	import starling.core.RenderSupport;
 	import starling.display.BlendMode;
 	import starling.display.DisplayObject;
-	
+
 	public class CrocoScene extends CrocoObjectEntity
 	{
 		public static const EVENT_ADD_SCENE_LAYER:String = "addSceneLayer";
@@ -20,7 +18,6 @@ package com.croco2d.scene
 		public static const EVENT_START_LOAD_SCENE_ASSETS:String = "startLoadSceneAssets";
 		public static const EVENT_LOAD_PROGRESS_SCENE_ASSETS:String = "loadProgressAssets";
 		public static const EVENT_COMPLETE_LOAD_SCENE_ASSETS:String = "completeLoadsceneAssets";
-		
 
 		public var initSceneLayers:Array;
 		
@@ -50,14 +47,6 @@ package com.croco2d.scene
 		{
 			super.onInit();
 			
-			//default scene has CrocoAssetsManager.
-			if(!hasPluginComponent(AppConfig.KEY_SCENE_ASSETS_MANAGER))
-			{
-				assetsManager = new CrocoAssetsManager();
-				assetsManager.name = AppConfig.KEY_SCENE_ASSETS_MANAGER;
-				pluginComponent(assetsManager);
-			}
-			
 			__layers = [];
 			__layersNameMap = [];
 			
@@ -68,50 +57,6 @@ package com.croco2d.scene
 			__layersGroup.visible = true;
 			__layersGroup.__onAddChildCallback = __onAddSceneLayerCallback;
 			__layersGroup.__onRemoveChildCallback = __onRemoveSceneLayerCallback;
-		}
-		
-		override protected function onInited():void
-		{
-			super.onInited();
-			
-			onSceneAssetsStartLoad();
-		}
-		
-		protected function onSceneAssetsStartLoad():void
-		{
-			var scenePreLoadAssetsFilePath:String = AppConfig.findScenesPathResource(this.name);
-			var scenePreLoadAssetsFileDir:File = File.applicationDirectory.resolvePath(scenePreLoadAssetsFilePath);
-			if(scenePreLoadAssetsFileDir.isDirectory && scenePreLoadAssetsFileDir.exists)
-			{
-				assetsManager.enqueue(scenePreLoadAssetsFileDir);
-				assetsManager.loadQueue(onSceneAssetsLoadProgress);
-
-				if(eventEnable && eventEmitter.hasEventListener(EVENT_START_LOAD_SCENE_ASSETS))
-				{
-					eventEmitter.dispatchEvent(EVENT_START_LOAD_SCENE_ASSETS);
-				}
-			}
-		}
-		
-		protected function onSceneAssetsLoadProgress(progress:Number):void
-		{
-			if(eventEnable && eventEmitter.hasEventListener(EVENT_LOAD_PROGRESS_SCENE_ASSETS))
-			{
-				eventEmitter.dispatchEvent(EVENT_LOAD_PROGRESS_SCENE_ASSETS, progress);
-			}
-			
-			if(progress == 1)
-			{
-				onScreenAssetsLoadCompleted();
-			}
-		}
-		
-		protected function onScreenAssetsLoadCompleted():void
-		{
-			if(eventEnable && eventEmitter.hasEventListener(EVENT_COMPLETE_LOAD_SCENE_ASSETS))
-			{
-				eventEmitter.dispatchEvent(EVENT_COMPLETE_LOAD_SCENE_ASSETS);
-			}
 		}
 		
 		override protected function onActive():void
@@ -218,6 +163,7 @@ package com.croco2d.scene
 			
 			sceneLayer.parent = __layersGroup;
 			sceneLayer.owner = this;
+			sceneLayer.scene = this;
 			sceneLayer.init();
 			sceneLayer.active();
 
@@ -250,20 +196,20 @@ package com.croco2d.scene
 			if(forTouch && (!touchAble || !visible)) return null;
 			
 			//front to back!
-			var displayObject:DisplayObject;
-
-			var sceneLayer:SceneLayer = __layersGroup.moveLast() as SceneLayer;
-			while(sceneLayer)
-			{
-				if(sceneLayer.__alive)
-				{
-					displayObject = sceneLayer.hitTest(localPoint, forTouch); 
-					
-					if(displayObject) return displayObject;
-				}
-				
-				sceneLayer = __layersGroup.movePre() as SceneLayer;
-			}
+//			var displayObject:DisplayObject;
+//			
+//			var sceneLayer:SceneLayer = __layersGroup.moveLast() as SceneLayer;
+//			while(sceneLayer)
+//			{
+//				if(sceneLayer.__alive)
+//				{
+//					displayObject = sceneLayer.hitTest(localPoint, forTouch); 
+//					
+//					if(displayObject) return displayObject;
+//				}
+//				
+//				sceneLayer = __layersGroup.movePre() as SceneLayer;
+//			}
 
 			return null;
 		}

@@ -37,7 +37,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 				animationName = assetPathArr[1];
 			}
 			
-			assetPath = AppConfig.findTargetScenePathResource(scene.name, assetPath);
+			assetPath = AppConfig.findScreenResourcePath(scene.name, assetPath);
 			var animationSetAsset:AnimationSetAsset = assetsManager.getAniSetResAsset(assetPath);
 			
 			var animationSetSprite:AnimationSetSprite = new AnimationSetSprite();

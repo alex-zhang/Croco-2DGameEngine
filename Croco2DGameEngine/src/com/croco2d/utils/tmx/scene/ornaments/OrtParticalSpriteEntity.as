@@ -36,7 +36,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 				particleName = assetPathArr[1];
 			}
 			
-			assetPath = AppConfig.findTargetScenePathResource(scene.name, assetPath);
+			assetPath = AppConfig.findScreenResourcePath(scene.name, assetPath);
 			var particleSetAsset:ParticleSetAsset = assetsManager.getParticleSetAsset(assetPath);
 
 			var xmlAndTexture:Array = particleName ? 

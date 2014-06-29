@@ -16,6 +16,8 @@ package com.croco2d.core
 		{
 			super.tick(deltaTime);
 			
+			if(__childrenOrderSortDirty) sortChildrenOrder(sortFunction);
+			
 			var child:CrocoObject = __childrenLinkList.moveFirst();
 			while(child)
 			{
@@ -67,6 +69,8 @@ package com.croco2d.core
 			}
 			
 			super.dispose();
+			
+			sortFunction = null;
 		}
 		
 		override protected function onAddChild(child:CrocoObject):void
@@ -81,10 +85,7 @@ package com.croco2d.core
 		{
 			child.deactive();
 			
-			if(needDispose)
-			{
-				child.dispose();
-			}
+			if(needDispose) child.dispose();
 		}
 	}
 }

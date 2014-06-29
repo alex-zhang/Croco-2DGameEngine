@@ -9,15 +9,16 @@ package com.croco2d.core
 			//-1 means the bottom depth than the other
 			return a.sortPriority > b.sortPriority ? 1 : -1;
 		}
-
-		//----------------------------------------------------------------------
+		
+		//--------------------------
 		
 		//default initChildren.
 		public var initChildren:Array = null;
+		
 		//the sort logic. Default base the sortPriority.
 		public var sortFunction:Function = defaultDepthSortFunction;
+		public var __childrenOrderSortDirty:Boolean = false;
 		
-		public var __childrenLinkListOrderSortDirty:Boolean = false;
 		public var __onAddChildCallback:Function = onAddChild;
 		public var __onRemoveChildCallback:Function = onRemoveChild;
 		public var __childrenLinkList:UniqueLinkList;
@@ -49,26 +50,6 @@ package com.croco2d.core
 			return __childrenLinkList.lastIndexOf(item);
 		}
 		
-		public function moveFirst():CrocoObject
-		{
-			return __childrenLinkList.moveFirst();
-		}
-		
-		public function moveLast():CrocoObject
-		{
-			return __childrenLinkList.moveLast();
-		}
-		
-		public function moveNext():CrocoObject
-		{
-			return __childrenLinkList.moveNext();
-		}
-		
-		public function movePre():CrocoObject
-		{
-			return __childrenLinkList.movePre();
-		}
-		
 		public function forEach(callback:Function):void
 		{
 			var child:CrocoObject = __childrenLinkList.moveFirst();
@@ -87,6 +68,26 @@ package com.croco2d.core
 				callback(child);
 				child = __childrenLinkList.movePre();
 			}
+		}
+		
+		croco_internal function moveFirst():CrocoObject
+		{
+			return __childrenLinkList.moveFirst();
+		}
+		
+		croco_internal function moveLast():CrocoObject
+		{
+			return __childrenLinkList.moveLast();
+		}
+		
+		croco_internal function moveNext():CrocoObject
+		{
+			return __childrenLinkList.moveNext();
+		}
+		
+		croco_internal function movePre():CrocoObject
+		{
+			return __childrenLinkList.movePre();
 		}
 		
 		public function findChildByFilterFunc(filterFunc:Function = null):CrocoObject 
@@ -108,7 +109,7 @@ package com.croco2d.core
 					if(field in child && filterFunc(child))
 					{
 						return child[field] == value;
-					}	
+					}
 				}
 				else
 				{
@@ -191,39 +192,19 @@ package com.croco2d.core
 			return findChildrenByFilterFunc(results, innerFilterFunc); 
 		}
 		
-		//help const strings.
-		private static const KEY_UID:String = "uid";
-		private static const KEY_NAME:String = "name";
-		private static const KEY_TYPE:String = "type";
-		
-		public function findChildByUID(uid:String, filterFunc:Function = null):CrocoObject
-		{
-			return findChildByField(KEY_UID, uid, filterFunc);
-		}
-		
-		public function findChildrenByUID(uid:String, results:Array = null, filterFunc:Function = null):Array
-		{
-			return findChildrenByField(KEY_UID, uid, results, filterFunc);
-		}
-		
 		public function findChildByName(name:String, filterFunc:Function = null):CrocoObject
 		{
-			return findChildByField(KEY_NAME, name, filterFunc);
-		}
-		
-		public function findChildrenByName(name:String, results:Array = null, filterFunc:Function = null):Array
-		{
-			return findChildrenByField(KEY_NAME, name, results, filterFunc);
+			return findChildByField("name", name, filterFunc);
 		}
 		
 		public function findChildByType(type:String, filterFunc:Function = null):CrocoObject
 		{
-			return findChildByField(KEY_TYPE, type, filterFunc);
+			return findChildByField("type", type, filterFunc);
 		}
 		
 		public function findChildrenByType(type:String, results:Array = null, filterFunc:Function = null):Array
 		{
-			return findChildrenByField(KEY_TYPE, type, results, filterFunc);
+			return findChildrenByField("type", type, results, filterFunc);
 		}
 		
 		public function findAllChildren(results:Array = null):Array
@@ -263,14 +244,14 @@ package com.croco2d.core
 		
 		public final function markChildrenOrderSortDirty():void
 		{
-			__childrenLinkListOrderSortDirty = true;
+			__childrenOrderSortDirty = true;
 		}
 		
 		public final function sortChildrenOrder(compareFunction:Function):void 
 		{ 
 			__childrenLinkList.sort(compareFunction);
 			
-			__childrenLinkListOrderSortDirty = false;
+			__childrenOrderSortDirty = false;
 		}
 		
 		override protected function onInit():void
@@ -287,22 +268,11 @@ package com.croco2d.core
 			}
 		}
 		
-		override public function tick(deltaTime:Number):void
-		{
-			super.tick(deltaTime);
-			
-			if(__childrenLinkListOrderSortDirty)
-			{
-				sortChildrenOrder(sortFunction);
-			}
-		}
-		
 		override public function dispose():void
 		{
 			super.dispose();
 			
 			initChildren = null;
-			sortFunction = null;
 			
 			__onAddChildCallback = null;
 			__onRemoveChildCallback = null;

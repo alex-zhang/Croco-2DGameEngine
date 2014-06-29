@@ -37,7 +37,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 			var assetsManager:CrocoAssetsManager = scene.assetsManager;
 			
 			var soundAsset:SoundAsset = assetsManager.getSoundAsset(
-				AppConfig.findTargetScenePathResource(scene.name, assetPath));
+				AppConfig.findScreenResourcePath(scene.name, assetPath));
 
 			//sound component.
 			var soundComponent:DistanceSoundComponent = new DistanceSoundComponent();

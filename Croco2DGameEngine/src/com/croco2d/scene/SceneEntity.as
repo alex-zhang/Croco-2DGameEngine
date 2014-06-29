@@ -17,9 +17,14 @@ package com.croco2d.scene
 	{
 		public var x:Number = 0.0;
 		public var y:Number = 0.0;
+		
 		public var ignoreCameraMatrix:Boolean = false;
-		public var aabb:Rectangle = null;
 
+		public var aabb:Rectangle = null;
+		
+		public var scene:CrocoScene;
+		public var sceneLayer:SceneLayer;
+		
 		public var __displayComponet:DisplayComponent;
 
 		public function SceneEntity()
@@ -28,16 +33,6 @@ package com.croco2d.scene
 
 			//draw able.
 			visible = true;
-		}
-		
-		public final function get scene():CrocoScene
-		{
-			return owner ? CrocoScene(owner.owner) : null;
-		}
-		
-		public final function get sceneLayer():SceneLayer
-		{
-			return SceneLayer(owner);
 		}
 		
 		public function get displayComponet():DisplayComponent

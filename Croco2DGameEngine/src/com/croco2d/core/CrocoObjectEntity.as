@@ -10,7 +10,7 @@ package com.croco2d.core
 	{
 		public static const EVENT_PLUGIN_COMPONENT:String = "pluginComponent";
 		public static const EVENT_PLUGOUT_COMPONENT:String = "plugoutComponent";
-
+		
 		public static const EVENT_INIT:String = "init";
 		public static const EVENT_ACTIVE:String = "active";
 		public static const EVENT_DEACTIVE:String = "deActive";
@@ -39,6 +39,15 @@ package com.croco2d.core
 			if(!__eventEmitter) __eventEmitter = new EventEmitter(this);
 
 			return __eventEmitter;
+		}
+		
+		//help for emitEvent.
+		public final function emitEvent(eventType:String, eventObject:Object = null):void
+		{
+			if(eventEnable &&　eventEmitter.hasEventListener(EVENT_PLUGIN_COMPONENT))
+			{
+				eventEmitter.dispatchEvent(eventType, eventObject);
+			}
 		}
 		
 		public function get propertyBag():PropertyBag
@@ -141,11 +150,6 @@ package com.croco2d.core
 		public function findPluinComponentsByField(field:String, value:*, results:Array = null, filterFunc:Function = null):Array
 		{ 
 			return __pluinComponentsGroup.findChildrenByField(field, value, results, filterFunc);
-		}
-		
-		public function findPluinComponentTypeCls(typeCls:Class, filterFunc:Function = null):CrocoObject
-		{
-			return __pluinComponentsGroup.findChildByTypeCls(typeCls, filterFunc);
 		}
 		
 		public function findPluinComponentsByTypeCls(typeCls, results:Array = null, filterFunc:Function = null):Array
@@ -268,6 +272,8 @@ package com.croco2d.core
 			{
 				eventEmitter.dispatchEvent(EVENT_INIT);
 			}
+			
+			emitEvent(EVENT_INIT);
 		}
 		
 		override protected function onActive():void
@@ -281,10 +287,7 @@ package com.croco2d.core
 		{
 			super.onActived();
 			
-			if(eventEnable && eventEmitter.hasEventListener(EVENT_ACTIVE))
-			{
-				eventEmitter.dispatchEvent(EVENT_ACTIVE);
-			}
+			emitEvent(EVENT_ACTIVE);
 		}
 		
 		override public function tick(deltaTime:Number):void
@@ -305,10 +308,7 @@ package com.croco2d.core
 		{
 			super.onDeactived();
 
-			if(eventEnable && eventEmitter.hasEventListener(EVENT_DEACTIVE))
-			{
-				eventEmitter.dispatchEvent(EVENT_DEACTIVE);
-			}
+			emitEvent(EVENT_DEACTIVE);
 		}
 		
 		override public function dispose():void

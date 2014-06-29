@@ -2,10 +2,13 @@ package com.croco2d.utils.collision
 {
 	import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.CrocoObjectSet;
+	import com.croco2d.core.croco_internal;
 	import com.croco2d.scene.SceneEntity;
 	import com.croco2d.utils.CrocoMathUtil;
 	
 	import flash.geom.Rectangle;
+	
+	use namespace croco_internal;
 
 	public class SimpleSpatialCollisionManager extends CrocoObject implements ISpatialCollisionManager
 	{

@@ -74,7 +74,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 				assetPath = assetPathArr[0];
 				assetName = assetPathArr[1];
 				
-				assetPath = AppConfig.findTargetScenePathResource(scene.name, assetPath);
+				assetPath = AppConfig.findScreenResourcePath(scene.name, assetPath);
 				
 				spriteSheetAsset = assetsManager.getSpriteSheetAsset(assetPath);
 				
@@ -82,7 +82,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 			}
 			else
 			{
-				assetPath = AppConfig.findTargetScenePathResource(scene.name, assetPath);
+				assetPath = AppConfig.findScreenResourcePath(scene.name, assetPath);
 				
 				textureAsset = assetsManager.getImageAsset(assetPath);
 				
@@ -103,7 +103,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 					assetPath2 = assetPathArr[0];
 					assetName = assetPathArr[1];
 					
-					assetPath2 = AppConfig.findTargetScenePathResource(scene.name, assetPath2);
+					assetPath2 = AppConfig.findScreenResourcePath(scene.name, assetPath2);
 					
 					spriteSheetAsset = assetsManager.getSpriteSheetAsset(assetPath2);
 					
@@ -111,7 +111,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 				}
 				else
 				{
-					assetPath2 = AppConfig.findTargetScenePathResource(scene.name, assetPath2);
+					assetPath2 = AppConfig.findScreenResourcePath(scene.name, assetPath2);
 					
 					textureAsset = assetsManager.getImageAsset(assetPath2);
 					

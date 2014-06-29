@@ -1,8 +1,8 @@
-package com.croco2d.bootStrap
+package com.croco2d 
 {
-	import com.croco2d.AppConfig;
-	import com.croco2d.CrocoEngine;
 	import com.croco2d.core.croco_internal;
+	import com.croco2d.screens.CrocoScreenNavigator;
+	import com.croco2d.screens.IBootStrapScreen;
 	import com.fireflyLib.utils.GlobalPropertyBag;
 	import com.fireflyLib.utils.JsonObjectFactorUtil;
 	import com.fireflyLib.utils.ObjectFactoryUtil;
@@ -27,10 +27,11 @@ package com.croco2d.bootStrap
 	{
 		public static const EVENT_BOOT_STRAP_COMPLETE:String = "bootStrapComplete";
 		
-		public var appConfigCls:Class = AppConfig;
+		protected var appConfigCls:Class = AppConfig;
 		
 		public var __starling:Starling;
 		public var __crocoEngine:CrocoEngine;
+		public var __screenNavigator:CrocoScreenNavigator;
 
 		//will dispose after bootStrap complete.
 		public var __bootStrapScreen:IBootStrapScreen;
@@ -43,7 +44,7 @@ package com.croco2d.bootStrap
 			GlobalPropertyBag.write(AppConfig.KEY_APPBOOTSTRAP, this);
 			
 			//default
-			this.visible = this.mouseEnabled = this.mouseChildren = false;
+//			this.visible = this.mouseEnabled = this.mouseChildren = false;
 			this.addEventListener(Event.ADDED_TO_STAGE, firstAddToStageHandler);
 		}
 
@@ -54,10 +55,10 @@ package com.croco2d.bootStrap
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, firstAddToStageHandler);
 			
-			croco_internal::preInit();
-			
 			//listen the event for the whole bootstap process has completed.
 			this.addEventListener(EVENT_BOOT_STRAP_COMPLETE, appBootStrapCompleteHandler);
+			
+			croco_internal::preInit();
 		}
 		
 		//this is init process logic u'd better don't modify it. 
@@ -66,28 +67,25 @@ package com.croco2d.bootStrap
 		{
 			const preInitCallbackConfig:Object = AppConfig.systemCallbackConfig.preInitCallbackConfig;
 			
-			//step 1.
 			onAppPreInit();
 			if(preInitCallbackConfig.onAppPreInitedCallback)
 			{
 				preInitCallbackConfig.onAppPreInitedCallback.call(null);
 			}
 
-			//step 2.
 			globalPropertyBagInit();
-			if(preInitCallbackConfig.onGlobalPropertyBagInitCallback)
+			if(preInitCallbackConfig.onGlobalPropertyBagInitedCallback)
 			{
-				preInitCallbackConfig.onGlobalPropertyBagInitCallback.call(null);
+				preInitCallbackConfig.onGlobalPropertyBagInitedCallback.call(null);
 			}
 			
-			//step 3.
 			onStarlingInit();
 			if(preInitCallbackConfig.onStarlingInitedCallback)
 			{
 				preInitCallbackConfig.onStarlingInitedCallback.call(null);
 			}
 			
-			//step 4.the preInit last step.
+			//the preInit last step.
 			onAppPreInitComplete();
 			if(preInitCallbackConfig.onAppPreInitCompletedCallback != null)
 			{
@@ -116,13 +114,11 @@ package com.croco2d.bootStrap
 			stage.color = globalEvnConfig.backgroundColor;
 			stage.frameRate = globalEvnConfig.frameRate;
 			
-			if(globalEvnConfig.startupLogger)
-			{
-				Logger.startup();
-			}
+			if(globalEvnConfig.startupLogger) Logger.startup();
 			
 			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, appActivateHandler);
 			NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, appDeactivateHandler);
+
 			stage.addEventListener(Event.RESIZE, stageResizeHandler);
 		}
 		
@@ -166,7 +162,8 @@ package com.croco2d.bootStrap
 		{
 			__starling.removeEventListener("rootCreated", starlingRootCreatedHandler);
 			__starling.addEventListener("context3DCreate", starlingContextCreatedHandler);
-			
+			__screenNavigator = __starling.root as CrocoScreenNavigator; 
+
 			croco_internal::init();
 		}
 		
@@ -176,35 +173,36 @@ package com.croco2d.bootStrap
 		{
 			const initCallbackConfig:Object = AppConfig.systemCallbackConfig.initCallbackConfig;
 			
-			//step 5.
 			onAppInit();
 			if(initCallbackConfig.onAppInitedCallback)
 			{
 				initCallbackConfig.onAppInitedCallback.call(null);
 			}
 			
-			//step 6.
 			onFeathersInit();
 			if(initCallbackConfig.onFeathersInitedCallback)
 			{
 				initCallbackConfig.onFeathersInitedCallback.call(null);
 			}
 			
-			//step 7.
 			onBootStrapScreenInit();
 			if(initCallbackConfig.onBootStrapScreenInitedCallback)
 			{
 				initCallbackConfig.onBootStrapScreenInitedCallback.call(null);
 			}
-
-			//step 8.
+			
+			onScreensInit();
+			if(initCallbackConfig.onScreensInitedCallback)
+			{
+				initCallbackConfig.onScreensInitedCallback.call(null);
+			}
+			
 			onCrocoEngineInit();
 			if(initCallbackConfig.onCrocoEngineInitedCallback)
 			{
 				initCallbackConfig.onCrocoEngineInitedCallback.call(null);
 			}
 
-			//step 9.
 			var isNeedAppAssetsPreload:Boolean = checkIsNeedAppAssetsPreload();
 			if(isNeedAppAssetsPreload)
 			{
@@ -220,8 +218,14 @@ package com.croco2d.bootStrap
 					initCallbackConfig.onAppAssetsPreloadStartedCallback.call(null);
 				}
 			}
+			else
+			{
+				if(__bootStrapScreen)
+				{
+					__bootStrapScreen.onAssetsPreloadProgress(1);
+				}	
+			}
 			
-			//step 10.
 			onAppInitComplete();
 			if(initCallbackConfig.onAppInitCompletedCallback != null)
 			{
@@ -231,7 +235,7 @@ package com.croco2d.bootStrap
 			//no BootStrapScreen and No preload, just go.
 			if(!isNeedAppAssetsPreload && !__bootStrapScreen)
 			{
-				dispatchEvent(new Event(EVENT_BOOT_STRAP_COMPLETE));	
+				dispatchEvent(new Event(EVENT_BOOT_STRAP_COMPLETE));
 			}
 		}
 		
@@ -247,6 +251,26 @@ package com.croco2d.bootStrap
 			const feathersConfig:Object = AppConfig.feathersConfig;
 			
 			JsonObjectFactorUtil.createFromJsonConfig(feathersConfig);
+		}
+		
+		protected function onScreensInit():void
+		{
+			const screensConfig:Array = AppConfig.screensConfig;
+			var n:int = screensConfig ? screensConfig.length : 0;
+			
+			var screenNavigatorItem:ScreenNavigatorItem;
+			var screenConfig:Object;
+			var screenID:String;
+			
+			for(var i:int = 0; i < n; i++)
+			{
+				screenConfig = screensConfig[i];
+				screenID = screenConfig.ctorParams[2][AppConfig.KEY_SCREEN_ID];
+				
+				screenNavigatorItem = JsonObjectFactorUtil.createFromJsonConfig(screenConfig) as ScreenNavigatorItem;
+
+				__screenNavigator.addScreen(screenID, screenNavigatorItem);
+			}
 		}
 
 		protected function onBootStrapScreenInit():void
@@ -268,7 +292,7 @@ package com.croco2d.bootStrap
 				{
 					this.__starling.stage.addChild(starling.display.DisplayObject(__bootStrapScreen));
 				}
-				
+
 				__bootStrapScreen.launch();
 			}
 		}
@@ -288,16 +312,16 @@ package com.croco2d.bootStrap
 		
 		protected function checkIsNeedAppAssetsPreload():Boolean
 		{
-			var preloadFile:File = File.applicationDirectory.resolvePath(AppConfig.PATH_PRELOAD_URL);
-			return preloadFile.exists;
+			var preloadDirFile:File = File.applicationDirectory.resolvePath(AppConfig.PATH_PRELOAD_URL);
+			return preloadDirFile.exists;
 		}
 		
 		protected function onAppAssetsPreloadInit():void
 		{
 			Logger.info("onAppAssetsPreload");
 			
-			var appPreLoadAssetsFile:File = File.applicationDirectory.resolvePath(AppConfig.PATH_PRELOAD_URL);
-			CrocoEngine.globalAssetsManager.enqueue(appPreLoadAssetsFile);
+			var preloadDirFile:File = File.applicationDirectory.resolvePath(AppConfig.PATH_PRELOAD_URL);
+			CrocoEngine.globalAssetsManager.enqueue(preloadDirFile);
 		}
 		
 		protected function onAppAssetsPreloadStart():void
@@ -344,7 +368,6 @@ package com.croco2d.bootStrap
 		{
 			Logger.info("onAppAssetsPreloadComplete");
 		}
-		
 		
 		//event callback part
 		//----------------------------------------------------------------------
@@ -401,10 +424,7 @@ package com.croco2d.bootStrap
 		
 		protected function stageResizeHandler(event:Event):void
 		{
-			if(__starling)
-			{
-				updateStarlingViewPort();
-			}
+			if(__starling) updateStarlingViewPort();
 		}
 		
 		protected function updateStarlingViewPort():void
@@ -463,7 +483,6 @@ package com.croco2d.bootStrap
 		{
 			this.removeEventListener(EVENT_BOOT_STRAP_COMPLETE, appBootStrapCompleteHandler);
 			
-			//step 11.
 			onAppBootStrapComplete();
 			const systemEventCallbackConfig:Object = AppConfig.systemCallbackConfig;
 			if(systemEventCallbackConfig.onAppBootStrapCompletedCallback != null)
@@ -471,10 +490,7 @@ package com.croco2d.bootStrap
 				systemEventCallbackConfig.onAppBootStrapCompletedCallback.call(null);
 			}
 			
-			//step 12.
 			onAppBootStrapCompletedThenReady2EntryScreen();
-			
-			//step 13.
 			onAppBootStrapCompletedAndClearSomethingsBefor();
 		}
 		
@@ -487,18 +503,19 @@ package com.croco2d.bootStrap
 		{
 			Logger.info("onAppBootStrapCompletedThenReady2GoEntryScreen");
 			
-			const systemEventCallbackConfig:Object = AppConfig.systemCallbackConfig.systemEventCallbackConfig;
-//			if(systemEventCallbackConfig.onAppBootStrapEntryScreenCallback != null)
-//			{
-//				__defaultEntryScreenConfig = systemEventCallbackConfig.onAppBootStrapEntryScreenCallback.call(null, __defaultEntryScreenConfig); 
-//			}
-//			
-//			var entryScreenId:String = __defaultEntryScreenConfig[AppConfig.KEY_SCREEN_ID];
-//			var targetScreenProprotity:Object = __defaultEntryScreenConfig.constructorParams[2];
-//			var entryScreenData:Object = targetScreenProprotity[AppConfig.KEY_ENTRY_SCREEN_DATA];
-//			
-//			__starlingRoot.jumToScreen(entryScreenId, entryScreenData);
-//			__defaultEntryScreenConfig = null;
+			const screensConfig:Array = AppConfig.screensConfig;
+			
+			var defaultScreenconfig:Object = screensConfig ? screensConfig[0] : null;
+			if(defaultScreenconfig)
+			{
+				var screenID:String = defaultScreenconfig.ctorParams[2][AppConfig.KEY_SCREEN_ID];
+				__screenNavigator.jumToScreen(screenID);		
+			}
+			else
+			{
+				Logger.warn("No defualt entry screen!");
+				return;
+			}
 		}
 		
 		protected function onAppBootStrapCompletedAndClearSomethingsBefor():void

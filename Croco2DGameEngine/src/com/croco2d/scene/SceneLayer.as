@@ -4,12 +4,15 @@ package com.croco2d.scene
 	import com.croco2d.core.CrocoObjectEntity;
 	import com.croco2d.core.CrocoObjectGroup;
 	import com.croco2d.core.CrocoObjectSet;
+	import com.croco2d.core.croco_internal;
 	
 	import flash.geom.Point;
 	
 	import starling.core.RenderSupport;
 	import starling.display.BlendMode;
 	import starling.display.DisplayObject;
+	
+	use namespace croco_internal;
 	
 	public class SceneLayer extends CrocoObjectEntity
 	{
@@ -20,6 +23,7 @@ package com.croco2d.scene
 		
 		public var initSceneEnetities:Array;
 
+		public var scene:CrocoScene;
 		public var alpha:Number = 1.0;
 		public var blendMode:String = BlendMode.AUTO;
 		public var touchAble:Boolean = true;
@@ -36,11 +40,6 @@ package com.croco2d.scene
 
 			//draw able.
 			visible = true;
-		}
-		
-		public final function get scene():CrocoScene
-		{
-			return owner as CrocoScene;
 		}
 		
 		//collision
@@ -62,7 +61,7 @@ package com.croco2d.scene
 
 				sceneEntity = __sceneEntitiesGroup.movePre() as SceneEntity;
 			}
-			
+
 			return null;
 		}
 
@@ -75,6 +74,8 @@ package com.croco2d.scene
 		{
 			sceneEntity.parent = __sceneEntitiesGroup;
 			sceneEntity.owner = this;
+			sceneEntity.scene = this.scene;
+			sceneEntity.sceneLayer = this;
 			sceneEntity.init();
 			sceneEntity.active();
 			
@@ -161,7 +162,7 @@ package com.croco2d.scene
 			__sceneEntitiesGroup.forEach(callback);
 		}
 		
-		public function lastForEach2SceneEntity(callback:Function):void
+		public function lastForEachSceneEntity(callback:Function):void
 		{
 			__sceneEntitiesGroup.lastForEach(callback);
 		}
@@ -203,17 +204,13 @@ package com.croco2d.scene
 		
 		override public function draw(support:RenderSupport, parentAlpha:Number):void
 		{
-			var curAlpha:Number = parentAlpha * alpha;
-			
-			if(needRealTimeDepthSort)
-			{
-				markSceneEntitiesOrderSortDirty();
-			}
+			if(needRealTimeDepthSort) markSceneEntitiesOrderSortDirty();
 			
 			var lastBlendMode:String = support.blendMode;
 			
 			support.blendMode = this.blendMode;
 
+			var curAlpha:Number = parentAlpha * alpha;
 			__sceneEntitiesGroup.draw(support, curAlpha);
 			
 			super.draw(support, curAlpha);

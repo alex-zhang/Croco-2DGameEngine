@@ -86,8 +86,11 @@ package com.croco2d.scene
 			this.name = AppConfig.KEY_CAMERA;
 
 			this.eventEnable = true;
+			
 			//draw able.
 			this.visible = true;
+			
+			debug = true;
 		}
 		
 		public function get width():Number
@@ -320,13 +323,6 @@ package com.croco2d.scene
 					
 					__transformMatrix.setTo(a, b, c, d, tx, ty);
 				}
-				
-				
-				//update aabb
-				var minX:Number = 0;
-				var minY:Number = 0;
-				var maxX:Number = 0;
-				var maxY:Number = 0;
 				
 				var helperMatrix:Matrix = CrocoMathUtil.helperMatrix;
 				helperMatrix.copyFrom(__transformMatrix);

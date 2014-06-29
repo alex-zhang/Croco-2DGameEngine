@@ -55,8 +55,6 @@ package com.croco2d.assets
 		
 		public static const BINARY_EXTENTION:String = "bin";//or other can'r read binary file.
 		
-		
-		
 		//====================================================================================================
 		
 		private var mAssetsTypeClassMap:Array = [];//type->AssetTypeClass

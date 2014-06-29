@@ -2,6 +2,9 @@ package com.croco2d.utils.flow
 {
 	import com.croco2d.core.CrocoObjectGroup;
 	import com.croco2d.core.CrocoObjectSet;
+	import com.croco2d.core.croco_internal;
+
+	use namespace croco_internal;
 
 	public class GroupFlowNodeBasic extends FlowNode
 	{

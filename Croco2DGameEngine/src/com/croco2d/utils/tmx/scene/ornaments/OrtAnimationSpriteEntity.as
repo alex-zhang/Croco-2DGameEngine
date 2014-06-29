@@ -47,7 +47,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 			assetPath = assetPathArr[0];
 			animationName = assetPathArr[1];
 			
-			assetPath = AppConfig.findTargetScenePathResource(scene.name, assetPath);
+			assetPath = AppConfig.findScreenResourcePath(scene.name, assetPath);
 			
 			var pivotX:Number = 0;
 			var pivotY:Number = 0;
