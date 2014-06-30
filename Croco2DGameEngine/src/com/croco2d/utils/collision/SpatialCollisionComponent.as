@@ -1,7 +1,7 @@
 package com.croco2d.utils.collision
 {
 	import com.croco2d.core.CrocoObject;
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 
 	public class SpatialCollisionComponent extends CrocoObject
 	{
@@ -18,7 +18,7 @@ package com.croco2d.utils.collision
 			
 			if(spatialManager)
 			{
-				spatialManager.addSceneEntity(owner as SceneEntity);
+				spatialManager.addSceneEntity(owner as CrocoGameObject);
 			}
 		}
 		
@@ -28,7 +28,7 @@ package com.croco2d.utils.collision
 			
 			if(spatialManager)
 			{
-				spatialManager.removeSceneEntity(owner as SceneEntity);
+				spatialManager.removeSceneEntity(owner as CrocoGameObject);
 			}
 		}
 		

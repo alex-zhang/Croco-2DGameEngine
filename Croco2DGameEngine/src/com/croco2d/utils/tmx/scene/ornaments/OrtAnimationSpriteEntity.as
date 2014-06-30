@@ -9,11 +9,11 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import com.croco2d.display.animationSprite.AnimationSetInfo;
 	import com.croco2d.display.animationSprite.AnimationSprite;
 	import com.croco2d.display.animationSprite.FrameInfo;
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 	
 	import starling.textures.Texture;
 
-	public class OrtAnimationSpriteEntity extends SceneEntity
+	public class OrtAnimationSpriteEntity extends CrocoGameObject
 	{
 		public function OrtAnimationSpriteEntity()
 		{

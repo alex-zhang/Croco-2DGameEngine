@@ -1,7 +1,5 @@
 package com.croco2d.core
 {
-	import starling.core.RenderSupport;
-
 	public class CrocoObjectGroup extends CrocoObjectSet
 	{
 		public function CrocoObjectGroup()
@@ -39,21 +37,21 @@ package com.croco2d.core
 			}
 		}
 		
-		override public function draw(support:RenderSupport, parentAlpha:Number):void
-		{
-			super.draw(support, parentAlpha);
-			
-			var child:CrocoObject = __childrenLinkList.moveFirst();
-			while(child)
-			{
-				if(child.__alive && child.visible)
-				{
-					child.draw(support, parentAlpha);
-				}
-				
-				child = __childrenLinkList.moveNext();
-			}
-		}
+//		override public function draw(support:RenderSupport, parentAlpha:Number):void
+//		{
+//			super.draw(support, parentAlpha);
+//			
+//			var child:CrocoObject = __childrenLinkList.moveFirst();
+//			while(child)
+//			{
+//				if(child.__alive && child.visible)
+//				{
+//					child.draw(support, parentAlpha);
+//				}
+//				
+//				child = __childrenLinkList.moveNext();
+//			}
+//		}
 		
 		/**
 		 * Override this function to handle any deleting or "shutdown" type operations you might need,

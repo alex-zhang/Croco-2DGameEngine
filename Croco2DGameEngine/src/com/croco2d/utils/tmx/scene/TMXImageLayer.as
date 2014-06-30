@@ -4,11 +4,11 @@ package com.croco2d.utils.tmx.scene
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.components.DisplayComponent;
 	import com.croco2d.display.CrocoImage;
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 
 	public class TMXImageLayer extends TMXBasicLayer
 	{
-		public var backgroundImageEntity:SceneEntity;
+		public var backgroundImageEntity:CrocoGameObject;
 
 		private var mImageWidth:Number;
 		private var mImageHeight:Number;
@@ -48,7 +48,7 @@ package com.croco2d.utils.tmx.scene
 			displayComponent.displayObject = crocoImage;
 
 			//entity.
-			backgroundImageEntity = new SceneEntity();
+			backgroundImageEntity = new CrocoGameObject();
 			backgroundImageEntity.initComponents = [displayComponent];
 			
 			initSceneEnetities = [backgroundImageEntity];

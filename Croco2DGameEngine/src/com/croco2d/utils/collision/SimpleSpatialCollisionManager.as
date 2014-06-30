@@ -3,7 +3,7 @@ package com.croco2d.utils.collision
 	import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.CrocoObjectSet;
 	import com.croco2d.core.croco_internal;
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 	import com.croco2d.utils.CrocoMathUtil;
 	
 	import flash.geom.Rectangle;
@@ -19,17 +19,17 @@ package com.croco2d.utils.collision
 			super();
 		}
 		
-		public function addSceneEntity(sceneEntity:SceneEntity):SceneEntity
+		public function addSceneEntity(sceneEntity:CrocoGameObject):CrocoGameObject
 		{
-			return __spatialSceneEntitiesSet.addChild(sceneEntity) as SceneEntity;
+			return __spatialSceneEntitiesSet.addChild(sceneEntity) as CrocoGameObject;
 		}
 		
-		public function removeSceneEntity(sceneEntity:SceneEntity):SceneEntity
+		public function removeSceneEntity(sceneEntity:CrocoGameObject):CrocoGameObject
 		{
-			return __spatialSceneEntitiesSet.removeChild(sceneEntity) as SceneEntity;
+			return __spatialSceneEntitiesSet.removeChild(sceneEntity) as CrocoGameObject;
 		}
 		
-		public function hasSceneEntity(sceneEntity:SceneEntity):Boolean
+		public function hasSceneEntity(sceneEntity:CrocoGameObject):Boolean
 		{
 			return __spatialSceneEntitiesSet.hasChild(sceneEntity);
 		}
@@ -42,7 +42,7 @@ package com.croco2d.utils.collision
 		{
 			if(!results) results = [];
 			
-			var child:SceneEntity = __spatialSceneEntitiesSet.moveFirst() as SceneEntity;
+			var child:CrocoGameObject = __spatialSceneEntitiesSet.moveFirst() as CrocoGameObject;
 			while(child)
 			{
 				if(child.__alive && child.__actived &&
@@ -54,13 +54,13 @@ package com.croco2d.utils.collision
 					if(isOneQuery) return results;
 				}
 				
-				child = __spatialSceneEntitiesSet.moveNext() as SceneEntity;
+				child = __spatialSceneEntitiesSet.moveNext() as CrocoGameObject;
 			}
 			
 			return results;
 		}
 		
-		protected function isSceneEntityOverlapPoint(sceneEntity:SceneEntity, 
+		protected function isSceneEntityOverlapPoint(sceneEntity:CrocoGameObject, 
 													 scenePosX:Number, scenePosY:Number):Boolean
 		{
 			if(sceneEntity.aabb)
@@ -89,7 +89,7 @@ package com.croco2d.utils.collision
 		{
 			if(!results) results = [];
 			
-			var child:SceneEntity = __spatialSceneEntitiesSet.moveFirst() as SceneEntity;
+			var child:CrocoGameObject = __spatialSceneEntitiesSet.moveFirst() as CrocoGameObject;
 			while(child)
 			{
 				if(child.__alive && child.__actived &&
@@ -101,13 +101,13 @@ package com.croco2d.utils.collision
 					if(isOneQuery) return results;
 				}
 				
-				child = __spatialSceneEntitiesSet.moveNext() as SceneEntity;
+				child = __spatialSceneEntitiesSet.moveNext() as CrocoGameObject;
 			}
 			
 			return results;
 		}
 		
-		protected function isSceneEntityOverlapRect(sceneEntity:SceneEntity, 
+		protected function isSceneEntityOverlapRect(sceneEntity:CrocoGameObject, 
 													scenePosX:Number, scenePosY:Number, rectWidth:Number, rectHeight:Number):Boolean
 		{
 			if(sceneEntity.aabb)
@@ -136,7 +136,7 @@ package com.croco2d.utils.collision
 		{
 			if(!results) results = [];
 			
-			var child:SceneEntity = __spatialSceneEntitiesSet.moveFirst() as SceneEntity;
+			var child:CrocoGameObject = __spatialSceneEntitiesSet.moveFirst() as CrocoGameObject;
 			while(child)
 			{
 				if(child.__alive && child.__actived &&
@@ -148,13 +148,13 @@ package com.croco2d.utils.collision
 					if(isOneQuery) return results;
 				}
 				
-				child = __spatialSceneEntitiesSet.moveNext() as SceneEntity;
+				child = __spatialSceneEntitiesSet.moveNext() as CrocoGameObject;
 			}
 			
 			return results;
 		}
 		
-		protected function isSceneEntityOverlapCircle(sceneEntity:SceneEntity, 
+		protected function isSceneEntityOverlapCircle(sceneEntity:CrocoGameObject, 
 													scenePosX:Number, scenePosY:Number, circleRadius:Number):Boolean
 		{
 			if(sceneEntity.aabb)
@@ -180,7 +180,7 @@ package com.croco2d.utils.collision
 		{
 			if(!results) results = [];
 			
-			var child:SceneEntity = __spatialSceneEntitiesSet.moveFirst() as SceneEntity;
+			var child:CrocoGameObject = __spatialSceneEntitiesSet.moveFirst() as CrocoGameObject;
 			while(child)
 			{
 				if(child.__alive && child.__actived &&
@@ -192,13 +192,13 @@ package com.croco2d.utils.collision
 					if(isOneQuery) return results;
 				}
 				
-				child = __spatialSceneEntitiesSet.moveNext() as SceneEntity;
+				child = __spatialSceneEntitiesSet.moveNext() as CrocoGameObject;
 			}
 			
 			return results;
 		}
 		
-		public function isSceneEntityOverlapCustom(sceneEntity:SceneEntity, 
+		public function isSceneEntityOverlapCustom(sceneEntity:CrocoGameObject, 
 													  scenePosX:Number, scenePosY:Number, customType:int = 0, params:Array = null):Boolean
 		{
 			return false;

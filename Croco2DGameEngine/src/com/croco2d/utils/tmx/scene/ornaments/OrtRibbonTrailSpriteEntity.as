@@ -4,11 +4,11 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.assets.ImageAsset;
 	import com.croco2d.assets.SpriteSheetAsset;
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 	
 	import starling.textures.Texture;
 
-	public class OrtRibbonTrailSpriteEntity extends SceneEntity
+	public class OrtRibbonTrailSpriteEntity extends CrocoGameObject
 	{
 		public function OrtRibbonTrailSpriteEntity()
 		{

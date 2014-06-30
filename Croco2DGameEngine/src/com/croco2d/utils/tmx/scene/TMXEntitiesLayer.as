@@ -1,6 +1,6 @@
 package com.croco2d.utils.tmx.scene
 {
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 	import com.croco2d.utils.tmx.data.TMXPropertySet;
 	import com.fireflyLib.utils.TypeUtility;
 	
@@ -20,7 +20,7 @@ package com.croco2d.utils.tmx.scene
 			
 			initSceneEnetities = [];
 			
-			var sceneEntity:SceneEntity;
+			var sceneEntity:CrocoGameObject;
 			
 			var objectXMLs:XMLList = xml.object; 
 			for each(var objectXML:XML in objectXMLs)
@@ -33,11 +33,11 @@ package com.croco2d.utils.tmx.scene
 			}
 		}
 
-		protected function deserializeForTMXObject(objectXML:XML):SceneEntity
+		protected function deserializeForTMXObject(objectXML:XML):CrocoGameObject
 		{
 			var entityClsType:String;
 			var entityCls:Class;
-			var entity:SceneEntity;
+			var entity:CrocoGameObject;
 			var entityTMXPropertySet:TMXPropertySet;
 			
 			if(objectXML.hasOwnProperty("@type"))
@@ -45,7 +45,7 @@ package com.croco2d.utils.tmx.scene
 				entityClsType = objectXML.@type;
 				entityCls = getDefinitionByName(entityClsType) as Class;
 				
-				entity = new SceneEntity();
+				entity = new CrocoGameObject();
 				entity.type = entityClsType;
 				
 				entityTMXPropertySet = new TMXPropertySet();

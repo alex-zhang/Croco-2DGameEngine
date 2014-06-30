@@ -4,7 +4,7 @@ package com.croco2d.utils.aoi
 	import com.croco2d.core.CrocoObjectGroup;
 	import com.croco2d.core.CrocoObjectSet;
 	import com.croco2d.core.croco_internal;
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 	import com.croco2d.utils.ViewportGridUtil;
 	import com.fireflyLib.utils.UniqueLinkList;
 	
@@ -52,9 +52,9 @@ package com.croco2d.utils.aoi
 			mViewportCellGridUtil.setViewPort(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
 		}
 		
-		public final function addSceneEntity(sceneEntity:SceneEntity):SceneEntity
+		public final function addSceneEntity(sceneEntity:CrocoGameObject):CrocoGameObject
 		{
-			var result:SceneEntity = mSceneEntitiesLinkList.add(sceneEntity) as SceneEntity;
+			var result:CrocoGameObject = mSceneEntitiesLinkList.add(sceneEntity) as CrocoGameObject;
 			if(result)
 			{
 				onAddSceneEntity(sceneEntity);
@@ -63,12 +63,12 @@ package com.croco2d.utils.aoi
 			return result;
 		}
 		
-		protected function onAddSceneEntity(sceneEntity:SceneEntity):void
+		protected function onAddSceneEntity(sceneEntity:CrocoGameObject):void
 		{
 			updateSceneEntityLampTowerLocateCell(sceneEntity);
 		}
 		
-		public function updateSceneEntityLampTowerLocateCell(sceneEntity:SceneEntity):void
+		public function updateSceneEntityLampTowerLocateCell(sceneEntity:CrocoGameObject):void
 		{
 			var sceneEntityPosX:Number = sceneEntity.x;
 			var sceneEntityPosY:Number = sceneEntity.y;
@@ -112,9 +112,9 @@ package com.croco2d.utils.aoi
 			}
 		}
 		
-		public final function removeSceneEntity(sceneEntity:SceneEntity):SceneEntity
+		public final function removeSceneEntity(sceneEntity:CrocoGameObject):CrocoGameObject
 		{
-			var result:SceneEntity =  mSceneEntitiesLinkList.remove(sceneEntity) as SceneEntity;
+			var result:CrocoGameObject =  mSceneEntitiesLinkList.remove(sceneEntity) as CrocoGameObject;
 			if(result)
 			{
 				onRemoveSceneEntity(sceneEntity);
@@ -123,7 +123,7 @@ package com.croco2d.utils.aoi
 			return result;
 		}
 		
-		protected function onRemoveSceneEntity(sceneEntity:SceneEntity):void
+		protected function onRemoveSceneEntity(sceneEntity:CrocoGameObject):void
 		{
 			var targetManager:LampTowerCell = sceneEntity.manager as LampTowerCell;
 			if(targetManager)
@@ -132,9 +132,9 @@ package com.croco2d.utils.aoi
 			}
 		}
 		
-		public function hasSceneEntity(sceneEntity:SceneEntity):Boolean
+		public function hasSceneEntity(sceneEntity:CrocoGameObject):Boolean
 		{
-			return mSceneEntitiesLinkList.has(sceneEntity) as SceneEntity;
+			return mSceneEntitiesLinkList.has(sceneEntity) as CrocoGameObject;
 		}
 		
 		protected function onActiveValidCell(colIndex:int, rowIndex:int):void

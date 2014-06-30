@@ -5,9 +5,9 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.components.DisplayComponent;
 	import com.croco2d.display.animationSprite.AnimationSetSprite;
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 
-	public class OrtAnimationSetSpriteEntity extends SceneEntity
+	public class OrtAnimationSetSpriteEntity extends CrocoGameObject
 	{
 		public function OrtAnimationSetSpriteEntity()
 		{

@@ -4,10 +4,10 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.assets.SoundAsset;
 	import com.croco2d.components.DistanceSoundComponent;
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 	import com.croco2d.sound.SoundManager;
 
-	public class OrtSurroundingSoundEntity extends SceneEntity
+	public class OrtSurroundingSoundEntity extends CrocoGameObject
 	{
 		private var mIsSoundPlaying:Boolean = false;
 

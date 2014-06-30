@@ -3,8 +3,6 @@ package com.croco2d.core
 	import com.fireflyLib.utils.EventEmitter;
 	import com.fireflyLib.utils.PropertyBag;
 	import com.llamaDebugger.Logger;
-	
-	use namespace croco_internal;
 
 	public class CrocoObjectEntity extends CrocoObject
 	{
@@ -17,11 +15,13 @@ package com.croco2d.core
 		
 		//----------------------------------------------------------------------
 		
-		public var initComponents:Array = null;
+		//controll when call the emitEvent.
 		public var eventEnable:Boolean = false;
 
 		public var __eventEmitter:EventEmitter;
 		public var __propertyBag:PropertyBag = null;
+		
+		public var initComponents:Array = null;
 		
 		public var __onPluginComponentCallback:Function = onPluginComponent;
 		public var __onPlugoutComponentCallback:Function = onPlugoutComponent;
@@ -50,14 +50,14 @@ package com.croco2d.core
 			}
 		}
 		
-		public function get propertyBag():PropertyBag
+		public final function get propertyBag():PropertyBag
 		{
 			if(!__propertyBag) __propertyBag = new PropertyBag();
 			
 			return __propertyBag;
 		}
 		
-		public function pluginComponent(component:CrocoObject):CrocoObject
+		public final function pluginComponent(component:CrocoObject):CrocoObject
 		{
 			if(!component.name)
 			{
@@ -83,13 +83,10 @@ package com.croco2d.core
 			
 			__pluinComponentsGroup.markChildrenOrderSortDirty();
 			
-			if(eventEnable &&　eventEmitter.hasEventListener(EVENT_PLUGIN_COMPONENT))
-			{
-				eventEmitter.dispatchEvent(EVENT_PLUGIN_COMPONENT, component);
-			}
+			emitEvent(EVENT_PLUGIN_COMPONENT, component);
 		}
 		
-		public function plugOutComponent(pluginName:String, needDispose:Boolean = false):CrocoObject
+		public final function plugOutComponent(pluginName:String, needDispose:Boolean = false):CrocoObject
 		{
 			var targetComponent:CrocoObject = findPluinComponent(pluginName);
 			if(targetComponent)
@@ -106,96 +103,77 @@ package com.croco2d.core
 			
 			component.deactive();
 			
-			if(eventEnable &&　eventEmitter.hasEventListener(EVENT_PLUGOUT_COMPONENT))
-			{
-				eventEmitter.dispatchEvent(EVENT_PLUGOUT_COMPONENT, component);
-			}
-			
-			if(needDispose)
-			{
-				component.dispose();
-			}
+			emitEvent(EVENT_PLUGOUT_COMPONENT, component);
+
+			if(needDispose) component.dispose();
 		}
 		
-		public function markPluginComponentsOrderSortDirty():void
+		public final function markPluginComponentsOrderSortDirty():void
 		{
 			__pluinComponentsGroup.markChildrenOrderSortDirty();
 		}
 		
-		public function hasPluginComponent(pluginName:String):Boolean
+		public final function hasPluginComponent(pluginName:String):Boolean
 		{
 			return Boolean(__pluinComponentsNameMap[pluginName]);
 		}
 		
-		public function hasPluginComponent2(pluinComponent:CrocoObject):Boolean
+		public final function hasPluginComponent2(pluinComponent:CrocoObject):Boolean
 		{
 			return __pluinComponentsGroup.hasChild(pluinComponent);
 		}
 		
-		public function findPluinComponent(pluginName:String):CrocoObject
+		public final function findPluinComponent(pluginName:String):CrocoObject
 		{
 			return __pluinComponentsNameMap[pluginName] as CrocoObject
 		}
 
-		public function getPluginComponentsCount():int
+		public final function getPluginComponentsCount():int
 		{
 			return __pluinComponentsGroup.length;
 		}
 		
-		public function findPluinComponentByField(field:String, value:*, filterFunc:Function = null):CrocoObject
+		public final function findPluinComponentByField(field:String, value:*, filterFunc:Function = null):CrocoObject
 		{
 			return __pluinComponentsGroup.findChildByField(field, value, filterFunc);
 		}
 		
-		public function findPluinComponentsByField(field:String, value:*, results:Array = null, filterFunc:Function = null):Array
+		public final function findPluinComponentsByField(field:String, value:*, results:Array = null, filterFunc:Function = null):Array
 		{ 
 			return __pluinComponentsGroup.findChildrenByField(field, value, results, filterFunc);
 		}
 		
-		public function findPluinComponentsByTypeCls(typeCls, results:Array = null, filterFunc:Function = null):Array
+		public final function findPluinComponentsByTypeCls(typeCls, results:Array = null, filterFunc:Function = null):Array
 		{
 			return __pluinComponentsGroup.findChildrenByTypeCls(typeCls, results, filterFunc);
 		}
 		
-		public function findPluinComponentByFilterFunc(filterFunc:Function = null):CrocoObject 
+		public final function findPluinComponentByFilterFunc(filterFunc:Function = null):CrocoObject 
 		{
 			return __pluinComponentsGroup.findChildByFilterFunc(filterFunc);
 		}
 		
-		public function findPluinComponentsByFilterFunc(results:Array = null, filterFunc:Function = null):Array 
+		public final function findPluinComponentsByFilterFunc(results:Array = null, filterFunc:Function = null):Array 
 		{
 			return __pluinComponentsGroup.findChildrenByFilterFunc(results, filterFunc);
 		}
 		
-		public function findAllPluinComponents(results:Array = null):Array
+		public final function findAllPluinComponents(results:Array = null):Array
 		{
 			return __pluinComponentsGroup.findAllChildren(results);
 		}
 		
-		public function forEachPluinComponent(callback:Function):void
+		public final function forEachPluinComponent(callback:Function):void
 		{
 			__pluinComponentsGroup.forEach(callback);
 		}
 		
-		public function lastForEachPluinComponent(callback:Function):void
+		public final function lastForEachPluinComponent(callback:Function):void
 		{
 			__pluinComponentsGroup.lastForEach(callback);
 		}
 		
-		public function getPluinComponentProperty(pluginName:String, filedName:String):*
-		{
-			var targetRemovedComponent:CrocoObject = findPluinComponent(pluginName);
-			if(!targetRemovedComponent) return undefined;
-			
-			if(filedName in targetRemovedComponent && !(targetRemovedComponent[filedName] is Function))
-			{
-				return targetRemovedComponent[filedName];
-			}
-			
-			return undefined;
-		}
-		
-		public function setPluinComponentProperty(pluginName:String, filedName:String, value:*):void
+		public final function setPluinComponentProperty(pluginName:String, filedName:String, value:*):void
 		{
 			var targetRemovedComponent:CrocoObject = findPluinComponent(pluginName);
 			if(!targetRemovedComponent) return;
@@ -206,7 +184,7 @@ package com.croco2d.core
 			}
 		}
 		
-		public function hasPluinComponentProperty(pluginName:String, filedName:String):Boolean
+		public final function hasPluinComponentProperty(pluginName:String, filedName:String):Boolean
 		{
 			var targetRemovedComponent:CrocoObject = findPluinComponent(pluginName);
 			if(!targetRemovedComponent) return false;
@@ -219,7 +197,7 @@ package com.croco2d.core
 			return false;
 		}
 		
-		public function callPluinComponentFunc(pluginName:String, funcName:String, args:Array = null):*
+		public final function callPluinComponentFunc(pluginName:String, funcName:String, args:Array = null):*
 		{
 			var targetRemovedComponent:CrocoObject = findPluinComponent(pluginName);
 			if(!targetRemovedComponent) return;
@@ -236,7 +214,7 @@ package com.croco2d.core
 			return undefined;
 		}
 		
-		public function hasPluinComponentFunc(pluginName:String, funcName:String):Boolean
+		public final function hasPluinComponentFunc(pluginName:String, funcName:String):Boolean
 		{
 			var targetRemovedComponent:CrocoObject = findPluinComponent(pluginName);
 			if(!targetRemovedComponent) return false;
@@ -251,8 +229,6 @@ package com.croco2d.core
 		
 		override protected function onInit():void
 		{
-			super.onInit();
-			
 			__pluinComponentsNameMap = [];
 			
 			__pluinComponentsGroup = new CrocoObjectGroup();
@@ -261,53 +237,37 @@ package com.croco2d.core
 			__pluinComponentsGroup.__onAddChildCallback = __onPluginComponentCallback;
 			__pluinComponentsGroup.__onRemoveChildCallback = __onPlugoutComponentCallback;
 			__pluinComponentsGroup.init();
+			
 			initComponents = null;
 		}
 		
 		override protected function onInited():void
 		{
-			super.onInited();
-			
-			if(eventEnable && eventEmitter.hasEventListener(EVENT_INIT))
-			{
-				eventEmitter.dispatchEvent(EVENT_INIT);
-			}
-			
 			emitEvent(EVENT_INIT);
 		}
 		
 		override protected function onActive():void
 		{
-			super.onActive();
-			
 			__pluinComponentsGroup.active();
 		}
 		
 		override protected function onActived():void
 		{
-			super.onActived();
-			
 			emitEvent(EVENT_ACTIVE);
 		}
 		
 		override public function tick(deltaTime:Number):void
 		{
-			super.tick(deltaTime);
-			
 			__pluinComponentsGroup.tick(deltaTime);
 		}
 
 		override protected function onDeactive():void
 		{
-			super.onDeactive();
-			
 			__pluinComponentsGroup.deactive();
 		}
 		
 		override protected function onDeactived():void
 		{
-			super.onDeactived();
-
 			emitEvent(EVENT_DEACTIVE);
 		}
 		

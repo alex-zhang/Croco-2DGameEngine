@@ -2,7 +2,7 @@ package com.croco2d.components
 {
 	import com.croco2d.CrocoEngine;
 	import com.croco2d.scene.CrocoCamera;
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 	import com.fireflyLib.utils.MathUtil;
 	
 	import flash.media.Sound;
@@ -26,8 +26,8 @@ package com.croco2d.components
 			{
 				var camera:CrocoCamera = CrocoEngine.camera;
 				
-				var soundCenterX:Number = SceneEntity(owner).x;
-				var soundCenterY:Number = SceneEntity(owner).x;
+				var soundCenterX:Number = CrocoGameObject(owner).x;
+				var soundCenterY:Number = CrocoGameObject(owner).x;
 				
 				var distance:Number = MathUtil.distance(soundCenterX, soundCenterY, camera.pivotX, camera.pivotY);
 				var isInSoundRange:Boolean = distance <= soundRange;

@@ -49,7 +49,7 @@ package com.croco2d.scene
 			
 			var displayObject:DisplayObject;
 
-			var sceneEntity:SceneEntity = __sceneEntitiesGroup.moveLast() as SceneEntity;
+			var sceneEntity:CrocoGameObject = __sceneEntitiesGroup.moveLast() as CrocoGameObject;
 			while(sceneEntity)
 			{
 				if(sceneEntity.__alive)
@@ -59,18 +59,18 @@ package com.croco2d.scene
 					if(displayObject) return displayObject;
 				}
 
-				sceneEntity = __sceneEntitiesGroup.movePre() as SceneEntity;
+				sceneEntity = __sceneEntitiesGroup.movePre() as CrocoGameObject;
 			}
 
 			return null;
 		}
 
-		public function addSceneEntity(sceneEntity:SceneEntity):SceneEntity
+		public function addSceneEntity(sceneEntity:CrocoGameObject):CrocoGameObject
 		{
-			return __sceneEntitiesGroup.addChild(sceneEntity) as SceneEntity;
+			return __sceneEntitiesGroup.addChild(sceneEntity) as CrocoGameObject;
 		}
 		
-		protected function onAddSceneEntity(sceneEntity:SceneEntity):void
+		protected function onAddSceneEntity(sceneEntity:CrocoGameObject):void
 		{
 			sceneEntity.parent = __sceneEntitiesGroup;
 			sceneEntity.owner = this;
@@ -87,12 +87,12 @@ package com.croco2d.scene
 			}
 		}
 		
-		public function removeSceneEntity(sceneEntity:SceneEntity, needDispose:Boolean = false):SceneEntity
+		public function removeSceneEntity(sceneEntity:CrocoGameObject, needDispose:Boolean = false):CrocoGameObject
 		{
-			return __sceneEntitiesGroup.removeChild(sceneEntity, needDispose) as SceneEntity;
+			return __sceneEntitiesGroup.removeChild(sceneEntity, needDispose) as CrocoGameObject;
 		}
 		
-		protected function onRemoveSceneEntity(sceneEntity:SceneEntity, needDispose:Boolean = false):void
+		protected function onRemoveSceneEntity(sceneEntity:CrocoGameObject, needDispose:Boolean = false):void
 		{
 			sceneEntity.deactive();
 
@@ -117,14 +117,14 @@ package com.croco2d.scene
 			return __sceneEntitiesGroup.length;
 		}
 		
-		public function hasSceneEntity(sceneEntity:SceneEntity):Boolean
+		public function hasSceneEntity(sceneEntity:CrocoGameObject):Boolean
 		{
 			return __sceneEntitiesGroup.hasChild(sceneEntity);
 		}
 		
-		public function findSceneEntityByField(field:String, value:*, filterFunc:Function = null):SceneEntity
+		public function findSceneEntityByField(field:String, value:*, filterFunc:Function = null):CrocoGameObject
 		{
-			return __sceneEntitiesGroup.findChildByField(field, value, filterFunc) as SceneEntity;
+			return __sceneEntitiesGroup.findChildByField(field, value, filterFunc) as CrocoGameObject;
 		}
 		
 		public function findSceneEntitiesByField(field:String, value:*, results:Array = null, filterFunc:Function = null):Array
@@ -132,9 +132,9 @@ package com.croco2d.scene
 			return __sceneEntitiesGroup.findChildrenByField(field, value, results, filterFunc);
 		}
 		
-		public function findSceneEntityByTypeCls(typeCls:Class, filterFunc:Function = null):SceneEntity
+		public function findSceneEntityByTypeCls(typeCls:Class, filterFunc:Function = null):CrocoGameObject
 		{
-			return __sceneEntitiesGroup.findChildByTypeCls(typeCls, filterFunc) as SceneEntity;
+			return __sceneEntitiesGroup.findChildByTypeCls(typeCls, filterFunc) as CrocoGameObject;
 		}
 		
 		public function findSceneEntitiesByTypeCls(typeCls, results:Array = null):Array

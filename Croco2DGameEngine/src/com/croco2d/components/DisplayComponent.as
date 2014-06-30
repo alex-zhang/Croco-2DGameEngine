@@ -87,7 +87,7 @@ package com.croco2d.components
 
 import com.croco2d.CrocoEngine;
 import com.croco2d.components.DisplayComponent;
-import com.croco2d.scene.SceneEntity;
+import com.croco2d.scene.CrocoGameObject;
 import com.croco2d.utils.CrocoMathUtil;
 
 import flash.geom.Matrix;
@@ -144,7 +144,7 @@ final class DisplayStage extends DisplayObjectContainer
 		var mt:Matrix = super.transformationMatrix;
 		mt.identity();
 		
-		var sceneEntity:SceneEntity = mDisplayComponent.owner as SceneEntity;
+		var sceneEntity:CrocoGameObject = mDisplayComponent.owner as CrocoGameObject;
 		if(!sceneEntity.ignoreCameraMatrix)
 		{
 			MatrixUtil.prependMatrix(mt, CrocoEngine.camera.transformMatrix);
@@ -171,7 +171,7 @@ final class DisplayStage extends DisplayObjectContainer
 		
 		//step 2.
 		//aabb test first.
-		var sceneEntity:SceneEntity = mDisplayComponent.owner as SceneEntity;
+		var sceneEntity:CrocoGameObject = mDisplayComponent.owner as CrocoGameObject;
 		localX = localPoint.x - sceneEntity.x;
 		localY = localPoint.y - sceneEntity.y;
 		

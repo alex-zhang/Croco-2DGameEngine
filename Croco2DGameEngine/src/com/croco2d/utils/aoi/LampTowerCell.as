@@ -2,7 +2,7 @@ package com.croco2d.utils.aoi
 {
 	import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.CrocoObjectSet;
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 
 	public class LampTowerCell extends CrocoObjectSet
 	{
@@ -57,7 +57,7 @@ package com.croco2d.utils.aoi
 		{
 			super.tick(deltaTime);
 			
-			var sceneEntity:SceneEntity = __childrenLinkList.moveFirst();
+			var sceneEntity:CrocoGameObject = __childrenLinkList.moveFirst();
 			while(sceneEntity)
 			{
 				if(sceneEntity.__alive)
@@ -69,7 +69,7 @@ package com.croco2d.utils.aoi
 			}
 		}
 		
-		protected function updateChildGridCell(sceneEntity:SceneEntity):void
+		protected function updateChildGridCell(sceneEntity:CrocoGameObject):void
 		{
 			LampTowerGrid(owner).updateSceneEntityLampTowerLocateCell(sceneEntity);
 		}

@@ -6,11 +6,11 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import com.croco2d.assets.SpriteSheetAsset;
 	import com.croco2d.components.DisplayComponent;
 	import com.croco2d.display.CrocoImage;
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 	
 	import starling.textures.Texture;
 
-	public class OrtImageEntity extends SceneEntity
+	public class OrtImageEntity extends CrocoGameObject
 	{
 		public function OrtImageEntity()
 		{

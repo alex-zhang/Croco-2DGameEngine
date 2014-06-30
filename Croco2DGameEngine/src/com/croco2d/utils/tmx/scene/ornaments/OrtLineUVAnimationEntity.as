@@ -5,7 +5,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import com.croco2d.assets.ImageAsset;
 	import com.croco2d.assets.SpriteSheetAsset;
 	import com.croco2d.components.DisplayComponent;
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 	
 	import starling.display.Shape;
 	import starling.display.materials.StandardMaterial;
@@ -13,7 +13,7 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import starling.display.shaders.vertex.AnimateUVVertexShader;
 	import starling.textures.Texture;
 
-	public class OrtLineUVAnimationEntity extends SceneEntity
+	public class OrtLineUVAnimationEntity extends CrocoGameObject
 	{
 		public function OrtLineUVAnimationEntity()
 		{

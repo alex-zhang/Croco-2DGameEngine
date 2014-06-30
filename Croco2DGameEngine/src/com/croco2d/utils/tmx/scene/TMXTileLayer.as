@@ -1,14 +1,14 @@
 package com.croco2d.utils.tmx.scene
 {
 	import com.croco2d.components.DisplayComponent;
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 	import com.croco2d.utils.tmx.data.TMXTileGridData;
 	import com.croco2d.utils.tmx.display.TMXTileMap;
 
 	public class TMXTileLayer extends TMXBasicLayer
 	{
 		public var tmxGridData:TMXTileGridData;
-		public var tileMapEntity:SceneEntity;
+		public var tileMapEntity:CrocoGameObject;
 		
 		public function TMXTileLayer()
 		{
@@ -35,7 +35,7 @@ package com.croco2d.utils.tmx.scene
 			displayComponent.displayObject = tmxTileMap;
 			
 			//entity
-			tileMapEntity = new SceneEntity();
+			tileMapEntity = new CrocoGameObject();
 			tileMapEntity.initComponents = [displayComponent];
 			
 			initSceneEnetities = [tileMapEntity];

@@ -4,11 +4,11 @@ package com.croco2d.utils.tmx.scene.ornaments
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.assets.ParticleSetAsset;
 	import com.croco2d.components.DisplayComponent;
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 	
 	import starling.extensions.PDParticleSystem;
 
-	public class OrtParticalSpriteEntity extends SceneEntity
+	public class OrtParticalSpriteEntity extends CrocoGameObject
 	{
 		public function OrtParticalSpriteEntity()
 		{

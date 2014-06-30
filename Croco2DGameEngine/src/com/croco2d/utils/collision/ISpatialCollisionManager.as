@@ -1,12 +1,12 @@
 package com.croco2d.utils.collision
 {
-	import com.croco2d.scene.SceneEntity;
+	import com.croco2d.scene.CrocoGameObject;
 
 	public interface ISpatialCollisionManager
 	{
-		function addSceneEntity(sceneEntity:SceneEntity):SceneEntity;
-		function removeSceneEntity(sceneEntity:SceneEntity):SceneEntity;
-		function hasSceneEntity(sceneEntity:SceneEntity):Boolean;
+		function addSceneEntity(sceneEntity:CrocoGameObject):CrocoGameObject;
+		function removeSceneEntity(sceneEntity:CrocoGameObject):CrocoGameObject;
+		function hasSceneEntity(sceneEntity:CrocoGameObject):Boolean;
 		
 		//return SceneEntities.
 		function queryEntitiesIsOverlapPoint(scenePosX:Number, scenePosY:Number, 
