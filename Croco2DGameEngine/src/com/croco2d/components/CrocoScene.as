@@ -1,4 +1,4 @@
-package com.croco2d.scene
+package com.croco2d.components
 {
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.core.CrocoObjectEntity;

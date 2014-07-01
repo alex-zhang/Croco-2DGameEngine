@@ -38,12 +38,12 @@ package com.croco2d.core
 			}
 		}
 		
-		override public function draw(support:RenderSupport, parentAlpha:Number):void
-		{
-			super.draw(support, parentAlpha);
-			
-			if(__child.visible) __child.draw(support, parentAlpha);
-		}
+//		override public function draw(support:RenderSupport, parentAlpha:Number):void
+//		{
+//			super.draw(support, parentAlpha);
+//			
+//			if(__child.visible) __child.draw(support, parentAlpha);
+//		}
 		
 		override protected function onDeactive():void
 		{

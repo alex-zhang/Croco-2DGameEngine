@@ -1,4 +1,4 @@
-package com.croco2d.scene
+package com.croco2d.components
 {
 	import com.croco2d.AppConfig;
 	import com.croco2d.CrocoEngine;
@@ -355,46 +355,46 @@ package com.croco2d.scene
 //			trace("camera tick time: " + (getTimer() - time));
 		}
 		
-		override public function draw(support:RenderSupport, parentAlpha:Number):void
-		{
+//		override public function draw(support:RenderSupport, parentAlpha:Number):void
+//		{
 //			var time:int = getTimer();
-			const isCameraDebugDraw:Boolean = CrocoEngine.debug;
-			if(isCameraDebugDraw)
-			{
-				debugGraphics.clear();
-			}
-			
-			var curAlpha:Number = parentAlpha * alpha;
-			
-			super.draw(support, curAlpha);
-			
-			if(__currentScene && 
-				__currentScene.__alive && __currentScene.__actived && __currentScene.visible)
-			{
-				__currentScene.draw(support, curAlpha);
-			}
-			
-			if(isCameraDebugDraw)
-			{
-				debugGraphics.endFill();
-			}
+//			const isCameraDebugDraw:Boolean = CrocoEngine.debug;
+//			if(isCameraDebugDraw)
+//			{
+//				debugGraphics.clear();
+//			}
+//			
+//			var curAlpha:Number = parentAlpha * alpha;
+//			
+//			super.draw(support, curAlpha);
+//			
+//			if(__currentScene && 
+//				__currentScene.__alive && __currentScene.__actived && __currentScene.visible)
+//			{
+//				__currentScene.draw(support, curAlpha);
+//			}
+//			
+//			if(isCameraDebugDraw)
+//			{
+//				debugGraphics.endFill();
+//			}
 //			trace("camera draw time: " + (getTimer() - time));
-		}
+//		}
 		
-		override protected function onDrawDebug():void
-		{
-			var camera:CrocoCamera = CrocoEngine.camera;
-			camera.debugGraphics.lineStyle(2, 0xFF0000);
-			camera.debugGraphics.drawRect(0, 0, width, height);
-			
-			var lineLenth:Number = 20;
-			
-			camera.debugGraphics.lineStyle(1, 0xFF0000);
-			camera.debugGraphics.moveTo(halfWidth, halfHeight - lineLenth);
-			camera.debugGraphics.lineTo(halfWidth, halfHeight + lineLenth);
-			camera.debugGraphics.moveTo(halfWidth - lineLenth, halfHeight);
-			camera.debugGraphics.lineTo(halfWidth + lineLenth, halfHeight);
-		}
+//		override protected function onDrawDebug():void
+//		{
+//			var camera:CrocoCamera = CrocoEngine.camera;
+//			camera.debugGraphics.lineStyle(2, 0xFF0000);
+//			camera.debugGraphics.drawRect(0, 0, width, height);
+//			
+//			var lineLenth:Number = 20;
+//			
+//			camera.debugGraphics.lineStyle(1, 0xFF0000);
+//			camera.debugGraphics.moveTo(halfWidth, halfHeight - lineLenth);
+//			camera.debugGraphics.lineTo(halfWidth, halfHeight + lineLenth);
+//			camera.debugGraphics.moveTo(halfWidth - lineLenth, halfHeight);
+//			camera.debugGraphics.lineTo(halfWidth + lineLenth, halfHeight);
+//		}
 
 		public function localPointToGlobalPoint(localPoint:Point, result:Point = null):Point
 		{
@@ -429,7 +429,7 @@ package com.croco2d.scene
 
 //------------------------------------------------------------------------------
 
-import com.croco2d.scene.CrocoCamera;
+import com.croco2d.components.CrocoCamera;
 
 import flash.geom.Point;
 

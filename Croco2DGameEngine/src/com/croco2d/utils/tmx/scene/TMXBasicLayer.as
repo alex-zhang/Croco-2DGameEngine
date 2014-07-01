@@ -1,6 +1,6 @@
 package com.croco2d.utils.tmx.scene
 {
-	import com.croco2d.scene.SceneLayer;
+	import com.croco2d.components.SceneLayer;
 	import com.croco2d.utils.tmx.data.TMXMapData;
 	import com.croco2d.utils.tmx.data.TMXPropertySet;
 	import com.fireflyLib.utils.MathUtil;

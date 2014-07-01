@@ -1,4 +1,4 @@
-package com.croco2d.scene
+package com.croco2d.components
 {
 	import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.CrocoObjectEntity;
@@ -11,6 +11,7 @@ package com.croco2d.scene
 	import starling.core.RenderSupport;
 	import starling.display.BlendMode;
 	import starling.display.DisplayObject;
+	import com.croco2d.core.CrocoGameObject;
 	
 	use namespace croco_internal;
 	

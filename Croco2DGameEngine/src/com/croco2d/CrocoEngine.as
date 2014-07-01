@@ -3,7 +3,7 @@ package com.croco2d
 	import com.croco2d.assets.CrocoAssetsManager;
 	import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.CrocoObjectEntity;
-	import com.croco2d.scene.CrocoCamera;
+	import com.croco2d.components.CrocoCamera;
 	import com.croco2d.input.InputManager;
 	import com.croco2d.sound.SoundManager;
 	import com.fireflyLib.utils.GlobalPropertyBag;

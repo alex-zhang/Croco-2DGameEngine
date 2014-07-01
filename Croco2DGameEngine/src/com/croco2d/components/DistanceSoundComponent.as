@@ -1,11 +1,11 @@
 package com.croco2d.components
 {
 	import com.croco2d.CrocoEngine;
-	import com.croco2d.scene.CrocoCamera;
 	import com.croco2d.scene.CrocoGameObject;
 	import com.fireflyLib.utils.MathUtil;
 	
 	import flash.media.Sound;
+	import com.croco2d.core.CrocoGameObject;
 
 	public class DistanceSoundComponent extends SoundComponent
 	{

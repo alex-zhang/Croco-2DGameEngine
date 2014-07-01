@@ -1,7 +1,7 @@
 package com.croco2d.screens
 {
 	import com.croco2d.CrocoEngine;
-	import com.croco2d.scene.CrocoScene;
+	import com.croco2d.components.CrocoScene;
 	
 	import starling.events.Event;
 
