@@ -1,7 +1,5 @@
 package com.croco2d.core
 {
-	import starling.core.RenderSupport;
-
 	public class CrocoObjectDecorator extends CrocoObject
 	{
 		//child will be the same life-cycle as the cur.

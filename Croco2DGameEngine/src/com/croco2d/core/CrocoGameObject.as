@@ -1,27 +1,23 @@
 package com.croco2d.core
 {
 	import com.croco2d.components.RenderComponent;
+	import com.croco2d.utils.CrocoTransform;
+	
+	import starling.core.RenderSupport;
+	
+	use namespace croco_internal;
 	
 	internal final class CrocoGameObject extends CrocoObjectEntity
 	{
 		public static const EVENT_ADD_GAME_OBJECT:String = "addGameObject";
 		public static const EVENT_REMOVE_GAME_OBJECT:String = "removeGameObject";
-		
-		public var initChildrenGameObjects:Array;
 
-		public var x:Number = 0;
-		public var y:Number = 0;
-		
-		public var scaleX:Number = 0;
-		public var scaleY:Number = 0;
-		
-		public var rotation:Number = 0;
-		
-		public var width:Number = 0;
-		
-		public var height:Number = 0;
+		//keep this not null
+		public const transform:CrocoTransform = new CrocoTransform();
 		
 		public var renderComponent:RenderComponent;
+		
+		public var initChildrenGameObjects:Array;
 
 		public var __gameObjectsGroup:CrocoObjectGroup;
 		public var __onAddGameObjectCallback:Function = onAddGameObject;
@@ -46,7 +42,7 @@ package com.croco2d.core
 		{
 			gameObject.parent = __gameObjectsGroup;
 			gameObject.owner = this;
-
+			
 			gameObject.init();
 			gameObject.active();
 			
@@ -100,6 +96,46 @@ package com.croco2d.core
 		public final function lastForEachChildGameObject(callback:Function):void
 		{
 			__gameObjectsGroup.lastForEach(callback);
+		}
+		
+		
+		override protected function onPluginComponent(component:CrocoObject):void 
+		{
+			super.onPluginComponent(component);
+			
+			if(component is RenderComponent)
+			{
+				renderComponent = component as RenderComponent;
+			}
+		}
+		
+		override protected function onPlugoutComponent(component:CrocoObject, needDispose:Boolean=false):void
+		{
+			if(component === renderComponent)
+			{
+				renderComponent = null;
+			}
+			
+			super.onPlugoutComponent(component, needDispose);
+		}
+		
+		public final function draw(support:RenderSupport, parentAlpha:Number):void
+		{
+			if(renderComponent)
+			{
+				renderComponent.draw(support, parentAlpha);
+			}
+			
+			var child:CrocoGameObject = __gameObjectsGroup.moveFirst() as CrocoGameObject;
+			while(child)
+			{
+				if(child.__alive)
+				{
+					child.draw(support, parentAlpha);
+				}
+				
+				child = __gameObjectsGroup.moveNext() as CrocoGameObject;
+			}
 		}
 
 		override protected function onInit():void
