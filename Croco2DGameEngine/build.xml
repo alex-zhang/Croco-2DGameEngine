@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Croco2DGameEngine" default="main" basedir=".">
+
+    <property name="libs_download.dir" value="${basedir}/libs"/>
+
+    <target name="download_libs">
+
+        <antcall target="download_file">
+        	<param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/Firefly-Lib/master/FireflyLib/bin/FireflyLib.swc"/>
+        </antcall>
+
+        <antcall target="download_file">
+            <param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/LlamaDebugger-Lib/master/LlamaDebugger/bin/LlamaDebugger.swc"/>
+        </antcall>
+
+        <antcall target="download_file">
+            <param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/PonyMVC-Framework/master/PonyMVC/bin/PonyMVC.swc"/>
+        </antcall>
+
+        
+        <antcall target="download_file">
+            <param name="download_file_url" value="https://raw.githubusercontent.com/claus/fzip/master/bin/fzip.swc"/>
+        </antcall>
+
+        <antcall target="download_file">
+            <param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/as3corelib/dev/bin/as3corelib.swc"/>
+        </antcall>
+
+        <antcall target="download_file">
+            <param name="download_file_url" value="http://napephys.com/nape-release.swc"/>
+        </antcall>
+
+        <antcall target="download_file">
+            <param name="download_file_url" value="https://raw.githubusercontent.com/StarlingGraphics/Starling-Extension-Graphics/master/extension/bin/Starling-Extension-Graphics.swc"/>
+        </antcall>
+
+        <!--
+            <param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/Starling-Framework/dev/starling/bin/starling.swc"/>
+        -->
+
+    </target>
+
+    <!--help for download-->
+    <target name="download_file">
+        <get src="${download_file_url}" dest="${libs_download.dir}"/>
+        <echo message="${download_file_url} has loaded."/>
+    </target>
+</project>	
