@@ -8,7 +8,7 @@ package com.croco2d.components
 
 	public class SoundComponent extends CrocoObject
 	{
-		protected var mSoundHandle:ISoundHandle;
+		public var __soundHandle:ISoundHandle;
 		
 		public function SoundComponent()
 		{
@@ -21,16 +21,16 @@ package com.croco2d.components
 			
 			if(sound)
 			{
-				mSoundHandle = CrocoEngine.soundManager.play(sound, category);
+				__soundHandle = CrocoEngine.soundManager.play(sound, category);
 			}
 		}
 		
 		public function stopSound():void
 		{
-			if(mSoundHandle)
+			if(__soundHandle)
 			{
-				mSoundHandle.stop();
-				mSoundHandle = null;
+				__soundHandle.stop();
+				__soundHandle = null;
 			}
 		}
 		

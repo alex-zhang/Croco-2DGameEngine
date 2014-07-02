@@ -1,15 +1,21 @@
 package com.croco2d
 {
 	import com.croco2d.assets.CrocoAssetsManager;
+	import com.croco2d.core.CrocoCamera;
+	import com.croco2d.core.CrocoGameObject;
 	import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.CrocoObjectEntity;
-	import com.croco2d.components.CrocoCamera;
 	import com.croco2d.input.InputManager;
 	import com.croco2d.sound.SoundManager;
 	import com.fireflyLib.utils.GlobalPropertyBag;
 	
+	import flash.display.Graphics;
 	import flash.events.Event;
 	import flash.utils.getTimer;
+	
+	import starling.core.Starling;
+	import starling.display.DisplayObject;
+	import starling.display.DisplayObjectContainer;
 	
 	public class CrocoEngine extends CrocoObjectEntity
 	{
@@ -45,23 +51,30 @@ package com.croco2d
 		public static var maxTicksPerFrame:int = 5;
 		
 		/**
+		 *  u can consider the rootGameObject as Scene.
+		 */		
+		public static var rootGameObject:CrocoGameObject;
+		
+		/**
 		 * If the game should stop updating/rendering.
 		 */
-		protected static var __running:Boolean = false;
+		public static var __running:Boolean = false;
 		
-		protected static var __tickTime:Number = 0.0;
+		public static var __tickTime:Number = 0.0;
 		
-		protected static var __tickTimes:int = 0;
+		public static var __tickTimes:int = 0;
 		
-		protected static var __curTime:int = -1;
+		public static var __curTime:int = -1;
 		
-		protected static var __lastTime:int = -1;
+		public static var __lastTime:int = -1;
 
-		//helper
+		//helper for reference.
 		public static var camera:CrocoCamera;
 		public static var inputManager:InputManager;
 		public static var soundManager:SoundManager;
 		public static var globalAssetsManager:CrocoAssetsManager;
+
+		public static var debugGraphics:Graphics;
 		
 		public static function hasPluginComponent(pluginName:String):Boolean
 		{
@@ -221,9 +234,28 @@ package com.croco2d
 			__lastTime = __curTime;
 		}
 		
+		override protected function onInit():void
+		{
+			debugGraphics = Starling.current.nativeOverlay.graphics;
+			
+			super.onInit();
+		}
+		
+		override public function tick(deltaTime:Number):void
+		{
+			if(rootGameObject && rootGameObject.__alive && rootGameObject.tickable)
+			{
+				rootGameObject.tick(deltaTime);
+			}
+			
+			super.tick(deltaTime);
+		}
+		
 		override public function dispose():void
 		{
 			super.dispose();
+			
+			rootGameObject = null;
 			
 			//just clear the reference.
 			camera = null;
@@ -239,11 +271,11 @@ package com.croco2d
 				"CrocoEngine::debug: " + CrocoEngine.debug + "\n" +
 				"CrocoEngine::tickDeltaTime: " + CrocoEngine.tickDeltaTime + "\n" +
 				"CrocoEngine::maxTicksPerFrame: " + CrocoEngine.maxTicksPerFrame + "\n" +
-				"CrocoEngine::__running: " + CrocoEngine.__running + "\n" +
-				"CrocoEngine::__tickTime: " + CrocoEngine.__tickTime + "\n" +
-				"CrocoEngine::__tickTimes: " + CrocoEngine.__tickTimes + "\n" +
-				"CrocoEngine::__curTime: " + CrocoEngine.__curTime + "\n" +
-				"CrocoEngine::__lastTime: " + CrocoEngine.__lastTime;
+				"CrocoEngine::running: " + CrocoEngine.__running + "\n" +
+				"CrocoEngine::tickTime: " + CrocoEngine.__tickTime + "\n" +
+				"CrocoEngine::tickTimes: " + CrocoEngine.__tickTimes + "\n" +
+				"CrocoEngine::curTime: " + CrocoEngine.__curTime + "\n" +
+				"CrocoEngine::lastTime: " + CrocoEngine.__lastTime;
 
 			return results;
 		}

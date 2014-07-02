@@ -102,6 +102,11 @@ package com.croco2d.sound
         {
             return mCategory;
         }
+		
+		public function get sound():Sound
+		{
+			return mSound;
+		}
 
         public function pause():void
         {

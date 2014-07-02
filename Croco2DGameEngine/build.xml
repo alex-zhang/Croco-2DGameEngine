@@ -3,6 +3,10 @@
 
     <property name="libs_download.dir" value="${basedir}/libs"/>
 
+	<target name="main">
+	    <echo message="main"/> 
+	</target>
+	
     <target name="download_libs">
 
         <antcall target="download_file">
@@ -16,7 +20,6 @@
         <antcall target="download_file">
             <param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/PonyMVC-Framework/master/PonyMVC/bin/PonyMVC.swc"/>
         </antcall>
-
         
         <antcall target="download_file">
             <param name="download_file_url" value="https://raw.githubusercontent.com/claus/fzip/master/bin/fzip.swc"/>

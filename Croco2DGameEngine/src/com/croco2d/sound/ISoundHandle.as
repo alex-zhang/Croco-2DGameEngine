@@ -1,5 +1,6 @@
 package com.croco2d.sound
 {
+    import flash.media.Sound;
     import flash.media.SoundTransform;
 
     /**
@@ -46,6 +47,11 @@ package com.croco2d.sound
          * Under what category is the sound being tracked by the SoundManager?
          */
         function get category():String;
+		
+		/**
+		 *  return the source sound.
+		 */		
+		function get sound():Sound;
         
         /**
          * Returns whether or not this sound is currently playing

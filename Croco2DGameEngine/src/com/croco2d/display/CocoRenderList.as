@@ -9,7 +9,9 @@ package com.croco2d.display
 		public static function childrenSortFunction(childA:DisplayObject, childB:DisplayObject):Number
 		{
 			//-1 means the bottom depth than the other
-			return childA.zOrder > childB.zOrder ? 1 : -1; 
+//			return childA.zOrder > childB.zOrder ? 1 : -1; 
+			
+			return -1;
 		}
 		
 		private var mChildrenSortDirty:Boolean = false;

@@ -37,22 +37,6 @@ package com.croco2d.core
 			}
 		}
 		
-//		override public function draw(support:RenderSupport, parentAlpha:Number):void
-//		{
-//			super.draw(support, parentAlpha);
-//			
-//			var child:CrocoObject = __childrenLinkList.moveFirst();
-//			while(child)
-//			{
-//				if(child.__alive && child.visible)
-//				{
-//					child.draw(support, parentAlpha);
-//				}
-//				
-//				child = __childrenLinkList.moveNext();
-//			}
-//		}
-		
 		/**
 		 * Override this function to handle any deleting or "shutdown" type operations you might need,
 		 * such as removing traditional Flash children like Sprite objects.

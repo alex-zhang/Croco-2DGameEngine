@@ -3,11 +3,9 @@ package com.croco2d.components
 	import com.croco2d.CrocoEngine;
 	import com.croco2d.core.CrocoObject;
 	
-	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import starling.animation.IAnimatable;
-	import starling.core.RenderSupport;
 	import starling.core.starling_internal;
 	import starling.display.DisplayObject;
 
@@ -26,15 +24,15 @@ package com.croco2d.components
 			mDisplayStage = new DisplayStage(this);
 
 			//draw able.
-			visible = true;
+//			visible = true;
 		}
 		
-		public function hitTest(localPoint:Point, forTouch:Boolean = false):DisplayObject
-		{
-			if(forTouch && (!visible || !touchable)) return null;
-			
-			return mDisplayStage.hitTest(localPoint, forTouch);
-		}
+//		public function hitTest(localPoint:Point, forTouch:Boolean = false):DisplayObject
+//		{
+//			if(forTouch && (!visible || !touchable)) return null;
+//			
+//			return mDisplayStage.hitTest(localPoint, forTouch);
+//		}
 		
 		public function get displayObject():DisplayObject
 		{
@@ -64,35 +62,32 @@ package com.croco2d.components
 			}
 		}
 
-		override public function draw(support:RenderSupport, parentAlpha:Number):void
-		{
-			super.draw(support, parentAlpha);
-			
-			mDisplayStage.render(support, parentAlpha);
-		}
+//		override public function draw(support:RenderSupport, parentAlpha:Number):void
+//		{
+//			super.draw(support, parentAlpha);
+//			
+//			mDisplayStage.render(support, parentAlpha);
+//		}
 		
-		override public function dispose():void
-		{
-			super.dispose();
-			
-			if(mDisplayStage)
-			{
-				mDisplayStage.starling_internal::setParent(null);
-				mDisplayStage.dispose();
-				mDisplayStage = null;
-			}
-		}
+//		override public function dispose():void
+//		{
+//			super.dispose();
+//			
+//			if(mDisplayStage)
+//			{
+//				mDisplayStage.starling_internal::setParent(null);
+//				mDisplayStage.dispose();
+//				mDisplayStage = null;
+//			}
+//		}
 	}
 }
 
-import com.croco2d.CrocoEngine;
 import com.croco2d.components.DisplayComponent;
-import com.croco2d.scene.CrocoGameObject;
 import com.croco2d.utils.CrocoMathUtil;
 
 import flash.geom.Matrix;
 import flash.geom.Point;
-import flash.geom.Rectangle;
 
 import starling.core.RenderSupport;
 import starling.core.starling_internal;
@@ -144,13 +139,13 @@ final class DisplayStage extends DisplayObjectContainer
 		var mt:Matrix = super.transformationMatrix;
 		mt.identity();
 		
-		var sceneEntity:CrocoGameObject = mDisplayComponent.owner as CrocoGameObject;
-		if(!sceneEntity.ignoreCameraMatrix)
-		{
-			MatrixUtil.prependMatrix(mt, CrocoEngine.camera.transformMatrix);
-		}
+//		var sceneEntity:CrocoGameObject = mDisplayComponent.owner as CrocoGameObject;
+//		if(!sceneEntity.ignoreCameraMatrix)
+//		{
+//			MatrixUtil.prependMatrix(mt, CrocoEngine.camera.transformMatrix);
+//		}
 		
-		mt.translate(sceneEntity.x, sceneEntity.y);
+//		mt.translate(sceneEntity.x, sceneEntity.y);
 		
 		return mt;
 	}
@@ -171,26 +166,26 @@ final class DisplayStage extends DisplayObjectContainer
 		
 		//step 2.
 		//aabb test first.
-		var sceneEntity:CrocoGameObject = mDisplayComponent.owner as CrocoGameObject;
-		localX = localPoint.x - sceneEntity.x;
-		localY = localPoint.y - sceneEntity.y;
+//		var sceneEntity:CrocoGameObject = mDisplayComponent.owner as CrocoGameObject;
+//		localX = localPoint.x - sceneEntity.x;
+//		localY = localPoint.y - sceneEntity.y;
 		
-		var aabb:Rectangle = sceneEntity.aabb;
-		if(!aabb || 
-			CrocoMathUtil.isOverlapPointAndRectangle(localX, localY, aabb.x, aabb.y, aabb.width, aabb.height))
-		{
-			mt.copyFrom(__displayObject.transformationMatrix);
-			mt.invert();
-			MatrixUtil.transformCoords(mt, localX, localY, localPoint);
-			
-			var hitTestBounds:Rectangle = mDisplayComponent.hitTestBounds;
-			if(!hitTestBounds || 
-				CrocoMathUtil.isOverlapPointAndRectangle(localPoint.x, localPoint.y, 
-					hitTestBounds.x, hitTestBounds.y, hitTestBounds.width, hitTestBounds.height))
-			{
-				return __displayObject.hitTest(localPoint, forTouch);
-			}
-		}
+//		var aabb:Rectangle = sceneEntity.aabb;
+//		if(!aabb || 
+//			CrocoMathUtil.isOverlapPointAndRectangle(localX, localY, aabb.x, aabb.y, aabb.width, aabb.height))
+//		{
+//			mt.copyFrom(__displayObject.transformationMatrix);
+//			mt.invert();
+//			MatrixUtil.transformCoords(mt, localX, localY, localPoint);
+//			
+//			var hitTestBounds:Rectangle = mDisplayComponent.hitTestBounds;
+//			if(!hitTestBounds || 
+//				CrocoMathUtil.isOverlapPointAndRectangle(localPoint.x, localPoint.y, 
+//					hitTestBounds.x, hitTestBounds.y, hitTestBounds.width, hitTestBounds.height))
+//			{
+//				return __displayObject.hitTest(localPoint, forTouch);
+//			}
+//		}
 		
 		return null;
 	}

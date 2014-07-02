@@ -1,13 +1,13 @@
 package com.croco2d.screens
 {
 	import com.croco2d.CrocoEngine;
-	import com.croco2d.components.CrocoScene;
+	import com.croco2d.core.CrocoGameObject;
 	
 	import starling.events.Event;
 
 	public class SceneScreen extends CrocoScreen
 	{
-		public var scene:CrocoScene;
+		public var scene:CrocoGameObject
 
 		public function SceneScreen()
 		{
@@ -34,20 +34,37 @@ package com.croco2d.screens
 				scene = createScene();
 			}
 			
-			onInitScene();
+			if(scene)
+			{
+				onActiveScene();
+			}
 		}
 		
-		protected function createScene():CrocoScene
+		protected function onActiveScene():void
 		{
-			return new CrocoScene();
-		}
-		
-		protected function onInitScene():void
-		{
-			scene.assetsManager = assetsManager;
+			CrocoEngine.camera.reset();
 			
-			//if one screen has many scene we should change the name here.
+			scene.init();
+			scene.active();
+			
+			CrocoEngine.rootGameObject = scene;
+			CrocoEngine.camera.watchTarget = scene;
+		}
+		
+		protected function onDeactiveScene():void
+		{
+			scene.deactive();
+			
+			CrocoEngine.rootGameObject = null;
+			CrocoEngine.camera.watchTarget = null;
+		}
+		
+		protected function createScene():CrocoGameObject
+		{
+			var scene:CrocoGameObject = CrocoGameObject.createEmpty();
 			scene.name = this.screenID;
+			
+			return scene;
 		}
 		
 		override protected function screen_addedToStageHandler(event:Event):void
@@ -56,7 +73,7 @@ package com.croco2d.screens
 
 			if(scene)
 			{
-				CrocoEngine.camera.setCurrentScene(scene);
+				onActiveScene();
 			}
 		}
 		
@@ -64,7 +81,7 @@ package com.croco2d.screens
 		{
 			if(scene)
 			{
-				CrocoEngine.camera.setCurrentScene(null);
+				onDeactiveScene();
 			}
 		}
 	}

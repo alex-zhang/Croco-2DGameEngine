@@ -5,12 +5,12 @@ package com.croco2d
 	import com.croco2d.screens.CrocoScreenNavigator;
 	import com.croco2d.screens.FlashBootStrapScreen;
 	import com.croco2d.screens.StarlingBootStrapScreen;
-	import com.croco2d.utils.tmx.scene.ornaments.OrtAnimationSetSpriteEntity;
-	import com.croco2d.utils.tmx.scene.ornaments.OrtAnimationSpriteEntity;
-	import com.croco2d.utils.tmx.scene.ornaments.OrtImageEntity;
-	import com.croco2d.utils.tmx.scene.ornaments.OrtLineUVAnimationEntity;
-	import com.croco2d.utils.tmx.scene.ornaments.OrtParticalSpriteEntity;
-	import com.croco2d.utils.tmx.scene.ornaments.OrtSurroundingSoundEntity;
+	import com.croco2d.tmx.scene.ornaments.OrtAnimationSetSpriteEntity;
+	import com.croco2d.tmx.scene.ornaments.OrtAnimationSpriteEntity;
+	import com.croco2d.tmx.scene.ornaments.OrtImageEntity;
+	import com.croco2d.tmx.scene.ornaments.OrtLineUVAnimationEntity;
+	import com.croco2d.tmx.scene.ornaments.OrtParticalSpriteEntity;
+	import com.croco2d.tmx.scene.ornaments.OrtSurroundingSoundEntity;
 	import com.llamaDebugger.Logger;
 	
 	import feathers.controls.ScreenNavigatorItem;
@@ -222,7 +222,7 @@ package com.croco2d
 				initComponents:
 				[
 					{
-						clsType:"(class)com.croco2d.scene::CrocoCamera"
+						clsType:"(class)com.croco2d.core::CrocoCamera"
 					},
 					{
 						clsType:"(class)com.croco2d.input::InputManager",

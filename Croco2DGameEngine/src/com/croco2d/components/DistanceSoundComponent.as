@@ -1,23 +1,23 @@
 package com.croco2d.components
 {
 	import com.croco2d.CrocoEngine;
-	import com.croco2d.scene.CrocoGameObject;
 	import com.fireflyLib.utils.MathUtil;
 	
 	import flash.media.Sound;
-	import com.croco2d.core.CrocoGameObject;
+	import com.croco2d.core.CrocoCamera;
 
 	public class DistanceSoundComponent extends SoundComponent
 	{
-		public var sound:Sound;
 		public var soundRange:Number = 100;
-		public var soundCategory:String;
 		
+		public var sound:Sound;
+		public var soundCategory:String;
+
 		public function DistanceSoundComponent()
 		{
 			super();
 		}
-		
+
 		override public function tick(deltaTime:Number):void
 		{
 			super.tick(deltaTime);
@@ -26,8 +26,8 @@ package com.croco2d.components
 			{
 				var camera:CrocoCamera = CrocoEngine.camera;
 				
-				var soundCenterX:Number = CrocoGameObject(owner).x;
-				var soundCenterY:Number = CrocoGameObject(owner).x;
+				var soundCenterX:Number// = ;CrocoGameObject(owner).x;
+				var soundCenterY:Number// = CrocoGameObject(owner).x;
 				
 				var distance:Number = MathUtil.distance(soundCenterX, soundCenterY, camera.pivotX, camera.pivotY);
 				var isInSoundRange:Boolean = distance <= soundRange;
@@ -36,10 +36,10 @@ package com.croco2d.components
 				{
 					playSound(sound, soundCategory);
 					
-					if(mSoundHandle)
+					if(__soundHandle)
 					{
-						mSoundHandle.volume = 1 - distance / soundRange;
-						mSoundHandle.pan = (soundCenterX - camera.pivotX) / soundRange;
+						__soundHandle.volume = 1 - distance / soundRange;
+						__soundHandle.pan = (soundCenterX - camera.pivotX) / soundRange;
 					}
 				}
 				else

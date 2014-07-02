@@ -1,8 +1,8 @@
 package com.croco2d.components
 {
 	import com.croco2d.core.CrocoObject;
-	import com.croco2d.utils.flow.FlowNode;
-	import com.croco2d.utils.flow.QueueFlowNode;
+	import com.croco2d.components.flow.FlowNode;
+	import com.croco2d.components.flow.QueueFlowNode;
 
 	public class FlowComponent extends CrocoObject
 	{

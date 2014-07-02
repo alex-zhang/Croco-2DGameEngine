@@ -46,6 +46,21 @@ package com.croco2d.core
 			super();
 		}
 		
+		public final function get alive():Boolean
+		{
+			return __alive;
+		}
+		
+		public final function get inited():Boolean
+		{
+			return __inited;
+		}
+		
+		public final function get actived():Boolean
+		{
+			return __actived;
+		}
+		
 		public final function get userData():Object
 		{
 			if(!__userData) __userData = {};
@@ -109,9 +124,9 @@ package com.croco2d.core
 		
 		public final function get ownerRoot():CrocoObject
 		{
-			var p:CrocoObject = this;
-			while(p.owner) p = p.owner;
-			return p;
+			var o:CrocoObject = this;
+			while(o.owner) o = o.owner;
+			return o;
 		}
 		
 		public function dispose():void 
@@ -147,9 +162,9 @@ package com.croco2d.core
 			var results:String = "class: " + getQualifiedClassName(this) + "\n" + 
 				"name: " + name + "\n" +
 				"type: " + type + "\n" +
-				"__alive: " + __alive + "\n" +
-				"__inited: " + __inited + "\n" +
-				"__actived: " + __actived + "\n" +
+				"alive: " + __alive + "\n" +
+				"inited: " + __inited + "\n" +
+				"actived: " + __actived + "\n" +
 				"tickable: " + tickable + "\n" +
 				"sortPriority: " + sortPriority + "\n" +
 				"debug: " + debug + "\n" +

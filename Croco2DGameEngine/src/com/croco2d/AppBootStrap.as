@@ -303,8 +303,10 @@ package com.croco2d
 			
 			const crocoEngineConfig:Object = AppConfig.crocoEngineConfig;
 			__crocoEngine = JsonObjectFactorUtil.createFromJsonConfig(crocoEngineConfig);
+			
 			__crocoEngine.init();
 			__crocoEngine.active();
+			
 			GlobalPropertyBag.write(AppConfig.KEY_CROCO_ENGINE, __crocoEngine);
 			
 			__crocoEngine.start();

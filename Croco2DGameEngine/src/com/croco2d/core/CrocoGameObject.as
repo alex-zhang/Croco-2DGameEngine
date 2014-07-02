@@ -1,22 +1,37 @@
 package com.croco2d.core
 {
+	import com.croco2d.components.TransformComponent;
 	import com.croco2d.components.RenderComponent;
-	import com.croco2d.utils.CrocoTransform;
+	import com.fireflyLib.utils.JsonObjectFactorUtil;
+	import com.fireflyLib.utils.MathUtil;
+	
+	import flash.geom.Point;
 	
 	import starling.core.RenderSupport;
+	import starling.display.DisplayObject;
+	import starling.utils.MatrixUtil;
 	
 	use namespace croco_internal;
 	
-	internal final class CrocoGameObject extends CrocoObjectEntity
+	public final class CrocoGameObject extends CrocoObjectEntity
 	{
 		public static const EVENT_ADD_GAME_OBJECT:String = "addGameObject";
 		public static const EVENT_REMOVE_GAME_OBJECT:String = "removeGameObject";
+		
+		public static function createEmpty():CrocoGameObject
+		{
+			return new CrocoGameObject();
+		}
+		
+		public static function createFromJsonConfig(jsonConfig:Object):CrocoGameObject
+		{
+			return JsonObjectFactorUtil.createFromJsonConfig(jsonConfig);
+		}
 
 		//keep this not null
-		public const transform:CrocoTransform = new CrocoTransform();
-		
+		public var transformComponent:TransformComponent;
 		public var renderComponent:RenderComponent;
-		
+
 		public var initChildrenGameObjects:Array;
 
 		public var __gameObjectsGroup:CrocoObjectGroup;
@@ -26,6 +41,10 @@ package com.croco2d.core
 		public function CrocoGameObject()
 		{
 			super();
+			
+			//we must have a TransformComponent.
+			transformComponent = new TransformComponent();
+			transformComponent.owner = this;
 		}
 		
 		public final function addGameObejct(gameObject:CrocoGameObject):CrocoGameObject
@@ -38,11 +57,11 @@ package com.croco2d.core
 			return __gameObjectsGroup.removeChild(gameObject) as CrocoGameObject;
 		}
 		
-		protected function onAddGameObject(gameObject:CrocoGameObject):void 
+		protected function onAddGameObject(gameObject:CrocoGameObject):void
 		{
 			gameObject.parent = __gameObjectsGroup;
 			gameObject.owner = this;
-			
+
 			gameObject.init();
 			gameObject.active();
 			
@@ -98,7 +117,6 @@ package com.croco2d.core
 			__gameObjectsGroup.lastForEach(callback);
 		}
 		
-		
 		override protected function onPluginComponent(component:CrocoObject):void 
 		{
 			super.onPluginComponent(component);
@@ -121,11 +139,18 @@ package com.croco2d.core
 		
 		public final function draw(support:RenderSupport, parentAlpha:Number):void
 		{
-			if(renderComponent)
+			//u will hard to break the parent matrix rule.
+			support.pushMatrix();
+			support.prependMatrix(transformComponent.transformMatrix);
+			//record the render world matrix.
+			transformComponent.lastWorldTransformMatrix.concat(support.modelViewMatrix);
+
+			if(renderComponent && renderComponent.__alive && renderComponent.visible)
 			{
 				renderComponent.draw(support, parentAlpha);
 			}
 			
+			//child
 			var child:CrocoGameObject = __gameObjectsGroup.moveFirst() as CrocoGameObject;
 			while(child)
 			{
@@ -136,12 +161,46 @@ package com.croco2d.core
 				
 				child = __gameObjectsGroup.moveNext() as CrocoGameObject;
 			}
+			
+			support.popMatrix();
+		}
+		
+		public final function hitTest(localPoint:Point, forTouch:Boolean = false):DisplayObject
+		{
+			var hitTestTarget:DisplayObject;
+			
+			var localX:Number = localPoint.x;
+			var localY:Number = localPoint.y;
+			
+			//child
+			var child:CrocoGameObject = __gameObjectsGroup.moveLast() as CrocoGameObject;
+			while(child)
+			{
+				if(child.__alive)
+				{
+					MatrixUtil.transformCoords(child.transformComponent.transformMatrix, localX, localY, MathUtil.helperFlashPoint);
+					
+					hitTestTarget = child.hitTest(MathUtil.helperFlashPoint, forTouch);
+
+					if(hitTestTarget) return hitTestTarget;
+				}
+				
+				child = __gameObjectsGroup.movePre() as CrocoGameObject;
+			}
+			
+			if(renderComponent && renderComponent.__alive)
+			{
+				hitTestTarget = renderComponent.hitTest(localPoint, forTouch);
+				if(hitTestTarget) return hitTestTarget;
+			}
+			
+			return null;
 		}
 
 		override protected function onInit():void
 		{
 			super.onInit();
-			
+
 			__gameObjectsGroup = new CrocoObjectGroup();
 			__gameObjectsGroup.name = "__gameObjectsGroup";
 			__gameObjectsGroup.initChildren = initChildrenGameObjects;
@@ -160,6 +219,30 @@ package com.croco2d.core
 		override protected function onDeactive():void
 		{
 			__gameObjectsGroup.deactive();
+		}
+		
+		override public function dispose():void
+		{
+			super.dispose();
+			
+			if(transformComponent)
+			{
+				transformComponent.dispose();
+				transformComponent = null;
+			}
+			
+			renderComponent = null;
+			
+			initChildrenGameObjects = null;
+			
+			if(__gameObjectsGroup)
+			{
+				__gameObjectsGroup.dispose();
+				__gameObjectsGroup = null;
+			}
+
+			__onAddGameObjectCallback = null;
+			__onRemoveGameObjectCallback = null;
 		}
 		
 		override public function toString():String
