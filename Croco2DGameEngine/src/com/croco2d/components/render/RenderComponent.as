@@ -1,7 +1,7 @@
 package com.croco2d.components.render
 {
 	import com.croco2d.core.CrocoObject;
-
+	
 	import flash.geom.Point;
 	
 	import starling.core.RenderSupport;
@@ -9,8 +9,6 @@ package com.croco2d.components.render
 
 	public class RenderComponent extends CrocoObject
 	{
-		public var visible:Boolean = true;
-
 		public function RenderComponent()
 		{
 			super();

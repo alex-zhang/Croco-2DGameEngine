@@ -12,8 +12,6 @@ package com.croco2d.core
 		 */
 		override public function tick(deltaTime:Number):void
 		{
-			super.tick(deltaTime);
-			
 			if(__childrenOrderSortDirty) sortChildrenOrder(sortFunction);
 			
 			var child:CrocoObject = __childrenLinkList.moveFirst();

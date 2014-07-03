@@ -1,14 +1,14 @@
 package com.croco2d.core
 {
-	import com.croco2d.AppConfig;
-	import com.croco2d.components.render.RenderComponent;
 	import com.croco2d.components.TransformComponent;
+	import com.croco2d.components.render.RenderComponent;
 	import com.fireflyLib.utils.JsonObjectFactorUtil;
 	import com.fireflyLib.utils.MathUtil;
 	
 	import flash.geom.Point;
 	
 	import starling.core.RenderSupport;
+	import starling.display.BlendMode;
 	import starling.display.DisplayObject;
 	import starling.utils.MatrixUtil;
 	
@@ -18,6 +18,8 @@ package com.croco2d.core
 	{
 		public static const EVENT_ADD_GAME_OBJECT:String = "addGameObject";
 		public static const EVENT_REMOVE_GAME_OBJECT:String = "removeGameObject";
+		
+		public static const PROP_RENDER_COMPONENT:String = "renderComponent";
 		
 		public static function createEmpty():CrocoGameObject
 		{
@@ -32,6 +34,14 @@ package com.croco2d.core
 		//keep this not null
 		public var transformComponent:TransformComponent;
 		public var renderComponent:RenderComponent;
+		
+		//we can control the tree's visible.
+		public var visible:Boolean = true;
+		//we can control the tree's alpha.
+		public var alpha:Number = 1.0;
+		public var blendMode:String = BlendMode.AUTO;
+
+		public var touchable:Boolean = true;
 
 		public var initChildrenGameObjects:Array;
 
@@ -138,24 +148,38 @@ package com.croco2d.core
 			super.onPlugoutComponent(component, needDispose);
 		}
 		
+		override public function tick(deltaTime:Number):void
+		{
+			super.tick(deltaTime);
+			
+			__gameObjectsGroup.tick(deltaTime);
+		}
+		
 		public final function draw(support:RenderSupport, parentAlpha:Number):void
 		{
+			parentAlpha *= alpha;
+			
+			const lastBlendMode:String = support.blendMode;
+			
 			//u will hard to break the parent matrix rule.
 			support.pushMatrix();
 			support.prependMatrix(transformComponent.transformMatrix);
 			//record the render world modelViewMatrix.
 			transformComponent.__lastModelViewMatrix.copyFrom(support.modelViewMatrix);
 
-			if(renderComponent && renderComponent.__alive && renderComponent.visible)
+			support.blendMode = blendMode;
+
+			//u will hard to break the parent alpha rule.
+			if(renderComponent && renderComponent.__alive)
 			{
 				renderComponent.draw(support, parentAlpha);
 			}
 			
-			//child
+			//children
 			var child:CrocoGameObject = __gameObjectsGroup.moveFirst() as CrocoGameObject;
 			while(child)
 			{
-				if(child.__alive)
+				if(child.__alive && child.visible)
 				{
 					child.draw(support, parentAlpha);
 				}
@@ -164,10 +188,13 @@ package com.croco2d.core
 			}
 			
 			support.popMatrix();
+			support.blendMode = lastBlendMode;
 		}
 		
 		public final function hitTest(localPoint:Point, forTouch:Boolean = false):DisplayObject
 		{
+			if(forTouch && (!visible || !touchable)) return null;
+
 			var hitTestTarget:DisplayObject;
 			
 			var localX:Number = localPoint.x;
@@ -179,10 +206,10 @@ package com.croco2d.core
 			{
 				if(child.__alive)
 				{
-					MatrixUtil.transformCoords(child.transformComponent.transformMatrix, localX, localY, MathUtil.helperFlashPoint);
+					MatrixUtil.transformCoords(child.transformComponent.transformMatrix, localX, localY, 
+						MathUtil.helperFlashPoint);
 					
 					hitTestTarget = child.hitTest(MathUtil.helperFlashPoint, forTouch);
-
 					if(hitTestTarget) return hitTestTarget;
 				}
 				
