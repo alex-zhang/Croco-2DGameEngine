@@ -60,8 +60,6 @@ package com.croco2d.screens
 			else
 			{
 				mLaunchImageLoaded = true;
-				
-				fadeoutBootStrapScreen();
 			}
 			
 			mStage = this.stage;

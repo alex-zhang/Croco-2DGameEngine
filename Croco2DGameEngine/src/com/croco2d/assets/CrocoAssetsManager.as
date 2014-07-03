@@ -14,7 +14,6 @@ package com.croco2d.assets
 
 	public class CrocoAssetsManager extends CrocoObject
 	{
-		public static const REPORT_NAME:String = "CrocoAssetsManager";
 		//type
 		public static const TEXT_TYPE:String = "text";
 		public static const XML_TYPE:String = "xml";
@@ -65,7 +64,7 @@ package com.croco2d.assets
 		{
 			if(mAssetsTypeClassMap[assetType])
 			{
-				Logger.warn(REPORT_NAME, "registAssetTypeClass " + 
+				Logger.warn("CrocoAssetsManager registAssetTypeClass " + 
 					assetType + "'s typeClass (" + TypeUtility.getSimpleClassName(typeClass) + ") has registed");
 			}
 			
@@ -86,7 +85,7 @@ package com.croco2d.assets
 		{
 			if(mAssetsExtentionToTypeMap[extention])
 			{
-				Logger.warn(REPORT_NAME, "registAssetTypeExtention " + 
+				Logger.warn("CrocoAssetsManager registAssetTypeExtention " + 
 					extention + "'s assetType (" + assetType + ") has registed");
 			}
 			mAssetsExtentionToTypeMap[extention] = assetType;
@@ -337,7 +336,7 @@ package com.croco2d.assets
 		/** Removes assets of all types, empties the queue and aborts any pending load operations.*/
 		public function clear():void
 		{
-			Logger.debug(REPORT_NAME, "clear Purging all assets, emptying queue");
+			Logger.debug("CrocoAssetsManager clear Purging all assets, emptying queue");
 			
 			clearQueue();
 			
@@ -402,7 +401,7 @@ package com.croco2d.assets
 				{
 					if (!rawAsset["exists"])
 					{
-						Logger.warn(REPORT_NAME, "enqueue File or directory not found: '" + rawAsset["url"] + "'");
+						Logger.warn("CrocoAssetsManager enqueue File or directory not found: '" + rawAsset["url"] + "'");
 					}
 					else if (!rawAsset["isHidden"])
 					{
@@ -422,7 +421,7 @@ package com.croco2d.assets
 				}
 				else
 				{
-					Logger.warn(REPORT_NAME, "enqueue Ignoring unsupported asset type: " + getQualifiedClassName(rawAsset));
+					Logger.warn("CrocoAssetsManager enqueue Ignoring unsupported asset type: " + getQualifiedClassName(rawAsset));
 				}
 			}
 		}
@@ -434,7 +433,7 @@ package com.croco2d.assets
 		{
 			if (name == null) name = assetNameScheme(url);
 			
-			Logger.debug(REPORT_NAME, "enqueueWithName Enqueuing '" + name + "'");
+			Logger.debug("CrocoAssetsManager enqueueWithName Enqueuing '" + name + "'");
 			
 			mQueue.push(
 				{
