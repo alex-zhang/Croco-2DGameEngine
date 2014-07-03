@@ -44,14 +44,26 @@ package com.croco2d.screens
 			return getScreenNavigatorItem(screenID);
 		}
 
-		public function getScreenNavigatorItem(screenId:String):ScreenNavigatorItem
+		public function getScreenNavigatorItem(screenID:String):ScreenNavigatorItem
 		{
-			return owner.getScreen(screenId);
+			return owner.getScreen(screenID);
+		}
+		
+		protected function jumToScreen(screenID:String):void
+		{
+			CrocoScreenNavigator(owner).jumToScreen(screenID);
+		}
+		
+		protected function showScreen(screenID:String):void
+		{
+			if(!ownerScreenID) return;
+			
+			owner.showScreen(ownerScreenID);
 		}
 		
 		protected function jump2OwnerScreen():void
 		{
-			owner.showScreen(ownerScreenID);
+			showScreen(ownerScreenID);
 		}
 	}
 }

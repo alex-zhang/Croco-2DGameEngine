@@ -81,8 +81,6 @@ package com.croco2d.core
 			
 			this.name = AppConfig.KEY_CAMERA;
 			this.eventEnable = true;
-
-			debug = true;
 		}
 		
 		public final function get displayStage():DisplayObjectContainer
@@ -348,7 +346,10 @@ package com.croco2d.core
 				watchTarget.draw(support, parentAlpha * alpha);
 			}
 			
-			onDrawDebug();
+			if(debugDraw) 
+			{
+				onDrawDebug();
+			}
 
 			if(debugDraw) 
 			{

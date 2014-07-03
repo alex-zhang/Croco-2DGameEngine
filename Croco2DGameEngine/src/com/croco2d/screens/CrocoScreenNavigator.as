@@ -12,9 +12,9 @@ package com.croco2d.screens
 			super();
 		}
 		
-		public function jumToScreen(id:String):Boolean
+		public function jumToScreen(screenID:String):Boolean
 		{
-			var targetScreenItem:ScreenNavigatorItem = getScreen(id);
+			var targetScreenItem:ScreenNavigatorItem = getScreen(screenID);
 			if(!targetScreenItem) return false;
 			
 			var targetScreenProperties:Object = targetScreenItem.properties;
@@ -25,13 +25,13 @@ package com.croco2d.screens
 				var targetScreenHubScreenItem:ScreenNavigatorItem = getScreen(targetScreenHubScreenId);
 				if(!targetScreenHubScreenItem) return false;
 				
-				targetScreenHubScreenItem.properties[AppConfig.KEY_OWNER_SCREEN_ID] = id;
+				targetScreenHubScreenItem.properties[AppConfig.KEY_OWNER_SCREEN_ID] = screenID;
 				
 				return jumToScreen(targetScreenHubScreenId);
 			}
 			else
 			{
-				showScreen(id);
+				showScreen(screenID);
 				
 				return true;
 			}

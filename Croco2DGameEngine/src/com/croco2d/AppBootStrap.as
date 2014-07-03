@@ -14,7 +14,6 @@ package com.croco2d
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
-	import flash.filesystem.File;
 	import flash.geom.Rectangle;
 	
 	import feathers.controls.ScreenNavigatorItem;
@@ -316,16 +315,14 @@ package com.croco2d
 		
 		protected function checkIsNeedAppAssetsPreload():Boolean
 		{
-			var preloadDirFile:File = File.applicationDirectory.resolvePath(AppConfig.PATH_PRELOAD_URL);
-			return preloadDirFile.exists;
+			return AppConfig.FILE_PRELOAD_DIR.exists;
 		}
 		
 		protected function onAppAssetsPreloadInit():void
 		{
 			Logger.info("onAppAssetsPreload");
 			
-			var preloadDirFile:File = File.applicationDirectory.resolvePath(AppConfig.PATH_PRELOAD_URL);
-			CrocoEngine.globalAssetsManager.enqueue(preloadDirFile);
+			CrocoEngine.globalAssetsManager.enqueue(AppConfig.FILE_PRELOAD_DIR);
 		}
 		
 		protected function onAppAssetsPreloadStart():void
