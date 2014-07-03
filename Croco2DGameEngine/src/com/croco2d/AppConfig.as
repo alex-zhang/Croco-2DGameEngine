@@ -13,6 +13,8 @@ package com.croco2d
 	import com.croco2d.tmx.scene.ornaments.OrtSurroundingSoundEntity;
 	import com.llamaDebugger.Logger;
 	
+	import flash.filesystem.File;
+	
 	import feathers.controls.ScreenNavigatorItem;
 
 	//data format see ObjectFactoryUtil.newInstanceFromConfig
@@ -41,45 +43,126 @@ package com.croco2d
 		//system Path Define
 		//if u modify the path u'd better modify all.
 		//----------------------------------------------------------------------
-		public static var PATH_ROOT_URL:String = ".";
-		public static var PATH_ASSETS_URL:String = PATH_ROOT_URL + "/assets";
-		public static var PATH_APP_URL:String = PATH_ASSETS_URL + "/app";
+		public static var PATH_ROOT_DIR:String = ".";
+		public static var PATH_ROOT_DIR_FILE:File = File.applicationDirectory;
 		
-		public static var PATH_PRELOAD_URL:String = PATH_APP_URL + "/preload";
-		public static var PATH_SHARED_URL:String = PATH_APP_URL + "/shared";
-		public static var PATH_SCREENS_URL:String = PATH_APP_URL + "/screens";
-		
-		//System path finding helper method.
-		//----------------------------------------------------------------------
-		public static var findRootResourcePath:Function = function(relativeURL:String):String {
-			return PATH_ROOT_URL + "/" + relativeURL;
+		public static var findRootResourcePath:Function = function(rootRelativeURL:String):String 
+		{
+			return PATH_ROOT_DIR + "/" + rootRelativeURL;
 		}
-		
-		public static var findAssetsResourcePath:Function = function(relativeURL:String):String {
-			return PATH_ASSETS_URL + "/" + relativeURL;
-		}
-		
-		public static var findAppResourcePath:Function = function(relativeURL:String):String {
-			return PATH_APP_URL + "/" + relativeURL;
-		}
-		
-		public static var findPreloadResourcePath:Function = function(relativeURL:String):String {
-			return PATH_PRELOAD_URL + "/" + relativeURL;
-		}
-		
-		public static var findSharedResourcePath:Function = function(relativeURL:String):String {
-			return PATH_SHARED_URL + "/" + relativeURL;
-		}
-		
-		public static var findScreenPath:Function = function(screenId:String):String {
-			return PATH_SCREENS_URL + "/" + screenId;
-		}
-		
-		public static var findScreenResourcePath:Function = function(screenId:String, relativeURL:String):String {
-			return findScreenPath(screenId) + "/" + relativeURL;
+
+		public static var findRootResourceFile:Function = function(rootRelativeURL:String):File
+		{
+			return PATH_ROOT_DIR_FILE.resolvePath(rootRelativeURL);
 		}
 			
-			//----------------------------------------------------------------------
+		//assets
+		public static var PATH_ASSETS_DIR:String = PATH_ROOT_DIR + "/assets";
+		public static var PATH_ASSETS_DIR_FILE:File = PATH_ROOT_DIR_FILE.resolvePath(PATH_ASSETS_DIR);
+		
+		public static var findAssetsResourcePath:Function = function(assetsRelativeURL:String):String 
+		{
+			return PATH_ASSETS_DIR + "/" + assetsRelativeURL;
+		}
+			
+		public static var findAssetsResourceFile:Function = function(assetsRelativeURL:String):File 
+		{
+			return PATH_ASSETS_DIR_FILE.resolvePath(assetsRelativeURL);
+		}
+		
+		//assets/app
+		public static var PATH_APP_DIR:String = PATH_ASSETS_DIR + "/app";
+		public static var FILE_APP_DIR:File = PATH_ROOT_DIR_FILE.resolvePath(PATH_APP_DIR);
+		
+		public static var findAppResourcePath:Function = function(appRelativeURL:String):String 
+		{
+			return PATH_APP_DIR + "/" + appRelativeURL;
+		}
+		
+		public static var findAppResourceFile:Function = function(appRelativeURL:String):File 
+		{
+			return FILE_APP_DIR.resolvePath(appRelativeURL);
+		}
+		
+		//assets/app/preload
+		public static var PATH_PRELOAD_DIR:String = PATH_APP_DIR + "/preload";
+		public static var FILE_PRELOAD_DIR:File = PATH_ROOT_DIR_FILE.resolvePath(PATH_PRELOAD_DIR);
+		
+		public static var findPreloadResourcePath:Function = function(preloadRelativeURL:String):String 
+		{
+			return PATH_PRELOAD_DIR + "/" + preloadRelativeURL;
+		}
+		
+		public static var findPreloadResourceFile:Function = function(preloadRelativeURL:String):File 
+		{
+			return FILE_PRELOAD_DIR.resolvePath(preloadRelativeURL);
+		}
+
+		//assets/app/shared
+		public static var PATH_SHARED_DIR:String = PATH_APP_DIR + "/shared";
+		public static var FILE_SHARED_DIR:File = PATH_ROOT_DIR_FILE.resolvePath(PATH_SHARED_DIR);
+		
+		public static var findSharedResourcePath:Function = function(sharedRelativeURL:String):String 
+		{
+			return PATH_SHARED_DIR + "/" + sharedRelativeURL;
+		}
+		
+		public static var findSharedResourceFile:Function = function(sharedRelativeURL:String):File 
+		{
+			return FILE_SHARED_DIR.resolvePath(sharedRelativeURL);
+		}
+		
+		//assets/app/screens
+		public static var PATH_SCREENS_DIR:String = PATH_APP_DIR + "/screens";
+		public static var FILE_SCREENS_DIR:File = PATH_ROOT_DIR_FILE.resolvePath(PATH_SCREENS_DIR);
+		
+		public static var findScreensResourcePath:Function = function(screensRelativeURL:String):String 
+		{
+			return PATH_SCREENS_DIR + "/" + screensRelativeURL;
+		}
+		
+		public static var findScreensResourceFile:Function = function(screensRelativeURL:String):File 
+		{
+			return FILE_SHARED_DIR.resolvePath(screensRelativeURL);
+		}
+			
+		public static var findScreenResourcePath:Function = function(screenName:String, screenRelativeURL:String):String 
+		{
+			return findScreensResourcePath(screenName + "/" + screenRelativeURL);
+		}
+			
+		public static var findScreenResourceFile:Function = function(screenName:String, screenRelativeURL:String):File 
+		{
+			var screenDirFile:File = findScreensResourceFile(screenName);
+			return screenDirFile.resolvePath(screenRelativeURL);
+		}
+		
+		//assets/app/scenes
+		public static var PATH_SCENES_DIR:String = PATH_APP_DIR + "/scenes";
+		public static var FILE_SCENES_DIR:File = PATH_ROOT_DIR_FILE.resolvePath(PATH_SCENES_DIR);
+		
+		public static var findScenesResourcePath:Function = function(scenesRelativeURL:String):String 
+		{
+			return PATH_SCENES_DIR + "/" + scenesRelativeURL;
+		}
+			
+		public static var findScenesResourceFile:Function = function(scenesRelativeURL:String):File 
+		{
+			return FILE_SCENES_DIR.resolvePath(scenesRelativeURL);
+		}
+			
+		public static var findSceneResourcePath:Function = function(sceneName:String, sceneRelativeURL:String):String 
+		{
+			return findScenesResourcePath(sceneName + "/" + sceneRelativeURL);
+		}
+		
+		public static var findSceneResourceFile:Function = function(sceneName:String, sceneRelativeURL:String):File 
+		{
+			var sceneDirFile:File = findScenesResourceFile(sceneName);
+			return sceneDirFile.resolvePath(sceneRelativeURL);
+		}
+		
+		//----------------------------------------------------------------------
 		
 		
 		//system config  Define

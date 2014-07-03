@@ -38,10 +38,8 @@ package com.croco2d.screens
 		
 		protected function checkIsNeedTargetScreenAssetsPreload():Boolean
 		{
-			var targetScreenPreLoadAssetsFilePath:String = AppConfig.findScreenPath(ownerScreenID);
-			var targetScreenPreLoadAssetsFile:File = File.applicationDirectory.resolvePath(targetScreenPreLoadAssetsFilePath);
-			
-			return targetScreenPreLoadAssetsFile.exists;
+			var targetScreenDirFile:File = AppConfig.findScreenResourceFile(ownerScreenID);
+			return targetScreenDirFile.exists;
 		}
 		
 		protected function onTargetScreenAssetsPreloadInit():void
@@ -54,10 +52,9 @@ package com.croco2d.screens
 		
 		protected function onTargetScreenAssetsQueueInit():void
 		{
-			var targetScreenPreLoadAssetsFilePath:String = AppConfig.findScreenPath(ownerScreenID);
-			var targetScreenPreLoadAssetsFile:File = File.applicationDirectory.resolvePath(targetScreenPreLoadAssetsFilePath);
+			var targetScreenDirFile:File = AppConfig.findScreenResourceFile(ownerScreenID);
 			
-			targeScreenAssetsManager.enqueue(targetScreenPreLoadAssetsFile);
+			targeScreenAssetsManager.enqueue(targetScreenDirFile);
 		}
 		
 		protected function onTargetScreenAssetsPreloadStart():void

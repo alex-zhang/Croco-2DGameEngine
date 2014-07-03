@@ -2,6 +2,7 @@ package com.croco2d.assets
 {
 	import com.croco2d.AppConfig;
 	import com.croco2d.core.CrocoObject;
+	import com.fireflyLib.utils.StringUtil;
 	import com.fireflyLib.utils.TypeUtility;
 	import com.llamaDebugger.Logger;
 	
@@ -411,7 +412,7 @@ package com.croco2d.assets
 						}
 						else
 						{
-							enqueueWithName(rawAsset["url"]);
+							enqueueWithName(unescape(rawAsset["url"]));
 						}
 					}
 				}
@@ -431,7 +432,7 @@ package com.croco2d.assets
 		 *  @returns the name under which the asset was registered. */
 		public function enqueueWithName(url:String, name:String = null):String
 		{
-			if (name == null) name = getAssetNameScheme(url);
+			if (name == null) name = assetNameScheme(url);
 			
 			Logger.debug(REPORT_NAME, "enqueueWithName Enqueuing '" + name + "'");
 			
@@ -541,8 +542,13 @@ package com.croco2d.assets
 		 *  accessible; override it if you need a custom naming scheme. Typically, 'rawAsset' is 
 		 *  either a String or a FileReference. Note that this method won't be called for embedded
 		 *  assets. */
-		protected function getAssetNameScheme(url:String):String
+		public var assetNameScheme:Function = function(url:String):String
 		{
+			if(StringUtil.startWithChars(url, "app:"))
+			{
+				url = "." + StringUtil.trimCharsAnd(url, "app:", -1);
+			}
+			
 			return url;
 		}
 	}
