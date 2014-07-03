@@ -1,7 +1,8 @@
 package com.croco2d.core
 {
+	import com.croco2d.AppConfig;
+	import com.croco2d.components.render.RenderComponent;
 	import com.croco2d.components.TransformComponent;
-	import com.croco2d.components.RenderComponent;
 	import com.fireflyLib.utils.JsonObjectFactorUtil;
 	import com.fireflyLib.utils.MathUtil;
 	
@@ -142,8 +143,8 @@ package com.croco2d.core
 			//u will hard to break the parent matrix rule.
 			support.pushMatrix();
 			support.prependMatrix(transformComponent.transformMatrix);
-			//record the render world matrix.
-			transformComponent.lastWorldTransformMatrix.concat(support.modelViewMatrix);
+			//record the render world modelViewMatrix.
+			transformComponent.__lastModelViewMatrix.copyFrom(support.modelViewMatrix);
 
 			if(renderComponent && renderComponent.__alive && renderComponent.visible)
 			{

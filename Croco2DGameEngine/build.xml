@@ -37,6 +37,10 @@
             <param name="download_file_url" value="https://raw.githubusercontent.com/StarlingGraphics/Starling-Extension-Graphics/master/extension/bin/Starling-Extension-Graphics.swc"/>
         </antcall>
 
+        <antcall target="download_file">
+            <param name="download_file_url" value="https://raw.githubusercontent.com/StarlingGraphics/Starling-Extension-Graphics/master/extension/bin/Starling-Extension-Graphics.swc"/>
+        </antcall>
+
         <!--
             <param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/Starling-Framework/dev/starling/bin/starling.swc"/>
         -->

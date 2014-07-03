@@ -1,11 +1,9 @@
 package com.croco2d.utils
 {
-	import com.croco2d.components.DisplayComponent;
-	
 	import starling.events.Touch;
 
-	public function getTouchTargetDisplayComponent(touch:Touch):DisplayComponent
+	public function getTouchTargetDisplayComponent(touch:Touch):*
 	{
-		return Object(touch.target.parent).owner as DisplayComponent;
+		return Object(touch.target.parent).owner;
 	}
 }

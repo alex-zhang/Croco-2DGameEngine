@@ -36,6 +36,8 @@ package com.croco2d
 		public static const KEY_HUB_SCREEN_ID:String = "hubScreenID";
 		public static const KEY_OWNER_SCREEN_ID:String = "ownerScreenID";
 		public static const KEY_SCREEN_ASSET_MANAGER:String = "screenAssetManager";
+		
+		public static const KEY_RENDER_COMPONENT:String = "renderComponent";
 		//----------------------------------------------------------------------
 		
 		//system Path Define

@@ -1,8 +1,6 @@
-package com.croco2d.components
+package com.croco2d.components.bt
 {
 	import com.croco2d.core.CrocoObject;
-	import com.croco2d.components.bt.BTNode;
-	import com.croco2d.components.bt.BTRootNode;
 
 	public class BehaviorTreeComponent extends CrocoObject
 	{

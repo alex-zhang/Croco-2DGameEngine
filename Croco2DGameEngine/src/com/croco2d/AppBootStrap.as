@@ -278,6 +278,8 @@ package com.croco2d
 			Logger.info("onBootStrapScreenInit");
 			
 			const bootStrapSceenConfig:Object = AppConfig.bootStrapSceenConfig;
+			if(!bootStrapSceenConfig) return;
+			
 			__bootStrapScreen = JsonObjectFactorUtil.createFromJsonConfig(bootStrapSceenConfig) as IBootStrapScreen;
 			
 			if(__bootStrapScreen)

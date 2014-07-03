@@ -1,4 +1,4 @@
-package com.croco2d.components
+package com.croco2d.components.motion
 {
 	import com.croco2d.core.CrocoObject;
 	import com.fireflyLib.utils.MathUtil;

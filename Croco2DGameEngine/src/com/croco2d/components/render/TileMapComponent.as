@@ -1,11 +1,11 @@
-package com.croco2d.components
+package com.croco2d.components.render
 {
 	import com.croco2d.CrocoEngine;
 	import com.croco2d.display.map.TileMap;
 	
 	import flash.geom.Rectangle;
 
-	public class TileMapComponent extends DisplayComponent
+	public class TileMapComponent extends DispalyObjectComponent
 	{
 		public var __tileMap:TileMap;
 		
@@ -31,7 +31,7 @@ package com.croco2d.components
 				minColStartIndex, minRowStartIndex);
 			
 			__tileMap.mapCellCls = mapCellCls;
-			displayObject = __tileMap;
+//			displayObject = __tileMap;
 		}
 		
 		override public function tick(deltaTime:Number):void

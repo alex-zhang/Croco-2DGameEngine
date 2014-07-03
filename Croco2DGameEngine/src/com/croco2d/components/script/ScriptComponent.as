@@ -1,4 +1,4 @@
-package com.croco2d.components
+package com.croco2d.components.script
 {
 	import com.croco2d.core.CrocoObject;
 

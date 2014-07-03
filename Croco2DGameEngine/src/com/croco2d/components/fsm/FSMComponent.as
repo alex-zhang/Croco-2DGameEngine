@@ -1,7 +1,6 @@
-package com.croco2d.components
+package com.croco2d.components.fsm
 {
 	import com.croco2d.core.CrocoObject;
-	import com.croco2d.components.fsm.FSM;
 
 	public class FSMComponent extends CrocoObject
 	{

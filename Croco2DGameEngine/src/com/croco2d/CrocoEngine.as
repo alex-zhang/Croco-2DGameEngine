@@ -14,8 +14,6 @@ package com.croco2d
 	import flash.utils.getTimer;
 	
 	import starling.core.Starling;
-	import starling.display.DisplayObject;
-	import starling.display.DisplayObjectContainer;
 	
 	public class CrocoEngine extends CrocoObjectEntity
 	{

@@ -7,8 +7,6 @@ package com.croco2d.components
 
 	public class TransformComponent extends CrocoObject
 	{
-		public var lastWorldTransformMatrix:Matrix = new Matrix();
-		
 		public var __transformMatrix:Matrix = new Matrix();
 		public var __transformMatrixDirty:Boolean = false; 
 
@@ -19,6 +17,9 @@ package com.croco2d.components
 		public var __scaleY:Number = 1.0;
 
 		public var __rotation:Number = 0.0;
+
+		//record the cur ModelViewMatrix for later use.
+		public var __lastModelViewMatrix:Matrix = new Matrix();
 
 		public function TransformComponent()
 		{

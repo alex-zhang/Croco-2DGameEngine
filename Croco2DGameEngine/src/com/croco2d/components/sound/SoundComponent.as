@@ -1,4 +1,4 @@
-package com.croco2d.components
+package com.croco2d.components.sound
 {
 	import com.croco2d.CrocoEngine;
 	import com.croco2d.core.CrocoObject;
