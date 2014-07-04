@@ -61,7 +61,7 @@ package com.croco2d.core
 		{
 			if(!component.name)
 			{
-				Logger.warn(name, "pluginComponent component must has a name.");
+				Logger.warn("pluginComponent component must has a name.");
 				
 				component.name = "component_" + getPluginComponentsCount();				
 			}

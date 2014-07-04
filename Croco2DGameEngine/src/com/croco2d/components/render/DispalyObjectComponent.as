@@ -16,8 +16,6 @@ package com.croco2d.components.render
 		public var __dispalyObject:DisplayObject;
 		public var __isAnimatableDisplayObject:Boolean;
 
-		//if __isAnimatableDisplayObject true and this can controll.
-		public var isPlayAnimation:Boolean = true;
 		public var filter:FragmentFilter;
 
 		public function DispalyObjectComponent()
@@ -66,7 +64,7 @@ package com.croco2d.components.render
 		
 		override public function tick(deltaTime:Number):void
 		{
-			if(__isAnimatableDisplayObject && isPlayAnimation)
+			if(__isAnimatableDisplayObject)
 			{
 				IAnimatable(__dispalyObject).advanceTime(deltaTime);
 			}

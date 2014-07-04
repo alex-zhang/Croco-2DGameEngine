@@ -1,7 +1,9 @@
 package com.croco2d.core
 {
 	import com.croco2d.components.TransformComponent;
+	import com.croco2d.components.collision.SpatialCollisionComponent;
 	import com.croco2d.components.render.RenderComponent;
+	import com.croco2d.components.script.ScriptComponent;
 	import com.fireflyLib.utils.JsonObjectFactorUtil;
 	import com.fireflyLib.utils.MathUtil;
 	
@@ -20,6 +22,8 @@ package com.croco2d.core
 		public static const EVENT_REMOVE_GAME_OBJECT:String = "removeGameObject";
 		
 		public static const PROP_RENDER_COMPONENT:String = "renderComponent";
+		public static const PROP_SPATIAL_COLLISION_COMPONENT_COMPONENT:String = "spatialCollisionComponent";
+		public static const PROP_SCRIPT_COMPONENT:String = "scriptComponent";
 		
 		public static function createEmpty():CrocoGameObject
 		{
@@ -34,6 +38,8 @@ package com.croco2d.core
 		//keep this not null
 		public var transformComponent:TransformComponent;
 		public var renderComponent:RenderComponent;
+		public var spatialCollisionComponent:SpatialCollisionComponent;
+		public var scriptComponent:ScriptComponent;
 		
 		//we can control the tree's visible.
 		public var visible:Boolean = true;
@@ -132,17 +138,37 @@ package com.croco2d.core
 		{
 			super.onPluginComponent(component);
 			
-			if(component is RenderComponent)
+			switch(component.name)
 			{
-				renderComponent = component as RenderComponent;
+				case PROP_RENDER_COMPONENT:
+					renderComponent = component as RenderComponent;
+					break;
+				
+				case PROP_SPATIAL_COLLISION_COMPONENT_COMPONENT:
+					spatialCollisionComponent = component as SpatialCollisionComponent;
+					break;
+
+				case PROP_SCRIPT_COMPONENT:
+					scriptComponent = component as ScriptComponent;
+					break;
 			}
 		}
 		
 		override protected function onPlugoutComponent(component:CrocoObject, needDispose:Boolean=false):void
 		{
-			if(component === renderComponent)
+			switch(component.name)
 			{
-				renderComponent = null;
+				case PROP_RENDER_COMPONENT:
+					renderComponent = null;
+					break;
+				
+				case PROP_SPATIAL_COLLISION_COMPONENT_COMPONENT:
+					spatialCollisionComponent = null;
+					break;
+				
+				case PROP_SCRIPT_COMPONENT:
+					scriptComponent = null;
+					break;
 			}
 			
 			super.onPlugoutComponent(component, needDispose);

@@ -1,6 +1,6 @@
 package com.croco2d.components.collision
 {
-	import com.croco2d.components.aoi.LampTowerGrid;
+	import com.croco2d.utils.aoi.LampTowerGrid;
 
 	public class LampTowerGridSpatialCollisionManager extends LampTowerGrid implements ISpatialCollisionManager
 	{

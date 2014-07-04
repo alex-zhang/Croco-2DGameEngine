@@ -1,5 +1,7 @@
 package com.croco2d.components.render
 {
+	import com.llamaDebugger.Logger;
+	
 	import starling.core.RenderSupport;
 	import starling.extensions.ColorArgb;
 	import starling.extensions.PDParticleSystem;
@@ -415,7 +417,11 @@ package com.croco2d.components.render
 		override protected function onInit():void
 		{
 			if(!initConfig) initConfig = DEFAULT_CONFIG;
-			if(!__texture) __texture = Texture.fromColor(50, 50, 0xFFFFFF);
+			if(!__texture) 
+			{
+				Logger.warn("PDParticleSystemComponent's texture is null, here will give a default texture!");
+				__texture = Texture.fromColor(50, 50, 0xFFFFFF);
+			}
 			
 			__particleSystem = new PDParticleSystem(initConfig, __texture);
 			if(autoPlay)
