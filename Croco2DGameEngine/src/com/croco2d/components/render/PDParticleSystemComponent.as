@@ -2,18 +2,20 @@ package com.croco2d.components.render
 {
 	import com.llamaDebugger.Logger;
 	
+	import flash.geom.Matrix;
+	
 	import starling.core.RenderSupport;
 	import starling.extensions.ColorArgb;
 	import starling.extensions.PDParticleSystem;
 	import starling.textures.Texture;
 
 	public class PDParticleSystemComponent extends RenderComponent
-	{ 
-		public var __particleSystem:PDParticleSystem;
-		
+	{
 		public var initConfig:XML;
-		public var autoPlay:Boolean = true;
+		public var isAutoPlay:Boolean = true;
+		public var isUseWorldSpace:Boolean = true;//default is true.
 		
+		public var __particleSystem:PDParticleSystem;
 		public var __texture:Texture;
 		
 		public function PDParticleSystemComponent()
@@ -59,23 +61,23 @@ package com.croco2d.components.render
 			}
 		}
 		
-		public function get emitterX():Number { return __particleSystem ? __particleSystem.emitterX : 0; }
-		public function set emitterX(value:Number):void 
-		{
-			if(__particleSystem)
-			{
-				__particleSystem.emitterX = value;
-			}
-		}
-		
-		public function get emitterY():Number { return __particleSystem ? __particleSystem.emitterY : 0; }
-		public function set emitterY(value:Number):void 
-		{
-			if(__particleSystem)
-			{
-				__particleSystem.emitterY = value;
-			}
-		}
+//		public function get emitterX():Number { return __particleSystem ? __particleSystem.emitterX : 0; }
+//		public function set emitterX(value:Number):void 
+//		{
+//			if(__particleSystem)
+//			{
+//				__particleSystem.emitterX = value;
+//			}
+//		}
+//		
+//		public function get emitterY():Number { return __particleSystem ? __particleSystem.emitterY : 0; }
+//		public function set emitterY(value:Number):void 
+//		{
+//			if(__particleSystem)
+//			{
+//				__particleSystem.emitterY = value;
+//			}
+//		}
 		
 		public function get blendFactorSource():String { return __particleSystem ? __particleSystem.blendFactorSource : null; }
 		public function set blendFactorSource(value:String):void 
@@ -424,7 +426,7 @@ package com.croco2d.components.render
 			}
 			
 			__particleSystem = new PDParticleSystem(initConfig, __texture);
-			if(autoPlay)
+			if(isAutoPlay)
 			{
 				this.start();
 			}
@@ -437,7 +439,27 @@ package com.croco2d.components.render
 		
 		override public function draw(support:RenderSupport, parentAlpha:Number):void
 		{
+			if(isUseWorldSpace)
+			{
+				const modelViewMatrix:Matrix = support.modelViewMatrix;
+				
+				const lastModelViewMatrixTX:Number = modelViewMatrix.tx;
+				const lastModelViewMatrixTY:Number = modelViewMatrix.ty;
+				
+				modelViewMatrix.tx = 0;
+				modelViewMatrix.ty = 0;
+				
+				__particleSystem.emitterX = lastModelViewMatrixTX;
+				__particleSystem.emitterY = lastModelViewMatrixTY;
+			}
+			
 			__particleSystem.render(support, parentAlpha);
+			
+			if(isUseWorldSpace)
+			{
+				modelViewMatrix.tx = lastModelViewMatrixTX;
+				modelViewMatrix.ty = lastModelViewMatrixTY;
+			}
 		}
 		
 		override public function dispose():void

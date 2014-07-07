@@ -2,6 +2,8 @@ package com.croco2d.components.render
 {
 	import com.llamaDebugger.Logger;
 	
+	import flash.geom.Matrix;
+	
 	import starling.core.RenderSupport;
 	import starling.extensions.RibbonSegment;
 	import starling.extensions.RibbonTrail;
@@ -9,6 +11,10 @@ package com.croco2d.components.render
 
 	public class RibbonTrailComponent extends RenderComponent
 	{
+		public var initTrailSegmentsCount:int = 10;
+		public var isAutoPlay:Boolean = true;
+		public var isUseWorldSpace:Boolean = true;//default is true.
+		
 		public var __texture:Texture;
 		public var __ribbonTrail:RibbonTrail;
 		
@@ -120,10 +126,15 @@ package com.croco2d.components.render
 			if(!__texture) 
 			{
 				Logger.warn("RibbonTrailComponent's texture is null, here will give a default texture!");
-				__texture = Texture.fromColor(50, 50, 0xFFFFFF);
+				__texture = Texture.fromColor(50, 50, 0xFF0000);
 			}
 
-			__ribbonTrail = new RibbonTrail(__texture);
+			__ribbonTrail = new RibbonTrail(__texture, initTrailSegmentsCount);
+			
+			if(isAutoPlay)
+			{
+				this.isPlaying = true;
+			}
 		}
 		
 		override public function tick(deltaTime:Number):void
@@ -133,7 +144,24 @@ package com.croco2d.components.render
 		
 		override public function draw(support:RenderSupport, parentAlpha:Number):void
 		{
+			if(isUseWorldSpace)
+			{
+				const modelViewMatrix:Matrix = support.modelViewMatrix;
+				
+				const lastModelViewMatrixTX:Number = modelViewMatrix.tx;
+				const lastModelViewMatrixTY:Number = modelViewMatrix.ty;
+				
+				modelViewMatrix.tx = 0;
+				modelViewMatrix.ty = 0;
+			}
+			
 			__ribbonTrail.render(support, parentAlpha);
+			
+			if(isUseWorldSpace)
+			{
+				modelViewMatrix.tx = lastModelViewMatrixTX;
+				modelViewMatrix.ty = lastModelViewMatrixTY;
+			}
 		}
 	}
 }
