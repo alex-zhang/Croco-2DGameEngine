@@ -3,6 +3,10 @@ package com.croco2d.input
 	import com.croco2d.AppConfig;
 	import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.CrocoObjectGroup;
+	
+	import flash.display.Sprite;
+	
+	import starling.core.Starling;
 
 	/**
 	 * A class managing input of any controllers that is an InputController.
@@ -13,6 +17,9 @@ package com.croco2d.input
 	 **/	
 	public class InputManager extends CrocoObject
 	{
+		public var globalMouseX:Number = 0.0;
+		public var globalMouseY:Number = 0.0;
+		
 		/**
 		 * time interval to clear the InputAction's disposed list automatically.
 		 */
@@ -25,6 +32,8 @@ package com.croco2d.input
 		
 		public var __inputControlllersGroup:CrocoObjectGroup;
 		public var __inputControlllerNameMap:Array;//name->InputController
+		
+		public var __starlingNativeOverlay:Sprite;
 		
 		public function InputManager()
 		{
@@ -45,6 +54,8 @@ package com.croco2d.input
 			__inputControlllersGroup.initChildren = initInputControllers;
 			__inputControlllersGroup.__onAddChildCallback = onAddInputController;
 			__inputControlllersGroup.__onRemoveChildCallback = onRemoveInputController;
+			
+			__starlingNativeOverlay = Starling.current.nativeOverlay;
 		}
 		
 		public function get length():int
@@ -249,6 +260,9 @@ package com.croco2d.input
 		 */
 		override public function tick(deltaTime:Number):void
 		{
+			globalMouseX = __starlingNativeOverlay.mouseX;
+			globalMouseY = __starlingNativeOverlay.mouseY;
+			
 			//clear the InputAction pool.
 			__clearDisposedActionsTime += deltaTime;
 			if(__clearDisposedActionsTime > clearDisposedActionsInterval)
