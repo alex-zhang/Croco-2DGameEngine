@@ -10,6 +10,7 @@ package com.croco2d.core
 			super();
 
 			__child = child;
+			__child.parent = this;
 		}
 		
 		public function get child():CrocoObject
@@ -19,7 +20,6 @@ package com.croco2d.core
 		
 		override protected function onInit():void
 		{
-			__child.parent = this;
 			__child.init();
 		}
 		
@@ -35,13 +35,6 @@ package com.croco2d.core
 				__child.tick(deltaTime);
 			}
 		}
-		
-//		override public function draw(support:RenderSupport, parentAlpha:Number):void
-//		{
-//			super.draw(support, parentAlpha);
-//			
-//			if(__child.visible) __child.draw(support, parentAlpha);
-//		}
 		
 		override protected function onDeactive():void
 		{

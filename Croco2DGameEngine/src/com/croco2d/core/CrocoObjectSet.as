@@ -17,6 +17,7 @@ package com.croco2d.core
 		
 		//the sort logic. Default base the sortPriority.
 		public var sortFunction:Function = defaultDepthSortFunction;
+		
 		public var __childrenOrderSortDirty:Boolean = false;
 		
 		public var __onAddChildCallback:Function = onAddChild;

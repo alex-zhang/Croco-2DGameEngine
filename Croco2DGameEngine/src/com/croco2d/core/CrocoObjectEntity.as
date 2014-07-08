@@ -1,7 +1,6 @@
 package com.croco2d.core
 {
 	import com.fireflyLib.utils.EventEmitter;
-	import com.fireflyLib.utils.PropertyBag;
 	import com.llamaDebugger.Logger;
 
 	public class CrocoObjectEntity extends CrocoObject
@@ -19,7 +18,6 @@ package com.croco2d.core
 		public var eventEnable:Boolean = false;
 
 		public var __eventEmitter:EventEmitter;
-		public var __propertyBag:PropertyBag = null;
 		
 		public var initComponents:Array = null;
 		
@@ -34,27 +32,48 @@ package com.croco2d.core
 			super();
 		}
 		
-		public function get eventEmitter():EventEmitter
+		public final function addEventListener(eventType:String, listener:Function):void
 		{
 			if(!__eventEmitter) __eventEmitter = new EventEmitter(this);
-
-			return __eventEmitter;
+			__eventEmitter.addEventListener(eventType, listener);
 		}
 		
-		//help for emitEvent.
-		public final function emitEvent(eventType:String, eventObject:Object = null):void
+		public final function removeEventListener(eventType:String, listener:Function):void
 		{
-			if(eventEnable &&　eventEmitter.hasEventListener(EVENT_PLUGIN_COMPONENT))
+			if(__eventEmitter)
 			{
-				eventEmitter.dispatchEvent(eventType, eventObject);
+				__eventEmitter.removeEventListener(eventType, listener);
 			}
 		}
 		
-		public final function get propertyBag():PropertyBag
+		public final function removeEventListeners(eventType:String = null):void
 		{
-			if(!__propertyBag) __propertyBag = new PropertyBag();
+			if(__eventEmitter)
+			{
+				__eventEmitter.removeEventListeners(eventType);
+			}
+		}
+		
+		public final function hasEventListener(eventType:String):Boolean
+		{
+			if(__eventEmitter)
+			{
+				return __eventEmitter.hasEventListener(eventType);
+			}
 			
-			return __propertyBag;
+			return false;
+		}
+		
+		//help for emitEvent.
+		public final function dispatchEvent(eventType:String, eventObject:Object = null):void
+		{
+			if(eventEnable)
+			{
+				if(__eventEmitter && __eventEmitter.hasEventListener(EVENT_PLUGIN_COMPONENT))
+				{
+					__eventEmitter.dispatchEvent(eventType, eventObject);
+				}
+			}
 		}
 		
 		public final function pluginComponent(component:CrocoObject):CrocoObject
@@ -67,7 +86,7 @@ package com.croco2d.core
 			}
 			
 			if(hasPluginComponent(component.name)) throw new Error("pluginComponent: " + component.name + " already exist!");
-			
+
 			return __pluinComponentsGroup.addChild(component);
 		}
 		
@@ -75,7 +94,6 @@ package com.croco2d.core
 		{
 			__pluinComponentsNameMap[component.name] = component;
 			
-			component.parent = __pluinComponentsGroup;
 			component.owner = this;
 			
 			component.init();
@@ -83,7 +101,7 @@ package com.croco2d.core
 			
 			__pluinComponentsGroup.markChildrenOrderSortDirty();
 			
-			emitEvent(EVENT_PLUGIN_COMPONENT, component);
+			dispatchEvent(EVENT_PLUGIN_COMPONENT, component);
 		}
 		
 		public final function plugOutComponent(pluginName:String, needDispose:Boolean = false):CrocoObject
@@ -103,7 +121,7 @@ package com.croco2d.core
 			
 			component.deactive();
 			
-			emitEvent(EVENT_PLUGOUT_COMPONENT, component);
+			dispatchEvent(EVENT_PLUGOUT_COMPONENT, component);
 
 			if(needDispose) component.dispose();
 		}
@@ -243,7 +261,7 @@ package com.croco2d.core
 		
 		override protected function onInited():void
 		{
-			emitEvent(EVENT_INIT);
+			dispatchEvent(EVENT_INIT);
 		}
 		
 		override protected function onActive():void
@@ -253,7 +271,7 @@ package com.croco2d.core
 		
 		override protected function onActived():void
 		{
-			emitEvent(EVENT_ACTIVE);
+			dispatchEvent(EVENT_ACTIVE);
 		}
 		
 		override public function tick(deltaTime:Number):void
@@ -268,7 +286,7 @@ package com.croco2d.core
 		
 		override protected function onDeactived():void
 		{
-			emitEvent(EVENT_DEACTIVE);
+			dispatchEvent(EVENT_DEACTIVE);
 		}
 		
 		override public function dispose():void
@@ -281,12 +299,6 @@ package com.croco2d.core
 			{
 				__eventEmitter.dispose();
 				__eventEmitter = null;
-			}
-			
-			if(__propertyBag)
-			{
-				__propertyBag.dispose();
-				__propertyBag = null;
 			}
 			
 			__onPluginComponentCallback = null;
@@ -305,8 +317,6 @@ package com.croco2d.core
 		{
 			var results:String = super.toString() + "\n" +
 				"eventEnable: " + eventEnable + "\n" +
-				"eventEmitter: " + __eventEmitter + "\n" +
-				"propertyBag: " + __propertyBag + "\n" +
 				"__pluinComponentsGroup: " + __pluinComponentsGroup + "\n";
 				
 				__pluinComponentsGroup.forEach(

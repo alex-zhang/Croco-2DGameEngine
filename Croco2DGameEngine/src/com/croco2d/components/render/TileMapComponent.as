@@ -5,7 +5,7 @@ package com.croco2d.components.render
 	
 	import flash.geom.Rectangle;
 
-	public class TileMapComponent extends DispalyObjectComponent
+	public class TileMapComponent extends DisplayObjectComponent
 	{
 		public var __tileMap:TileMap;
 		

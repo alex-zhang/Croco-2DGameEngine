@@ -77,6 +77,11 @@ package com.croco2d.display.animationSprite
 			}
 		}
 		
+		public function get totalFrame():uint
+		{
+			return mTotalFrame;
+		}
+		
 		public function get eventEmitter():EventEmitter
 		{
 			if(!mEventEmitter)

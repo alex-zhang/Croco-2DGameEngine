@@ -17,6 +17,7 @@ package com.croco2d.components.render
 		
 		public var __particleSystem:PDParticleSystem;
 		public var __texture:Texture;
+		public var __defaultTexture:Texture;
 		
 		public function PDParticleSystemComponent()
 		{
@@ -31,6 +32,12 @@ package com.croco2d.components.render
 				__texture = value;
 				
 				if(!__texture) throw new Error("PDParticleSystemComponent texture is null!");
+				
+				if(__defaultTexture)
+				{
+					__defaultTexture.dispose();
+					__defaultTexture = null;
+				}
 				
 				if(__particleSystem)
 				{
@@ -150,7 +157,7 @@ package com.croco2d.components.render
 		}
 		
 		public function get startSize():Number { return __particleSystem ? __particleSystem.startSize : 0; }
-		public function set startSize(value:Number):void 
+		public function set startSize(value:Number):void
 		{ 
 			if(__particleSystem)
 			{
@@ -422,9 +429,15 @@ package com.croco2d.components.render
 			if(!__texture) 
 			{
 				Logger.warn("PDParticleSystemComponent's texture is null, here will give a default texture!");
-				__texture = Texture.fromColor(50, 50, 0xFFFFFF);
+				
+				if(!__defaultTexture)
+				{
+					__defaultTexture = Texture.fromColor(50, 50, 0xFFFFFF);
+				}
+				
+				__texture = __defaultTexture;
 			}
-			
+
 			__particleSystem = new PDParticleSystem(initConfig, __texture);
 			if(isAutoPlay)
 			{
@@ -470,6 +483,12 @@ package com.croco2d.components.render
 			{
 				__particleSystem.dispose();
 				__particleSystem = null;
+			}
+			
+			if(__defaultTexture)
+			{
+				__defaultTexture.dispose();
+				__defaultTexture = null;
 			}
 		}
 		

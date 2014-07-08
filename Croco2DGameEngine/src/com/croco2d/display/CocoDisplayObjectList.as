@@ -4,53 +4,48 @@ package com.croco2d.display
 	import starling.display.DisplayObject;
 	import starling.display.DisplayObjectContainer;
 
-	public class CocoRenderList extends DisplayObjectContainer
+	public class CocoDisplayObjectList extends DisplayObjectContainer
 	{
 		public static function childrenSortFunction(childA:DisplayObject, childB:DisplayObject):Number
 		{
 			//-1 means the bottom depth than the other
-//			return childA.zOrder > childB.zOrder ? 1 : -1; 
+			return childA.zOrder > childB.zOrder ? 1 : -1; 
 			
 			return -1;
 		}
-		
+
 		private var mChildrenSortDirty:Boolean = false;
 		private var mChildrenSortFunction:Function;
 		
-		public function CocoRenderList()
+		public function CocoDisplayObjectList()
 		{
 			super();
 			
 			mChildrenSortFunction = childrenSortFunction;
 		}
 		
-		public function invalidChildrenSort():void
+		public final function invalidChildrenSort():void
 		{
 			mChildrenSortDirty = true;
 		}
 		
 		public function set childrenSortFunction(value:Function):void
 		{
-			mChildrenSortFunction = value;
-			mChildrenSortDirty = true;
+			if(mChildrenSortFunction != value)
+			{
+				mChildrenSortFunction = value;
+				
+				if(mChildrenSortFunction != null)
+				{
+					invalidChildrenSort();	
+				}
+			}
 		}
 		
 		public function get childrenSortFunction():Function
 		{
 			return mChildrenSortFunction;
 		}
-		
-//		override protected function onChildRemoved(child:DisplayObject):void
-//		{
-//			child.starling_internal::setParent(null);
-//		}
-//		
-//		override protected function onChildAdded(child:DisplayObject):void
-//		{
-//			child.starling_internal::setParent(this);
-//			
-//			invalidChildrenSort();
-//		}
 		
 		override public function render(support:RenderSupport, parentAlpha:Number):void
 		{

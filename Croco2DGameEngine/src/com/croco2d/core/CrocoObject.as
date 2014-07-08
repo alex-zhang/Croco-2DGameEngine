@@ -78,8 +78,8 @@ package com.croco2d.core
 			}
 		}
 		
-		protected function onInit():void {}
-		protected function onInited():void {}
+		protected function onInit():void {};
+		protected function onInited():void {};
 		
 		public final function active():void
 		{
@@ -91,10 +91,10 @@ package com.croco2d.core
 			}
 		}
 		
-		protected function onActive():void {}
-		protected function onActived():void {}
+		protected function onActive():void {};
+		protected function onActived():void {};
 		
-		public function tick(deltaTime:Number):void {}
+		public function tick(deltaTime:Number):void {};
 
 		public final function deactive():void
 		{
@@ -115,18 +115,11 @@ package com.croco2d.core
 			__alive = false;
 		}
 		
-		public final function get parentRoot():CrocoObject
+		public final function get root():CrocoObject
 		{
 			var p:CrocoObject = this;
 			while(p.parent) p = p.parent;
 			return p;
-		}
-		
-		public final function get ownerRoot():CrocoObject
-		{
-			var o:CrocoObject = this;
-			while(o.owner) o = o.owner;
-			return o;
 		}
 		
 		public function dispose():void 
@@ -138,8 +131,6 @@ package com.croco2d.core
 			owner = null;
 			
 			__userData = null;
-			
-			sortPriority = NaN;
 			
 			__alive = false;
 			__inited = false;

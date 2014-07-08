@@ -269,7 +269,7 @@ package com.croco2d.core
 
 		protected function cameraDisplayTouchHandler(event:TouchEvent):void
 		{
-			emitEvent(TouchEvent.TOUCH, event);
+			dispatchEvent(TouchEvent.TOUCH, event);
 		}
 		
 		public function get transformMatrix():Matrix

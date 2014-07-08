@@ -2,6 +2,8 @@ package com.croco2d.core
 {
 	import com.croco2d.components.TransformComponent;
 	import com.croco2d.components.collision.SpatialCollisionComponent;
+	import com.croco2d.components.physics.ColliderComponent;
+	import com.croco2d.components.physics.RigidbodyComponent;
 	import com.croco2d.components.render.RenderComponent;
 	import com.croco2d.components.script.ScriptComponent;
 	import com.fireflyLib.utils.JsonObjectFactorUtil;
@@ -21,9 +23,11 @@ package com.croco2d.core
 		public static const EVENT_ADD_GAME_OBJECT:String = "addGameObject";
 		public static const EVENT_REMOVE_GAME_OBJECT:String = "removeGameObject";
 		
-		public static const PROP_RENDER_COMPONENT:String = "renderComponent";
-		public static const PROP_SPATIAL_COLLISION_COMPONENT_COMPONENT:String = "spatialCollisionComponent";
-		public static const PROP_SCRIPT_COMPONENT:String = "scriptComponent";
+		public static const PROP_RENDER:String = "render";
+		public static const PROP_SPATIAL_COLLISION:String = "spatialCollisionComponent";
+		public static const PROP_RIGID_BODY:String = "rigidbodyComponent";
+		public static const PROP_COLLIDER:String = "colliderComponent";
+		public static const PROP_SCRIPT:String = "scriptComponent";
 		
 		public static function createEmpty():CrocoGameObject
 		{
@@ -36,17 +40,18 @@ package com.croco2d.core
 		}
 
 		//keep this not null
-		public var transformComponent:TransformComponent;
-		public var renderComponent:RenderComponent;
-		public var spatialCollisionComponent:SpatialCollisionComponent;
-		public var scriptComponent:ScriptComponent;
+		public var transform:TransformComponent;
+		public var render:RenderComponent;
+		public var spatialCollision:SpatialCollisionComponent;
+		public var rigidbody:RigidbodyComponent;
+		public var collider:ColliderComponent;
+		public var script:ScriptComponent;
 		
 		//we can control the tree's visible.
 		public var visible:Boolean = true;
 		//we can control the tree's alpha.
 		public var alpha:Number = 1.0;
 		public var blendMode:String = BlendMode.AUTO;
-
 		public var touchable:Boolean = true;
 
 		public var initChildrenGameObjects:Array;
@@ -60,8 +65,8 @@ package com.croco2d.core
 			super();
 			
 			//we must have a TransformComponent.
-			transformComponent = new TransformComponent();
-			transformComponent.owner = this;
+			transform = new TransformComponent();
+			transform.owner = this;
 		}
 		
 		public final function addGameObejct(gameObject:CrocoGameObject):CrocoGameObject
@@ -76,20 +81,19 @@ package com.croco2d.core
 		
 		protected function onAddGameObject(gameObject:CrocoGameObject):void
 		{
-			gameObject.parent = __gameObjectsGroup;
-			gameObject.owner = this;
+			gameObject.parent = this;
 
 			gameObject.init();
 			gameObject.active();
 			
-			emitEvent(EVENT_ADD_GAME_OBJECT);
+			dispatchEvent(EVENT_ADD_GAME_OBJECT);
 		}
 		
 		protected function onRemoveGameObject(gameObject:CrocoGameObject, needDispose:Boolean = false):void 
 		{
 			gameObject.deactive();
 			
-			emitEvent(EVENT_REMOVE_GAME_OBJECT, gameObject);
+			dispatchEvent(EVENT_REMOVE_GAME_OBJECT, gameObject);
 			
 			if(needDispose) gameObject.dispose();
 		}
@@ -140,16 +144,24 @@ package com.croco2d.core
 			
 			switch(component.name)
 			{
-				case PROP_RENDER_COMPONENT:
-					renderComponent = component as RenderComponent;
+				case PROP_RENDER:
+					render = component as RenderComponent;
 					break;
 				
-				case PROP_SPATIAL_COLLISION_COMPONENT_COMPONENT:
-					spatialCollisionComponent = component as SpatialCollisionComponent;
+				case PROP_SPATIAL_COLLISION:
+					spatialCollision = component as SpatialCollisionComponent;
+					break;
+				
+				case PROP_RIGID_BODY:
+					rigidbody = component as RigidbodyComponent;
+					break;
+				
+				case PROP_COLLIDER:
+					collider = component as ColliderComponent;
 					break;
 
-				case PROP_SCRIPT_COMPONENT:
-					scriptComponent = component as ScriptComponent;
+				case PROP_SCRIPT:
+					script = component as ScriptComponent;
 					break;
 			}
 		}
@@ -158,26 +170,34 @@ package com.croco2d.core
 		{
 			switch(component.name)
 			{
-				case PROP_RENDER_COMPONENT:
-					renderComponent = null;
+				case PROP_RENDER:
+					render = null;
 					break;
 				
-				case PROP_SPATIAL_COLLISION_COMPONENT_COMPONENT:
-					spatialCollisionComponent = null;
+				case PROP_SPATIAL_COLLISION:
+					spatialCollision = null;
 					break;
 				
-				case PROP_SCRIPT_COMPONENT:
-					scriptComponent = null;
+				case PROP_RIGID_BODY:
+					rigidbody = null;
+					break;
+				
+				case PROP_COLLIDER:
+					collider = null;
+					break;
+
+				case PROP_SCRIPT:
+					script = null;
 					break;
 			}
-			
+
 			super.onPlugoutComponent(component, needDispose);
 		}
 		
 		override public function tick(deltaTime:Number):void
 		{
 			super.tick(deltaTime);
-			
+
 			__gameObjectsGroup.tick(deltaTime);
 		}
 		
@@ -189,16 +209,16 @@ package com.croco2d.core
 			
 			//u will hard to break the parent matrix rule.
 			support.pushMatrix();
-			support.prependMatrix(transformComponent.transformMatrix);
+			support.prependMatrix(transform.transformMatrix);
 			//record the render world modelViewMatrix.
-			transformComponent.__lastModelViewMatrix.copyFrom(support.modelViewMatrix);
+			transform.__lastModelViewMatrix.copyFrom(support.modelViewMatrix);
 
 			support.blendMode = blendMode;
 
 			//u will hard to break the parent alpha rule.
-			if(renderComponent && renderComponent.__alive)
+			if(render && render.__alive)
 			{
-				renderComponent.draw(support, parentAlpha);
+				render.draw(support, parentAlpha);
 			}
 			
 			//children
@@ -232,7 +252,7 @@ package com.croco2d.core
 			{
 				if(child.__alive)
 				{
-					MatrixUtil.transformCoords(child.transformComponent.transformMatrix, localX, localY, 
+					MatrixUtil.transformCoords(child.transform.transformMatrix, localX, localY, 
 						MathUtil.helperFlashPoint);
 					
 					hitTestTarget = child.hitTest(MathUtil.helperFlashPoint, forTouch);
@@ -242,9 +262,9 @@ package com.croco2d.core
 				child = __gameObjectsGroup.movePre() as CrocoGameObject;
 			}
 			
-			if(renderComponent && renderComponent.__alive)
+			if(render && render.__alive)
 			{
-				hitTestTarget = renderComponent.hitTest(localPoint, forTouch);
+				hitTestTarget = render.hitTest(localPoint, forTouch);
 				if(hitTestTarget) return hitTestTarget;
 			}
 			
@@ -254,6 +274,8 @@ package com.croco2d.core
 		override protected function onInit():void
 		{
 			super.onInit();
+			
+			__gameObjectsGroup.addChild(transform);
 
 			__gameObjectsGroup = new CrocoObjectGroup();
 			__gameObjectsGroup.name = "__gameObjectsGroup";
@@ -261,6 +283,7 @@ package com.croco2d.core
 			__gameObjectsGroup.__onAddChildCallback = onAddGameObject;
 			__gameObjectsGroup.__onRemoveChildCallback = onRemoveGameObject;
 			__gameObjectsGroup.init();
+			
 			
 			initChildrenGameObjects = null;
 		}
@@ -279,13 +302,13 @@ package com.croco2d.core
 		{
 			super.dispose();
 			
-			if(transformComponent)
+			if(transform)
 			{
-				transformComponent.dispose();
-				transformComponent = null;
+				transform.dispose();
+				transform = null;
 			}
 			
-			renderComponent = null;
+			render = null;
 			
 			initChildrenGameObjects = null;
 			

@@ -15,7 +15,7 @@ package com.croco2d.components.render
 			super();
 			
 			//default.
-			this.name = CrocoGameObject.PROP_RENDER_COMPONENT;
+			this.name = CrocoGameObject.PROP_RENDER;
 		}
 		
 		public function draw(support:RenderSupport, parentAlpha:Number):void

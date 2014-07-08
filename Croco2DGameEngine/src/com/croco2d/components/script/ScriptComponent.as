@@ -10,7 +10,7 @@ package com.croco2d.components.script
 			super();
 			
 			//default.
-			this.name = CrocoGameObject.PROP_SCRIPT_COMPONENT;
+			this.name = CrocoGameObject.PROP_SCRIPT;
 		}
 	}
 }

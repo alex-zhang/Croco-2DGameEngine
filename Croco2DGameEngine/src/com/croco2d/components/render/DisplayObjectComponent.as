@@ -11,14 +11,14 @@ package com.croco2d.components.render
 	import starling.display.DisplayObject;
 	import starling.filters.FragmentFilter;
 
-	public class DispalyObjectComponent extends RenderComponent
+	public class DisplayObjectComponent extends RenderComponent
 	{
 		public var __dispalyObject:DisplayObject;
 		public var __isAnimatableDisplayObject:Boolean;
 
 		public var filter:FragmentFilter;
 
-		public function DispalyObjectComponent()
+		public function DisplayObjectComponent()
 		{
 			super();
 		}
@@ -75,7 +75,7 @@ package com.croco2d.components.render
 			if(__dispalyObject)
 			{
 				//just the set the right matix in stage space.
-				__dispalyObject.transformationMatrix = CrocoGameObject(owner).transformComponent.__lastModelViewMatrix;
+				__dispalyObject.transformationMatrix = CrocoGameObject(owner).transform.__lastModelViewMatrix;
 				
 				if(filter)
 				{

@@ -59,7 +59,7 @@ package com.croco2d.components
 			var gameObject:CrocoGameObject = owner as CrocoGameObject;
 			while(gameObject)
 			{
-				result.concat(gameObject.transformComponent.transformMatrix);
+				result.concat(gameObject.transform.transformMatrix);
 				gameObject = gameObject.owner as CrocoGameObject;
 			}
 

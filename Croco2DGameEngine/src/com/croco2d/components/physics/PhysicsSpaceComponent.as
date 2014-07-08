@@ -15,8 +15,16 @@ package com.croco2d.components.physics
 	public class PhysicsSpaceComponent extends CrocoObject
 	{
 		public var broadphase:Broadphase = Broadphase.DYNAMIC_AABB_TREE;
-		public var velocityIterations:int = 10;
-		public var positionIterations:int = 10;
+		
+		/**
+		 * velocityIterations for the velocity constraint solver.
+		 */
+		public var velocityIterations:int = 8;
+		
+		/**
+		 *positionIterations for the position constraint solver.
+		 */
+		public var positionIterations:int = 8;
 		
 		public var __physicsSpace:Space;
 		public var __gravity:Vec2 = new Vec2(AppConfig.globalEvnConfig.gravityX, AppConfig.globalEvnConfig.gravityY);
@@ -55,11 +63,11 @@ package com.croco2d.components.physics
 		
 		protected function onPhysicsSpaceInteractionBegin(interactionCallback:InteractionCallback):void
 		{
-			var a:PhysicsObject = interactionCallback.int1.userData.entity;
-			var b:PhysicsObject = interactionCallback.int2.userData.entity;
-			
-			if(a && a.__alive && a.physicsBeginContactCallEnabled) a.handleBeginContact(interactionCallback);
-			if(b && b.__alive && b.physicsBeginContactCallEnabled) b.handleBeginContact(interactionCallback);
+//			var a:PhysicsObject = interactionCallback.int1.userData.entity;
+//			var b:PhysicsObject = interactionCallback.int2.userData.entity;
+//			
+//			if(a && a.__alive && a.physicsBeginContactCallEnabled) a.handleBeginContact(interactionCallback);
+//			if(b && b.__alive && b.physicsBeginContactCallEnabled) b.handleBeginContact(interactionCallback);
 		}
 		
 		protected function onPhysicsSpaceInteractionEnd(interactionCallback:InteractionCallback):void
