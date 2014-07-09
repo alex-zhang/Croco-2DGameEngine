@@ -14,7 +14,7 @@ package com.croco2d.components.physics
 		
 		override protected function createShape():Shape
 		{
-			__rectShape = new Polygon(Polygon.rect(0, 0, 0, 0));
+			__rectShape = new Polygon(Polygon.rect(0, 0, 50, 50));
 			return __rectShape;
 		}
 	}

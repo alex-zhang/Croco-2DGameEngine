@@ -1,17 +1,25 @@
 package com.croco2d.components
 {
-	import com.croco2d.core.CrocoGameObject;
 	import com.croco2d.core.CrocoObject;
+	import com.croco2d.utils.CrocoMathUtil;
+	import com.llamaDebugger.Logger;
 	
 	import flash.geom.Matrix;
 
 	public class TransformComponent extends CrocoObject
 	{
+		public var moveAble:Boolean = true;
+		public var zoomAble:Boolean = true;
+		public var rotateAble:Boolean = true;
+		
 		public var __transformMatrix:Matrix = new Matrix();
 		public var __transformMatrixDirty:Boolean = false; 
 
 		public var __x:Number = 0.0;
 		public var __y:Number = 0.0;
+		
+		public var __pivotX:Number = 0.0;
+		public var __pivotY:Number = 0.0;
 
 		public var __scaleX:Number = 1.0;
 		public var __scaleY:Number = 1.0;
@@ -25,58 +33,21 @@ package com.croco2d.components
 		{
 			super();
 		}
-
-		public function get transformMatrix():Matrix
-		{
-			if(__transformMatrixDirty)
-			{
-				if(__rotation == 0)
-				{
-					__transformMatrix.setTo(__scaleX, 0.0, 0.0, __scaleY, __x, __y);
-				}
-				else
-				{
-					const cos:Number = Math.cos(__rotation);
-					const sin:Number = Math.sin(__rotation);
-					
-					__transformMatrix.setTo(__scaleX *  cos, __scaleX *  sin, __scaleY * -sin, __scaleY *  cos, __x, __y);					
-				}
-			}
-				
-			return __transformMatrix;
-		}
 		
-		public function invalidateTransformMatrix():void
+		public function identityMatrix():void
 		{
-			__transformMatrixDirty = true;
-		}
-		
-		public function getWorldTransformMatrix(result:Matrix = null):Matrix
-		{
-			if(result) result.identity();
-			else result = new Matrix();
-			
-			var gameObject:CrocoGameObject = owner as CrocoGameObject;
-			while(gameObject)
-			{
-				result.concat(gameObject.transform.transformMatrix);
-				gameObject = gameObject.owner as CrocoGameObject;
-			}
-
-			return result;
-		}
-		
-		public function reset():void
-		{
-			__x = 0;
-			__y = 0;
+			__x = 0.0;
+			__y = 0.0;
+			__pivotX = 0.0;
+			__pivotY = 0.0;
 			__scaleX = 1.0;
 			__scaleY = 1.0;
-			__rotation = 0;
+			__rotation = 0.0;
 			
-			__transformMatrixDirty = true;
+			__transformMatrix.identity();
+			__transformMatrixDirty = false;
 		}
-	
+		
 		public function get x():Number
 		{
 			return __x;
@@ -84,12 +55,14 @@ package com.croco2d.components
 		
 		public function set x(value:Number):void
 		{
-			if(__x != value)
-			{
-				__x = value;
-				
-				__transformMatrixDirty = true;
-			}
+			setPosition(value, __y);
+		}
+		
+		public function translateX(deltaX:Number):void
+		{
+			if(deltaX == 0) return;
+			
+			setPosition(__x + deltaX, __y);
 		}
 		
 		public function get y():Number
@@ -99,57 +72,37 @@ package com.croco2d.components
 		
 		public function set y(value:Number):void
 		{
-			if(__y != value)
-			{
-				__y = value;
-				
-				__transformMatrixDirty = true;
-			}
-		}
-		
-		public function setPosition(x:Number, y:Number):void
-		{
-			if(__x != x || __y != y)
-			{
-				__x = x;
-				__y = y;
-				
-				__transformMatrixDirty = true;
-			}
-		}
-		
-		public function translateX(deltaX:Number):void
-		{
-			if(deltaX == 0) return;
-			
-			__x += deltaX;
-			
-			__transformMatrixDirty = true;
+			setPosition(__x, value);
 		}
 		
 		public function translateY(deltaY:Number):void
 		{
 			if(deltaY == 0) return;
 			
-			__y += deltaY;
-			
-			__transformMatrixDirty = true;
+			setPosition(__x, __y + deltaY);
 		}
 		
 		public function translatePosition(deltaX:Number, deltaY:Number):void
 		{
-			if(deltaX != 0)
+			if(deltaX == 0 && deltaY == 0) return;
+			
+			setPosition(__x + deltaX, __y + deltaY);
+		}
+		
+		public function setPosition(x:Number, y:Number):void
+		{
+			if(!moveAble)
 			{
-				__x += deltaX;
-				
-				__transformMatrixDirty = true;
+				Logger.warn("TransformComponent moveable false!");
+				return;
 			}
 			
-			if(deltaY != 0)
+			if(__x != x || __y != y)
 			{
-				__y += deltaY;
+				__x = x;
+				__y = y;
 				
-				__transformMatrixDirty = true;	
+				__transformMatrixDirty = true;
 			}
 		}
 		
@@ -185,21 +138,26 @@ package com.croco2d.components
 		
 		public function scale(value:Number):void
 		{
-			if(__scaleX != value)
-			{
-				__scaleX = value;
-				
-				__transformMatrixDirty = true;
-			}
+			setScaleXY(value, value);
+		}
 
-			if(__scaleY != value)
+		public function setScaleXY(scaleX:Number, scaleY:Number):void
+		{
+			if(!zoomAble)
 			{
-				__scaleY = value;
+				Logger.warn("TransformComponent zoomAble false!");
+				return;
+			}
+			
+			if(__scaleX != scaleX || __scaleY != scaleY)
+			{
+				__scaleX = scaleX;
+				__scaleY = scaleY;
 				
 				__transformMatrixDirty = true;
 			}
 		}
-
+		
 		public function get rotation():Number
 		{
 			return __rotation;
@@ -207,6 +165,24 @@ package com.croco2d.components
 		
 		public function set rotation(value:Number):void
 		{
+			setRotation(value);
+		}
+		
+		public function rotate(angle:Number):void
+		{
+			setRotation(__rotation + angle);
+		}
+		
+		public function setRotation(value:Number):void
+		{
+			if(!rotateAble)
+			{
+				Logger.warn("TransformComponent rotateAble false!");
+				return;
+			}
+			
+			value = CrocoMathUtil.clampRadian(value);
+			
 			if(__rotation != value)
 			{
 				__rotation = value;
@@ -214,5 +190,54 @@ package com.croco2d.components
 				__transformMatrixDirty = true;
 			}
 		}
+
+		public function get transformMatrix():Matrix
+		{
+			if(__transformMatrixDirty)
+			{
+				if(__rotation == 0)
+				{
+					__transformMatrix.setTo(__scaleX, 0.0, 0.0, __scaleY, 
+						__x - __pivotX * __scaleX, __y - __pivotY * __scaleY);
+				}
+				else
+				{
+					const cos:Number = Math.cos(__rotation);
+					const sin:Number = Math.sin(__rotation);
+					const a:Number   = __scaleX *  cos;
+					const b:Number   = __scaleX *  sin;
+					const c:Number   = __scaleY * -sin;
+					const d:Number   = __scaleY *  cos;
+					const tx:Number  = __x - __pivotX * a - __pivotY * c;
+					const ty:Number  = __y - __pivotX * b - __pivotY * d;
+					
+					__transformMatrix.setTo(a, b, c, d, tx, ty);
+				}
+				
+				__transformMatrixDirty = false;
+			}
+				
+			return __transformMatrix;
+		}
+		
+		public final function invalidateTransformMatrix():void
+		{
+			__transformMatrixDirty = true;
+		}
+		
+//		public function getWorldTransformMatrix(result:Matrix = null):Matrix
+//		{
+//			if(result) result.identity();
+//			else result = new Matrix();
+//			
+//			var gameObject:CrocoGameObject = owner as CrocoGameObject;
+//			while(gameObject)
+//			{
+//				result.concat(gameObject.transform.transformMatrix);
+//				gameObject = gameObject.owner as CrocoGameObject;
+//			}
+//
+//			return result;
+//		}
 	}
 }

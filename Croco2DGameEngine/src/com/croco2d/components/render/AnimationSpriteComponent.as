@@ -2,13 +2,16 @@ package com.croco2d.components.render
 {
 	import com.croco2d.display.animationSprite.AnimationSprite;
 	import com.croco2d.display.animationSprite.FrameInfo;
+	
+	import starling.display.DisplayObject;
 
 	public class AnimationSpriteComponent extends DisplayObjectComponent
 	{
 		public var isAutoPlay:Boolean = true;
 		
-		public var __frames:Vector.<FrameInfo>;
 		public var __animationSprite:AnimationSprite;
+		
+		public var __frames:Vector.<FrameInfo>;
 		public var __fps:Number = 24;//default
 		public var __loop:Boolean = false;
 		public var __color:uint = 0xFFFFFF;//default;
@@ -162,6 +165,12 @@ package com.croco2d.components.render
 			}
 		}
 		
+		//dead end.
+		override public function set dispalyObject(value:DisplayObject):void
+		{
+			throw new Error("u can't set the value.");
+		}
+		
 		override protected function onInit():void
 		{
 			__animationSprite = new AnimationSprite();
@@ -177,6 +186,8 @@ package com.croco2d.components.render
 			{
 				__animationSprite.play();
 			}
+			
+			super.dispalyObject = __animationSprite;
 		}
 		
 		override public function dispose():void

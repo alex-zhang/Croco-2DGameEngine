@@ -1,5 +1,7 @@
 package com.croco2d.components.physics
 {
+	import com.croco2d.components.TransformComponent;
+	import com.croco2d.core.GameObject;
 	import com.croco2d.core.CrocoObject;
 	
 	import nape.constraint.ConstraintList;
@@ -13,9 +15,6 @@ package com.croco2d.components.physics
 
 	public class RigidbodyComponent extends CrocoObject
 	{
-		//not set it to null.
-		public var position:Vec2 = new Vec2();
-		
 		public var beginContactCallEnabled:Boolean = false;
 		public var endContactCallEnabled:Boolean = false;
 		
@@ -29,6 +28,15 @@ package com.croco2d.components.physics
 		public var __compound:Compound;
 		public var __disableCCD:Boolean = false;
 		
+		public var __transform:TransformComponent;
+		
+		public function RigidbodyComponent()
+		{
+			super();
+			
+			name = GameObject.PROP_RIGID_BODY;
+		}
+
 		public function get bodyType():BodyType
 		{
 			return __bodyType;
@@ -172,29 +180,44 @@ package com.croco2d.components.physics
 			if(__disableCCD != value)
 			{
 				__disableCCD = value;
-				
+
 				if(__rigidbody)
 				{
 					__rigidbody.disableCCD = __disableCCD;
 				}
 			}
 		}
-
-		public function RigidbodyComponent()
-		{
-			super();
-		}
 		
 		override protected function onInit():void
 		{
-			__rigidbody = new Body(__bodyType, position);
+			__transform = GameObject(owner).transform;
+			
+			__rigidbody = new Body(__bodyType, Vec2.weak(__transform.x, __transform.y));
 			__rigidbody.allowMovement = __allowMovement;
 			__rigidbody.allowRotation = __allowRotation;
 			__rigidbody.angularVel = __angularVel;
-			
+			__rigidbody.compound = __compound;
+			__rigidbody.disableCCD = __disableCCD;
 			__rigidbody.space = __physicsSpaceComponent ? __physicsSpaceComponent.__physicsSpace : null;
 			
-			__rigidbody.userData.owner = this;
+			__rigidbody.userData.owner = this;//keep the ref.
+		}
+		
+		override public function tick(deltaTime:Number):void
+		{
+			__transform.setPosition(__rigidbody.position.x, __rigidbody.position.y);
+			__transform.rotation = __rigidbody.rotation;
+		}
+		
+		override public function dispose():void
+		{
+			super.dispose();
+			
+			if(__rigidbody)
+			{
+				__rigidbody.space = null;
+				__rigidbody = null;
+			}
 		}
 	}
 }

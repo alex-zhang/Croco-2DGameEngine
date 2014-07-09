@@ -38,8 +38,6 @@ package com.croco2d.input
 		public function InputManager()
 		{
 			super();
-			
-			this.name = AppConfig.KEY_INPUT_MANAGER;
 		}
 		
 		override protected function onInit():void

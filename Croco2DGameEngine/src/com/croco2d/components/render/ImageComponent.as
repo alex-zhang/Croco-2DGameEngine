@@ -12,7 +12,7 @@ package com.croco2d.components.render
 		public var __texture:Texture;
 		public var __smoothing:String = TextureSmoothing.NONE;
 		public var __color:uint = 0xFFFFFF;//default;
-		
+
 		public function ImageComponent()
 		{
 			super();
@@ -64,6 +64,12 @@ package com.croco2d.components.render
 			}
 		}
 		
+		//dead end.
+		override public function set dispalyObject(value:DisplayObject):void
+		{
+			throw new Error("u can't set the value.");
+		}
+		
 		override protected function onInit():void
 		{
 			__crocoImage = new CrocoImage();
@@ -75,11 +81,6 @@ package com.croco2d.components.render
 			}
 			
 			super.dispalyObject = __crocoImage;
-		}
-		
-		override public function set dispalyObject(value:DisplayObject):void
-		{
-			throw new Error("u can't set the value.");
 		}
 		
 		override public function dispose():void

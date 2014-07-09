@@ -69,7 +69,7 @@ package com.croco2d.core
 		{
 			if(eventEnable)
 			{
-				if(__eventEmitter && __eventEmitter.hasEventListener(EVENT_PLUGIN_COMPONENT))
+				if(__eventEmitter && __eventEmitter.hasEventListener(eventType))
 				{
 					__eventEmitter.dispatchEvent(eventType, eventObject);
 				}
@@ -277,6 +277,11 @@ package com.croco2d.core
 		override public function tick(deltaTime:Number):void
 		{
 			__pluinComponentsGroup.tick(deltaTime);
+		}
+		
+		override public function onDebugDraw():void 
+		{
+			__pluinComponentsGroup.__onDebugDrawCallback();
 		}
 
 		override protected function onDeactive():void

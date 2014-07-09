@@ -1,6 +1,6 @@
 package com.croco2d.components.render
 {
-	import com.croco2d.core.CrocoGameObject;
+	import com.croco2d.core.GameObject;
 	
 	import flash.geom.Point;
 	
@@ -48,6 +48,7 @@ package com.croco2d.components.render
 			{
 				if(__dispalyObject)
 				{
+					__dispalyObject.myData.owner = null;
 					__dispalyObject.starling_internal::setParent(null);
 				}
 				
@@ -55,6 +56,7 @@ package com.croco2d.components.render
 				
 				if(__dispalyObject)
 				{
+					__dispalyObject.myData.owner = this;
 					__dispalyObject.starling_internal::setParent(Starling.current.stage);
 				}
 				
@@ -75,7 +77,7 @@ package com.croco2d.components.render
 			if(__dispalyObject)
 			{
 				//just the set the right matix in stage space.
-				__dispalyObject.transformationMatrix = CrocoGameObject(owner).transform.__lastModelViewMatrix;
+				__dispalyObject.transformationMatrix = GameObject(owner).transform.__lastModelViewMatrix;
 				
 				if(filter)
 				{

@@ -1,6 +1,6 @@
 package com.croco2d.components.physics
 {
-	import com.croco2d.core.CrocoGameObject;
+	import com.croco2d.core.GameObject;
 	import com.croco2d.core.CrocoObject;
 	
 	import nape.phys.Material;
@@ -17,6 +17,9 @@ package com.croco2d.components.physics
 		public function ColliderComponent()
 		{
 			super();
+
+			name = GameObject.PROP_COLLIDER;
+			tickable = false;
 		}
 		
 		public function get material():Material
@@ -39,7 +42,7 @@ package com.croco2d.components.physics
 		
 		override protected function onInit():void
 		{
-			__rigidbodyComponent = CrocoGameObject(owner).rigidbody;
+			__rigidbodyComponent = GameObject(owner).rigidbody;
 			
 			__shape = createShape();
 

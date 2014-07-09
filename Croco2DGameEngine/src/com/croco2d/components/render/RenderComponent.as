@@ -1,6 +1,6 @@
 package com.croco2d.components.render
 {
-	import com.croco2d.core.CrocoGameObject;
+	import com.croco2d.core.GameObject;
 	import com.croco2d.core.CrocoObject;
 	
 	import flash.geom.Point;
@@ -15,7 +15,7 @@ package com.croco2d.components.render
 			super();
 			
 			//default.
-			this.name = CrocoGameObject.PROP_RENDER;
+			this.name = GameObject.PROP_RENDER;
 		}
 		
 		public function draw(support:RenderSupport, parentAlpha:Number):void

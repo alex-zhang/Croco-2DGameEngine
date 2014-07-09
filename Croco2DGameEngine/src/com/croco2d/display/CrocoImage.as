@@ -25,7 +25,7 @@ package com.croco2d.display
 		
 		public function CrocoImage()
 		{
-			super(0, 0);
+			super(0.000001, 0.000001);
 
 			mVertexData.setTexCoords(0, 0.0, 0.0);
 			mVertexData.setTexCoords(1, 1.0, 0.0);

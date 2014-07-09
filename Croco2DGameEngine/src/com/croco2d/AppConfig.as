@@ -11,7 +11,6 @@ package com.croco2d
 	import com.croco2d.tmx.scene.ornaments.OrtLineUVAnimationEntity;
 	import com.croco2d.tmx.scene.ornaments.OrtParticalSpriteEntity;
 	import com.croco2d.tmx.scene.ornaments.OrtSurroundingSoundEntity;
-	import com.llamaDebugger.Logger;
 	
 	import flash.filesystem.File;
 	
@@ -20,11 +19,20 @@ package com.croco2d
 	//data format see ObjectFactoryUtil.newInstanceFromConfig
 	public class AppConfig
 	{
+		public static var globalEvnConfig:Object;
+		public static var systemCallbackConfig:Object;
+		public static var globalPropertyBagConfig:Object;
+		public static var starlingConfig:Object;
+		public static var feathersConfig:Object; 
+		public static var bootStrapSceenConfig:Object;
+		public static var crocoEngineConfig:Object;
+		public static var screensConfig:Array;
+		
 		//system config  Define
 		//----------------------------------------------------------------------
 		
 		//global evn config.
-		public static var globalEvnConfig:Object = 
+		globalEvnConfig = 
 		{
 			//1.3333~ 1.777 ratio.
 			designWidth:960,
@@ -37,11 +45,12 @@ package com.croco2d
 			pauseRenderingWhenDeActivated:true,
 			startupLogger:true,
 			gravityX:0,
-			gravityY:980
+			gravityY:980,
+			physicsStepTime: 1/ 20
 		}
 		
 		//system callback config
-		public static var systemCallbackConfig:Object = 
+		systemCallbackConfig = 
 		{
 			preInitCallbackConfig:
 			{
@@ -82,12 +91,12 @@ package com.croco2d
 		 * key => Json Config.
 		 * 
 		 */		
-		public static var globalPropertyBagConfig:Object = 
+		globalPropertyBagConfig = 
 		{
 		}
 			
 		//Starling framework config.
-		public static var starlingConfig:Object = 
+		starlingConfig = 
 		{
 			clsProps:
 			{
@@ -120,7 +129,7 @@ package com.croco2d
 		
 		//feathers UI FrameWork.
 		//----------------------------------------------------------------------
-		public static var feathersConfig:Object = 
+		feathersConfig = 
 		{
 			//eg. "com.example.FeatherDefaultTheme"
 			clsType:null
@@ -132,7 +141,7 @@ package com.croco2d
 		 * launchImage:"launchImage.png" //the image name of the resource, fileFormat support swf , png, jpg
 		 * fadeOutTime:10 //the BootStrapScreen fadout time.
 		 */
-		public static var bootStrapSceenConfig:Object = 
+		bootStrapSceenConfig = 
 		{
 			clsType:"(class)com.croco2d.screens::FlashBootStrapScreen",
 			
@@ -145,12 +154,11 @@ package com.croco2d
 		
 		//each pluginComponent 
 		//data format see ObjectFactoryUtil.newInstanceFromConfig
-		public static var crocoEngineConfig:Object = 
+		crocoEngineConfig = 
 		{
 			clsProps:
 			{
 				timeScale:1.0,
-				debug:true,
 				tickDeltaTime:1.0 / 60,
 				maxTicksPerFrame:5
 			},
@@ -162,12 +170,10 @@ package com.croco2d
 				initComponents:
 				[
 					{
-						clsType:"(class)com.croco2d.core::CrocoCamera"
-					},
-					{
 						clsType:"(class)com.croco2d.input::InputManager",
 						props:
 						{
+							name:AppConfig.KEY_INPUT_MANAGER,
 							initInputControllers:
 							[
 								{
@@ -180,6 +186,7 @@ package com.croco2d
 						clsType:"(class)com.croco2d.sound::SoundManager",
 						props:
 						{
+							name:AppConfig.KEY_SOUND_MANAGER,
 							maxConcurrentSounds:10
 						}
 					},
@@ -194,7 +201,7 @@ package com.croco2d
 			}
 		}
 		
-		public static var screensConfig:Array = 
+		screensConfig = 
 		[
 			{
 				clsType:"(class)feathers.controls::ScreenNavigatorItem",
@@ -234,7 +241,6 @@ package com.croco2d
 		
 		public static const KEY_GLOBAL_ASSETS_MANAGER:String = "globalAssetsManager";
 		
-		public static const KEY_CAMERA:String = "camera";
 		public static const KEY_INPUT_MANAGER:String = "inputManager";
 		public static const KEY_SOUND_MANAGER:String = "soundManager";
 		public static const KEY_KEY_BOARD_CONTROLLER:String = "keyboardController";
@@ -375,7 +381,7 @@ package com.croco2d
 		//----------------------------------------------------------------------
 		public function AppConfig()
 		{
-			Logger.info("appConfigInit.");
+			super();
 		}
 		
 		//Strong Reference Clsses.

@@ -28,8 +28,6 @@ package com.croco2d.sound
         {
 			super();
 			
-			this.name = AppConfig.KEY_SOUND_MANAGER;
-			
             createCategory(MUSIC_MIXER_CATEGORY);
             createCategory(SFX_MIXER_CATEGORY);
         }

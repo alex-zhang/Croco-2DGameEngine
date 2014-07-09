@@ -41,6 +41,14 @@ package com.croco2d.core
 			__child.deactive();
 		}
 		
+		override public function onDebugDraw():void 
+		{
+			if(__child.debug)
+			{
+				__child.__onDebugDrawCallback();
+			}
+		}
+		
 		override public function dispose():void
 		{
 			super.dispose();

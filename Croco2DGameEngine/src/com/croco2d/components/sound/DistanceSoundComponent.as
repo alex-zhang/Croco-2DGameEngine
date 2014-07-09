@@ -4,7 +4,6 @@ package com.croco2d.components.sound
 	import com.fireflyLib.utils.MathUtil;
 	
 	import flash.media.Sound;
-	import com.croco2d.core.CrocoCamera;
 
 	public class DistanceSoundComponent extends SoundComponent
 	{
@@ -24,7 +23,7 @@ package com.croco2d.components.sound
 
 			if(sound && soundRange > 0)
 			{
-				var camera:CrocoCamera = CrocoEngine.camera;
+				var camera:* = CrocoEngine.camera;
 				
 				var soundCenterX:Number// = ;CrocoGameObject(owner).x;
 				var soundCenterY:Number// = CrocoGameObject(owner).x;

@@ -40,6 +40,8 @@ package com.croco2d.core
 		
 		public var __onDeactiveCallback:Function = onDeactive;
 		public var __onDeactivedCallback:Function = onDeactived;
+		
+		public var __onDebugDrawCallback:Function = onDebugDraw;
 
 		public function CrocoObject()
 		{
@@ -95,6 +97,8 @@ package com.croco2d.core
 		protected function onActived():void {};
 		
 		public function tick(deltaTime:Number):void {};
+		
+		public function onDebugDraw():void {};
 
 		public final function deactive():void
 		{

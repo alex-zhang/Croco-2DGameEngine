@@ -35,6 +35,23 @@ package com.croco2d.core
 			}
 		}
 		
+		override public function onDebugDraw():void
+		{
+			var child:CrocoObject = __childrenLinkList.moveFirst();
+			while(child)
+			{
+				if(child.__alive)
+				{
+					if(child.debug)
+					{
+						child.__onDebugDrawCallback();
+					}
+				}
+				
+				child = __childrenLinkList.moveNext();
+			}
+		}
+		
 		/**
 		 * Override this function to handle any deleting or "shutdown" type operations you might need,
 		 * such as removing traditional Flash children like Sprite objects.

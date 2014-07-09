@@ -1,13 +1,13 @@
 package com.croco2d.screens
 {
 	import com.croco2d.CrocoEngine;
-	import com.croco2d.core.CrocoGameObject;
+	import com.croco2d.core.GameObject;
 	
 	import starling.events.Event;
 
 	public class SceneScreen extends CrocoScreen
 	{
-		public var scene:CrocoGameObject
+		public var scene:GameObject
 
 		public function SceneScreen()
 		{
@@ -42,26 +42,19 @@ package com.croco2d.screens
 		
 		protected function onActiveScene():void
 		{
-			CrocoEngine.camera.reset();
-			
-			scene.init();
-			scene.active();
-			
-			CrocoEngine.rootGameObject = scene;
-			CrocoEngine.camera.watchTarget = scene;
+			CrocoEngine.instance.setRootGameObject(scene);
 		}
 		
 		protected function onDeactiveScene():void
 		{
 			scene.deactive();
 			
-			CrocoEngine.rootGameObject = null;
-			CrocoEngine.camera.watchTarget = null;
+			CrocoEngine.instance.setRootGameObject(null);
 		}
 		
-		protected function createScene():CrocoGameObject
+		protected function createScene():GameObject
 		{
-			var scene:CrocoGameObject = CrocoGameObject.createEmpty();
+			var scene:GameObject = GameObject.createEmpty();
 			scene.name = this.screenID;
 			
 			return scene;

@@ -152,6 +152,12 @@ package com.croco2d.components.render
 			return 0;
 		}
 		
+		//dead end.
+		override public function set dispalyObject(value:DisplayObject):void
+		{
+			throw new Error("u can't set the value.");
+		}
+		
 		override protected function onInit():void
 		{
 			__displayObjectList = new CocoDisplayObjectList();

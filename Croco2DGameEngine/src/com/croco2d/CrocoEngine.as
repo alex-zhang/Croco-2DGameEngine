@@ -1,30 +1,38 @@
 package com.croco2d
 {
 	import com.croco2d.assets.CrocoAssetsManager;
-	import com.croco2d.core.CrocoCamera;
-	import com.croco2d.core.CrocoGameObject;
+	import com.croco2d.components.render.CameraComponent;
 	import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.CrocoObjectEntity;
+	import com.croco2d.core.GameObject;
 	import com.croco2d.input.InputManager;
 	import com.croco2d.sound.SoundManager;
 	import com.fireflyLib.utils.GlobalPropertyBag;
 	
 	import flash.display.Graphics;
 	import flash.events.Event;
+	import flash.geom.Point;
 	import flash.utils.getTimer;
 	
+	import starling.core.RenderSupport;
 	import starling.core.Starling;
+	import starling.display.DisplayObject;
+	import starling.events.ResizeEvent;
+	import starling.events.TouchEvent;
 	
 	public class CrocoEngine extends CrocoObjectEntity
 	{
 		/** The version of the Engine. */
-		public static const VERSION:String = "0.0.1";
-		
+		public static const VERSION:String = "0.0.2";
+
 		//Events.		
 		public static const EVENT_START_ENGINE:String = "startEngine";
 		public static const EVENT_STOP_ENGINE:String = "stopEngine";
-		
-		public static var instance:CrocoEngine;
+		public static const EVENT_PRE_DRAW:String = "preDraw";
+		public static const EVENT_AFTER_DRAW:String = "afterDraw";
+		public static const EVENT_CHANGED_ROOT_GAME_OBJECT:String = "changedRootGameObject";
+		public static const EVENT_CANVAS_STAGE_TOUCH:String = "canvasStageTouch";
+		public static const EVENT_STAGE_RESIZE:String = "stageResize";
 		
 		public static var engineCls:Class = CrocoEngine;
 		
@@ -48,10 +56,6 @@ package com.croco2d
 		
 		public static var maxTicksPerFrame:int = 5;
 		
-		/**
-		 *  u can consider the rootGameObject as Scene.
-		 */		
-		public static var rootGameObject:CrocoGameObject;
 		
 		/**
 		 * If the game should stop updating/rendering.
@@ -66,25 +70,23 @@ package com.croco2d
 		
 		public static var __lastTime:int = -1;
 
+		public static var __canvasStage:DisplayObject;
+		
 		//helper for reference.
-		public static var camera:CrocoCamera;
+		public static var instance:CrocoEngine;
+		
+		public static var camera:CameraComponent;
 		public static var inputManager:InputManager;
 		public static var soundManager:SoundManager;
 		public static var globalAssetsManager:CrocoAssetsManager;
+		/**
+		 *  u can consider the rootGameObject as Scene.
+		 */		
+		public static var rootGameObject:GameObject;
 
 		public static var debugGraphics:Graphics;
 		
-		public static function hasPluginComponent(pluginName:String):Boolean
-		{
-			return instance.hasPluginComponent(pluginName);
-		}
-		
-		public static function findPluinComponent(pluginName:String):*
-		{
-			return instance.findPluinComponent(pluginName);
-		}
-		
-		public static function findStaticPropertity(key:String):*
+		public static function findClsProperty(key:String):*
 		{
 			return engineCls[key];
 		}
@@ -94,7 +96,9 @@ package com.croco2d
 		public var __onAdvanceCallback:Function = onAdvance;
 		public var __onStartEngineCallback:Function = onStartEngine;
 		public var __onStopEngineCallback:Function = onStopEngine;
-		public var __onEnterFrameHandlerCallback:Function = onEnterFrameHandler;
+		public var __onEnterFrameCallback:Function = onEnterFrame;
+		public var __onCanvasStageTouchCallback:Function = onCanvasStageTouch;
+		public var __onStageResizeCallback:Function = onStageResize;
 		
 		public function CrocoEngine()
 		{
@@ -103,8 +107,8 @@ package com.croco2d
 			if(instance) throw new Error("CrocoEngine is a singleton mode Class!");
 			instance = this;
 			
-			this.name = AppConfig.KEY_CROCO_ENGINE;
-			this.eventEnable = true;
+			name = AppConfig.KEY_CROCO_ENGINE;
+			eventEnable = true;
 		}
 		
 		public final function start():void 
@@ -114,18 +118,14 @@ package com.croco2d
 			__running = true;
 			
 			__onStartEngineCallback();
+			__lastTime = -1;
+			
+			dispatchEvent(EVENT_START_ENGINE);
+			
+			GlobalPropertyBag.stage.addEventListener(flash.events.Event.ENTER_FRAME, __onEnterFrameCallback);
 		}
 		
-		protected function onStartEngine():void
-		{
-			__lastTime = -1;
-			GlobalPropertyBag.stage.addEventListener(Event.ENTER_FRAME, __onEnterFrameHandlerCallback);
-			
-			if(eventEnable && eventEmitter.hasEventListener(EVENT_START_ENGINE))
-			{
-				eventEmitter.dispatchEvent(EVENT_START_ENGINE);
-			}
-		}
+		protected function onStartEngine():void {};
 		
 		public final function stop():void 
 		{ 
@@ -134,24 +134,41 @@ package com.croco2d
 			__running = false;
 			
 			__onStopEngineCallback();
+			
+			dispatchEvent(EVENT_STOP_ENGINE);
+			
+			GlobalPropertyBag.stage.removeEventListener(flash.events.Event.ENTER_FRAME, __onEnterFrameCallback);
 		}
 		
-		protected function onStopEngine():void
-		{
-			GlobalPropertyBag.stage.removeEventListener(Event.ENTER_FRAME, __onEnterFrameHandlerCallback);
-			
-			if(eventEnable && eventEmitter.hasEventListener(EVENT_STOP_ENGINE))
-			{
-				eventEmitter.dispatchEvent(EVENT_STOP_ENGINE);
-			}
-		}
+		protected function onStopEngine():void {};
 		
 		public final function get running():Boolean
 		{ 
 			return __running;
 		}
 		
-		public function advance(elapsedTime:Number):void
+		public final function setRootGameObject(value:GameObject):void
+		{
+			if(rootGameObject != value)
+			{
+				if(rootGameObject)
+				{
+					rootGameObject.deactive();
+				}
+				
+				rootGameObject = value;
+				
+				if(rootGameObject)
+				{
+					rootGameObject.init();
+					rootGameObject.active();
+				}
+				
+				dispatchEvent(EVENT_CHANGED_ROOT_GAME_OBJECT, rootGameObject);
+			}
+		}
+		
+		public final function advance(elapsedTime:Number):void
 		{
 			__onAdvanceCallback(elapsedTime * timeScale, true);
 		}
@@ -162,10 +179,6 @@ package com.croco2d
 			
 			switch(component.name)
 			{
-				case AppConfig.KEY_CAMERA:
-					camera = CrocoCamera(component);
-					break;
-				
 				case AppConfig.KEY_INPUT_MANAGER:
 					inputManager = InputManager(component);
 					break;
@@ -184,10 +197,6 @@ package com.croco2d
 		{
 			switch(component.name)
 			{
-				case AppConfig.KEY_CAMERA:
-					camera = null;
-					break;
-				
 				case AppConfig.KEY_INPUT_MANAGER:
 					inputManager = null;
 					break;
@@ -218,7 +227,7 @@ package com.croco2d
 			}
 		}
 
-		protected function onEnterFrameHandler(event:Event):void
+		protected function onEnterFrame(event:flash.events.Event = null):void
 		{
 			__curTime = getTimer();
 			if(__lastTime < 0)
@@ -228,15 +237,31 @@ package com.croco2d
 			}
 			
 			onAdvance((__curTime - __lastTime) * timeScale * 0.001);
-			
+
 			__lastTime = __curTime;
+		}
+		
+		protected function onCanvasStageTouch(event:TouchEvent = null):void
+		{
+			dispatchEvent(EVENT_CANVAS_STAGE_TOUCH, event);
+		}
+		
+		protected function onStageResize(event:ResizeEvent = null):void
+		{
+			dispatchEvent(EVENT_STAGE_RESIZE, event);
 		}
 		
 		override protected function onInit():void
 		{
 			debugGraphics = Starling.current.nativeOverlay.graphics;
-			
+
+			__canvasStage = new CanvasStage();
+			__canvasStage.addEventListener(TouchEvent.TOUCH, __onCanvasStageTouchCallback);
+			Starling.current.stage.addChildAt(__canvasStage, 0);
+
 			super.onInit();
+			
+			Starling.current.stage.addEventListener(ResizeEvent.RESIZE, __onStageResizeCallback);
 		}
 		
 		override public function tick(deltaTime:Number):void
@@ -249,17 +274,71 @@ package com.croco2d
 			super.tick(deltaTime);
 		}
 		
+		public function draw(support:RenderSupport, parentAlpha:Number):void
+		{
+			//displayDraw.
+			if(camera && camera.__alive)
+			{
+				dispatchEvent(EVENT_PRE_DRAW);
+				
+				camera.draw(support, parentAlpha);
+				dispatchEvent(EVENT_AFTER_DRAW);
+			}
+			
+			//debug draw.
+			if(debug)
+			{
+				CrocoEngine.debugGraphics.clear();
+				__onDebugDrawCallback();
+				CrocoEngine.debugGraphics.endFill();
+			}
+		}
+		
+		override public function onDebugDraw():void
+		{
+			super.onDebugDraw();
+			
+			if(rootGameObject && rootGameObject.__alive && rootGameObject.debug)
+			{
+				rootGameObject.__onDebugDrawCallback();
+			}
+		}
+		
+		public function hitTest(localPoint:Point, forTouch:Boolean = false):DisplayObject
+		{
+			if(camera && camera.__alive)
+			{
+				return camera.hitTest(localPoint, forTouch);
+			}
+			
+			return null;
+		}
+		
 		override public function dispose():void
 		{
 			super.dispose();
 			
-			rootGameObject = null;
+			__onAdvanceCallback = null;
+			__onStartEngineCallback = null;
+			__onStopEngineCallback = null;
+			__onEnterFrameCallback = null;
+			__onCanvasStageTouchCallback = null;
+			__onStageResizeCallback = null;
+			
+			if(__canvasStage)
+			{
+				__canvasStage.removeFromParent();
+				__canvasStage.removeEventListener(TouchEvent.TOUCH, __onCanvasStageTouchCallback);
+				__canvasStage.dispose();
+				__canvasStage = null;
+			}
 			
 			//just clear the reference.
 			camera = null;
 			inputManager = null;
 			soundManager = null;
 			globalAssetsManager = null;
+			rootGameObject = null;
 		}
 		
 		override public function toString():String
@@ -277,5 +356,29 @@ package com.croco2d
 
 			return results;
 		}
+	}
+}
+
+
+import flash.geom.Point;
+
+import starling.core.RenderSupport;
+import starling.display.DisplayObject;
+
+final internal class CanvasStage extends DisplayObject
+{
+	public function CanvasStage()
+	{
+		super();
+	}
+	
+	override public function render(support:RenderSupport, parentAlpha:Number):void
+	{
+		com.croco2d.CrocoEngine.instance.draw(support, parentAlpha * alpha);
+	}
+	
+	override public function hitTest(localPoint:Point, forTouch:Boolean = false):DisplayObject
+	{
+		return com.croco2d.CrocoEngine.instance.hitTest(localPoint, forTouch); 
 	}
 }

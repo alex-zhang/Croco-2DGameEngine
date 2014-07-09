@@ -3,7 +3,9 @@ package com.croco2d.core
 	import com.croco2d.components.TransformComponent;
 	import com.croco2d.components.collision.SpatialCollisionComponent;
 	import com.croco2d.components.physics.ColliderComponent;
+	import com.croco2d.components.physics.PhysicsSpaceComponent;
 	import com.croco2d.components.physics.RigidbodyComponent;
+	import com.croco2d.components.render.CameraComponent;
 	import com.croco2d.components.render.RenderComponent;
 	import com.croco2d.components.script.ScriptComponent;
 	import com.fireflyLib.utils.JsonObjectFactorUtil;
@@ -18,23 +20,27 @@ package com.croco2d.core
 	
 	use namespace croco_internal;
 	
-	public final class CrocoGameObject extends CrocoObjectEntity
+	public final class GameObject extends CrocoObjectEntity
 	{
 		public static const EVENT_ADD_GAME_OBJECT:String = "addGameObject";
 		public static const EVENT_REMOVE_GAME_OBJECT:String = "removeGameObject";
-		
+
 		public static const PROP_RENDER:String = "render";
 		public static const PROP_SPATIAL_COLLISION:String = "spatialCollisionComponent";
-		public static const PROP_RIGID_BODY:String = "rigidbodyComponent";
-		public static const PROP_COLLIDER:String = "colliderComponent";
+		
+		public static const PROP_PHYSICS_SPACE:String = "physicsSpace";
+		public static const PROP_RIGID_BODY:String = "rigidbody";
+		public static const PROP_COLLIDER:String = "collider";
+//		public static const PROP_JOINT:String = "joint";
+		
 		public static const PROP_SCRIPT:String = "scriptComponent";
 		
-		public static function createEmpty():CrocoGameObject
+		public static function createEmpty():GameObject
 		{
-			return new CrocoGameObject();
+			return new GameObject();
 		}
 		
-		public static function createFromJsonConfig(jsonConfig:Object):CrocoGameObject
+		public static function createFromJsonConfig(jsonConfig:Object):GameObject
 		{
 			return JsonObjectFactorUtil.createFromJsonConfig(jsonConfig);
 		}
@@ -43,8 +49,13 @@ package com.croco2d.core
 		public var transform:TransformComponent;
 		public var render:RenderComponent;
 		public var spatialCollision:SpatialCollisionComponent;
+		
+		public var physicsSpace:PhysicsSpaceComponent;
 		public var rigidbody:RigidbodyComponent;
 		public var collider:ColliderComponent;
+		public var camera:CameraComponent;
+//		public var joint:JointComponent;
+		
 		public var script:ScriptComponent;
 		
 		//we can control the tree's visible.
@@ -60,7 +71,7 @@ package com.croco2d.core
 		public var __onAddGameObjectCallback:Function = onAddGameObject;
 		public var __onRemoveGameObjectCallback:Function = onRemoveGameObject;
 		
-		public function CrocoGameObject()
+		public function GameObject()
 		{
 			super();
 			
@@ -69,17 +80,17 @@ package com.croco2d.core
 			transform.owner = this;
 		}
 		
-		public final function addGameObejct(gameObject:CrocoGameObject):CrocoGameObject
+		public final function addGameObejct(gameObject:GameObject):GameObject
 		{
-			return __gameObjectsGroup.addChild(gameObject) as CrocoGameObject;
+			return __gameObjectsGroup.addChild(gameObject) as GameObject;
 		}
 		
-		public final function removeGameObject(gameObject:CrocoGameObject):CrocoGameObject
+		public final function removeGameObject(gameObject:GameObject):GameObject
 		{
-			return __gameObjectsGroup.removeChild(gameObject) as CrocoGameObject;
+			return __gameObjectsGroup.removeChild(gameObject) as GameObject;
 		}
 		
-		protected function onAddGameObject(gameObject:CrocoGameObject):void
+		protected function onAddGameObject(gameObject:GameObject):void
 		{
 			gameObject.parent = this;
 
@@ -89,7 +100,7 @@ package com.croco2d.core
 			dispatchEvent(EVENT_ADD_GAME_OBJECT);
 		}
 		
-		protected function onRemoveGameObject(gameObject:CrocoGameObject, needDispose:Boolean = false):void 
+		protected function onRemoveGameObject(gameObject:GameObject, needDispose:Boolean = false):void 
 		{
 			gameObject.deactive();
 			
@@ -103,7 +114,7 @@ package com.croco2d.core
 			__gameObjectsGroup.markChildrenOrderSortDirty();
 		}
 		
-		public final function hasGameObject(gameObject:CrocoGameObject):Boolean
+		public final function hasGameObject(gameObject:GameObject):Boolean
 		{
 			return __gameObjectsGroup.hasChild(gameObject);
 		}
@@ -113,9 +124,9 @@ package com.croco2d.core
 			return __pluinComponentsGroup.length;
 		}
 		
-		public final function findGameObjectByFilterFunc(filterFunc:Function = null):CrocoGameObject 
+		public final function findGameObjectByFilterFunc(filterFunc:Function = null):GameObject 
 		{
-			return __gameObjectsGroup.findChildByFilterFunc(filterFunc) as CrocoGameObject;
+			return __gameObjectsGroup.findChildByFilterFunc(filterFunc) as GameObject;
 		}
 		
 		public final function findGameObjectsByFilterFunc(results:Array = null, filterFunc:Function = null):Array 
@@ -152,6 +163,10 @@ package com.croco2d.core
 					spatialCollision = component as SpatialCollisionComponent;
 					break;
 				
+				case PROP_PHYSICS_SPACE:
+					physicsSpace = component as PhysicsSpaceComponent;
+					break;
+				
 				case PROP_RIGID_BODY:
 					rigidbody = component as RigidbodyComponent;
 					break;
@@ -159,6 +174,10 @@ package com.croco2d.core
 				case PROP_COLLIDER:
 					collider = component as ColliderComponent;
 					break;
+				
+//				case PROP_JOINT:
+//					joint = component as JointComponent;
+//					break;
 
 				case PROP_SCRIPT:
 					script = component as ScriptComponent;
@@ -185,6 +204,10 @@ package com.croco2d.core
 				case PROP_COLLIDER:
 					collider = null;
 					break;
+				
+//				case PROP_JOINT:
+//					joint = null;
+//					break;
 
 				case PROP_SCRIPT:
 					script = null;
@@ -199,6 +222,13 @@ package com.croco2d.core
 			super.tick(deltaTime);
 
 			__gameObjectsGroup.tick(deltaTime);
+		}
+		
+		override public function onDebugDraw():void 
+		{
+			super.onDebugDraw();
+			
+			__gameObjectsGroup.onDebugDraw();
 		}
 		
 		public final function draw(support:RenderSupport, parentAlpha:Number):void
@@ -222,7 +252,7 @@ package com.croco2d.core
 			}
 			
 			//children
-			var child:CrocoGameObject = __gameObjectsGroup.moveFirst() as CrocoGameObject;
+			var child:GameObject = __gameObjectsGroup.moveFirst() as GameObject;
 			while(child)
 			{
 				if(child.__alive && child.visible)
@@ -230,7 +260,7 @@ package com.croco2d.core
 					child.draw(support, parentAlpha);
 				}
 				
-				child = __gameObjectsGroup.moveNext() as CrocoGameObject;
+				child = __gameObjectsGroup.moveNext() as GameObject;
 			}
 			
 			support.popMatrix();
@@ -247,7 +277,7 @@ package com.croco2d.core
 			var localY:Number = localPoint.y;
 			
 			//child
-			var child:CrocoGameObject = __gameObjectsGroup.moveLast() as CrocoGameObject;
+			var child:GameObject = __gameObjectsGroup.moveLast() as GameObject;
 			while(child)
 			{
 				if(child.__alive)
@@ -259,7 +289,7 @@ package com.croco2d.core
 					if(hitTestTarget) return hitTestTarget;
 				}
 				
-				child = __gameObjectsGroup.movePre() as CrocoGameObject;
+				child = __gameObjectsGroup.movePre() as GameObject;
 			}
 			
 			if(render && render.__alive)
@@ -275,8 +305,6 @@ package com.croco2d.core
 		{
 			super.onInit();
 			
-			__gameObjectsGroup.addChild(transform);
-
 			__gameObjectsGroup = new CrocoObjectGroup();
 			__gameObjectsGroup.name = "__gameObjectsGroup";
 			__gameObjectsGroup.initChildren = initChildrenGameObjects;
