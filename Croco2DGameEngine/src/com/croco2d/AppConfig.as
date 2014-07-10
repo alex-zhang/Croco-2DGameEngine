@@ -1,10 +1,15 @@
 package com.croco2d
 {
 	import com.croco2d.assets.CrocoAssetsManager;
+	import com.croco2d.components.render.CameraRenderComponent;
+	import com.croco2d.core.GameObject;
+	import com.croco2d.input.InputManager;
 	import com.croco2d.input.controllers.KeyboardController;
+	import com.croco2d.screens.CrocoScreen;
 	import com.croco2d.screens.CrocoScreenNavigator;
 	import com.croco2d.screens.FlashBootStrapScreen;
 	import com.croco2d.screens.StarlingBootStrapScreen;
+	import com.croco2d.sound.SoundManager;
 	import com.croco2d.tmx.scene.ornaments.OrtAnimationSetSpriteEntity;
 	import com.croco2d.tmx.scene.ornaments.OrtAnimationSpriteEntity;
 	import com.croco2d.tmx.scene.ornaments.OrtImageEntity;
@@ -15,6 +20,8 @@ package com.croco2d
 	import flash.filesystem.File;
 	
 	import feathers.controls.ScreenNavigatorItem;
+	
+	import starling.core.Starling;
 
 	//data format see ObjectFactoryUtil.newInstanceFromConfig
 	public class AppConfig
@@ -162,13 +169,27 @@ package com.croco2d
 				tickDeltaTime:1.0 / 60,
 				maxTicksPerFrame:5
 			},
-			
+
 			clsType:"(class)com.croco2d::CrocoEngine",
 			
 			props:
 			{
 				initComponents:
 				[
+					{
+						clsType:"(class)com.croco2d.core::GameObject",
+						props:
+						{
+							name:AppConfig.KEY_CAMERA,
+							initComponents:
+							[
+								{
+									clsType:"(class)com.croco2d.components.render::CameraRenderComponent"
+								}
+							]
+						}
+					},
+					
 					{
 						clsType:"(class)com.croco2d.input::InputManager",
 						props:
@@ -235,12 +256,11 @@ package com.croco2d
 		//system Chars Key Define
 		//----------------------------------------------------------------------
 		//global.
-		public static const KEY_APPBOOTSTRAP:String = "appBootstrap";
+		public static const KEY_APP_BOOTSTRAP:String = "appBootstrap";
 		public static const KEY_STARLING:String = "starling";
 		public static const KEY_CROCO_ENGINE:String = "crocoEngine";
-		
+		public static const KEY_CAMERA:String = "camera";
 		public static const KEY_GLOBAL_ASSETS_MANAGER:String = "globalAssetsManager";
-		
 		public static const KEY_INPUT_MANAGER:String = "inputManager";
 		public static const KEY_SOUND_MANAGER:String = "soundManager";
 		public static const KEY_KEY_BOARD_CONTROLLER:String = "keyboardController";
@@ -386,12 +406,20 @@ package com.croco2d
 		
 		//Strong Reference Clsses.
 		//----------------------------------------------------------------------
-		ScreenNavigatorItem;
+		Starling;
 		CrocoScreenNavigator;
+		ScreenNavigatorItem;
+		CrocoScreen;
 		FlashBootStrapScreen;
 		StarlingBootStrapScreen;
+		
+		GameObject;
+		CameraRenderComponent;
+		
 		KeyboardController;
+		InputManager;
 		CrocoAssetsManager;
+		SoundManager;
 		
 		OrtAnimationSetSpriteEntity;
 		OrtAnimationSpriteEntity;

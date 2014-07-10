@@ -1,12 +1,11 @@
 package com.croco2d.components
 {
-	import com.croco2d.core.CrocoObject;
 	import com.croco2d.utils.CrocoMathUtil;
 	import com.llamaDebugger.Logger;
 	
 	import flash.geom.Matrix;
 
-	public class TransformComponent extends CrocoObject
+	public class TransformComponent extends GameObjectComponent
 	{
 		public var moveAble:Boolean = true;
 		public var zoomAble:Boolean = true;
@@ -101,6 +100,64 @@ package com.croco2d.components
 			{
 				__x = x;
 				__y = y;
+				
+				__transformMatrixDirty = true;
+			}
+		}
+		
+		public function get pivotX():Number
+		{
+			return __pivotX;
+		}
+		
+		public function set pivotX(value:Number):void
+		{
+			setPivotPosition(value, __pivotY);
+		}
+		
+		public function get pivotY():Number
+		{
+			return __pivotY;
+		}
+		
+		public function set pivotY(value:Number):void
+		{
+			setPivotPosition(__pivotX, value);
+		}
+		
+		public function translatePivotX(deltaPivotX:Number):void
+		{
+			if(deltaPivotX == 0) return;
+			
+			setPivotPosition(__pivotX + deltaPivotX, __pivotY);
+		}
+		
+		public function translatePivotY(deltaPivotY:Number):void
+		{
+			if(deltaPivotY == 0) return;
+			
+			setPivotPosition(__pivotX, __pivotY + deltaPivotY);
+		}
+		
+		public function translatePivotPosition(deltaPivotX:Number, deltaPivotY:Number):void
+		{
+			if(deltaPivotX == 0 && deltaPivotY == 0) return;
+
+			setPosition(__pivotX + deltaPivotX, __pivotY + deltaPivotY);
+		}
+		
+		public function setPivotPosition(pivotX:Number, pivotY:Number):void
+		{
+			if(!moveAble)
+			{
+				Logger.warn("TransformComponent moveable false!");
+				return;
+			}
+			
+			if(__pivotX != pivotX || __pivotY != pivotY)
+			{
+				__pivotX = pivotX;
+				__pivotY = pivotY;
 				
 				__transformMatrixDirty = true;
 			}

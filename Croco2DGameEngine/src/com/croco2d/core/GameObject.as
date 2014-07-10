@@ -5,7 +5,7 @@ package com.croco2d.core
 	import com.croco2d.components.physics.ColliderComponent;
 	import com.croco2d.components.physics.PhysicsSpaceComponent;
 	import com.croco2d.components.physics.RigidbodyComponent;
-	import com.croco2d.components.render.CameraComponent;
+	import com.croco2d.components.render.CameraRenderComponent;
 	import com.croco2d.components.render.RenderComponent;
 	import com.croco2d.components.script.ScriptComponent;
 	import com.fireflyLib.utils.JsonObjectFactorUtil;
@@ -24,10 +24,10 @@ package com.croco2d.core
 	{
 		public static const EVENT_ADD_GAME_OBJECT:String = "addGameObject";
 		public static const EVENT_REMOVE_GAME_OBJECT:String = "removeGameObject";
+		public static const EVENT_TOUCH:String = "touch";
 
 		public static const PROP_RENDER:String = "render";
 		public static const PROP_SPATIAL_COLLISION:String = "spatialCollisionComponent";
-		
 		public static const PROP_PHYSICS_SPACE:String = "physicsSpace";
 		public static const PROP_RIGID_BODY:String = "rigidbody";
 		public static const PROP_COLLIDER:String = "collider";
@@ -53,7 +53,7 @@ package com.croco2d.core
 		public var physicsSpace:PhysicsSpaceComponent;
 		public var rigidbody:RigidbodyComponent;
 		public var collider:ColliderComponent;
-		public var camera:CameraComponent;
+		public var cameraRender:RenderComponent;
 //		public var joint:JointComponent;
 		
 		public var script:ScriptComponent;
@@ -78,6 +78,9 @@ package com.croco2d.core
 			//we must have a TransformComponent.
 			transform = new TransformComponent();
 			transform.owner = this;
+			
+			//defualt is true, it will controll by global.
+			debug = true;
 		}
 		
 		public final function addGameObejct(gameObject:GameObject):GameObject
@@ -174,10 +177,6 @@ package com.croco2d.core
 				case PROP_COLLIDER:
 					collider = component as ColliderComponent;
 					break;
-				
-//				case PROP_JOINT:
-//					joint = component as JointComponent;
-//					break;
 
 				case PROP_SCRIPT:
 					script = component as ScriptComponent;
@@ -241,6 +240,7 @@ package com.croco2d.core
 			support.pushMatrix();
 			support.prependMatrix(transform.transformMatrix);
 			//record the render world modelViewMatrix.
+			
 			transform.__lastModelViewMatrix.copyFrom(support.modelViewMatrix);
 
 			support.blendMode = blendMode;

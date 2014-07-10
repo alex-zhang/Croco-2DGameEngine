@@ -40,7 +40,7 @@ package com.croco2d
 			super();
 			
 			GlobalPropertyBag.stage = stage;
-			GlobalPropertyBag.write(AppConfig.KEY_APPBOOTSTRAP, this);
+			GlobalPropertyBag.write(AppConfig.KEY_APP_BOOTSTRAP, this);
 			
 			//default
 //			this.visible = this.mouseEnabled = this.mouseChildren = false;
@@ -305,12 +305,15 @@ package com.croco2d
 			const crocoEngineConfig:Object = AppConfig.crocoEngineConfig;
 			__crocoEngine = JsonObjectFactorUtil.createFromJsonConfig(crocoEngineConfig);
 			
-			__crocoEngine.init();
-			__crocoEngine.active();
-			
-			GlobalPropertyBag.write(AppConfig.KEY_CROCO_ENGINE, __crocoEngine);
-			
-			__crocoEngine.start();
+			if(__crocoEngine)
+			{
+				__crocoEngine.init();
+				__crocoEngine.active();
+				
+				GlobalPropertyBag.write(AppConfig.KEY_CROCO_ENGINE, __crocoEngine);
+				
+				__crocoEngine.start();
+			}
 		}
 		
 		protected function checkIsNeedAppAssetsPreload():Boolean

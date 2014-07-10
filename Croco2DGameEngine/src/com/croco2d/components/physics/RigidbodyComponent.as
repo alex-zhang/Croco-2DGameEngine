@@ -1,8 +1,8 @@
 package com.croco2d.components.physics
 {
+	import com.croco2d.components.GameObjectComponent;
 	import com.croco2d.components.TransformComponent;
 	import com.croco2d.core.GameObject;
-	import com.croco2d.core.CrocoObject;
 	
 	import nape.constraint.ConstraintList;
 	import nape.dynamics.ArbiterList;
@@ -13,7 +13,7 @@ package com.croco2d.components.physics
 	import nape.phys.BodyType;
 	import nape.phys.Compound;
 
-	public class RigidbodyComponent extends CrocoObject
+	public class RigidbodyComponent extends GameObjectComponent
 	{
 		public var beginContactCallEnabled:Boolean = false;
 		public var endContactCallEnabled:Boolean = false;

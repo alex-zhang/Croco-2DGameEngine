@@ -1,6 +1,5 @@
 package com.croco2d.sound
 {
-    import com.croco2d.AppConfig;
     import com.croco2d.core.CrocoObject;
     
     import flash.media.Sound;

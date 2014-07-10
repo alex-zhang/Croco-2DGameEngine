@@ -1,12 +1,12 @@
 package com.croco2d.components.physics
 {
+	import com.croco2d.components.GameObjectComponent;
 	import com.croco2d.core.GameObject;
-	import com.croco2d.core.CrocoObject;
 	
 	import nape.phys.Material;
 	import nape.shape.Shape;
 
-	public class ColliderComponent extends CrocoObject
+	public class ColliderComponent extends GameObjectComponent
 	{
 		//refer
 		public var __rigidbodyComponent:RigidbodyComponent;

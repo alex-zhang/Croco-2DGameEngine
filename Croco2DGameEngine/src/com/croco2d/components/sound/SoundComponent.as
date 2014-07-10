@@ -1,12 +1,12 @@
 package com.croco2d.components.sound
 {
 	import com.croco2d.CrocoEngine;
-	import com.croco2d.core.CrocoObject;
+	import com.croco2d.components.GameObjectComponent;
 	import com.croco2d.sound.ISoundHandle;
 	
 	import flash.media.Sound;
 
-	public class SoundComponent extends CrocoObject
+	public class SoundComponent extends GameObjectComponent
 	{
 		public var __soundHandle:ISoundHandle;
 		

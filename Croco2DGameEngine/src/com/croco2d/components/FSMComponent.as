@@ -1,9 +1,8 @@
 package com.croco2d.components
 {
-	import com.croco2d.core.CrocoObject;
 	import com.croco2d.utils.fsm.FSM;
 
-	public class FSMComponent extends CrocoObject
+	public class FSMComponent extends GameObjectComponent
 	{
 		public var fsmImplCls:Class;
 		public var initFSMStates:Array = null;

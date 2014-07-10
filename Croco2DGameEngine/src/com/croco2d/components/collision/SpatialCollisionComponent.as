@@ -1,8 +1,8 @@
 package com.croco2d.components.collision
 {
-	import com.croco2d.core.CrocoObject;
+	import com.croco2d.components.GameObjectComponent;
 
-	public class SpatialCollisionComponent extends CrocoObject
+	public class SpatialCollisionComponent extends GameObjectComponent
 	{
 		public var spatialManager:ISpatialCollisionManager;
 		

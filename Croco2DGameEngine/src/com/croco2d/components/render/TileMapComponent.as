@@ -38,7 +38,7 @@ package com.croco2d.components.render
 		{
 			super.tick(deltaTime);
 			
-			var cameraAABB:Rectangle = CrocoEngine.camera.aabb;
+			var cameraAABB:Rectangle// = CrocoEngine.camera.aabb;
 			
 			__tileMap.setViewPort(cameraAABB.x, cameraAABB.y, 
 				cameraAABB.width, cameraAABB.height);
@@ -47,7 +47,7 @@ package com.croco2d.components.render
 			
 			__tileMap.tick(deltaTime);
 		}
-		
+
 		override public function dispose():void
 		{
 			super.dispose();

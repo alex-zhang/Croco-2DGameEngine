@@ -295,6 +295,7 @@ package com.croco2d.input
 			super.dispose();
 			
 			__inputControlllerNameMap = null;
+			__starlingNativeOverlay = null;
 			
 			if(_actions)
 			{

@@ -1,9 +1,8 @@
 package com.croco2d.components.physics
 {
-	import com.croco2d.core.GameObject;
-	import com.croco2d.core.CrocoObject;
+	import com.croco2d.components.GameObjectComponent;
 
-	public class JointComponent extends CrocoObject
+	public class JointComponent extends GameObjectComponent
 	{
 		public function JointComponent()
 		{

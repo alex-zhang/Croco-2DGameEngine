@@ -1,7 +1,6 @@
 package com.croco2d
 {
 	import com.croco2d.assets.CrocoAssetsManager;
-	import com.croco2d.components.render.CameraComponent;
 	import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.CrocoObjectEntity;
 	import com.croco2d.core.GameObject;
@@ -17,6 +16,7 @@ package com.croco2d
 	import starling.core.RenderSupport;
 	import starling.core.Starling;
 	import starling.display.DisplayObject;
+	import starling.display.Stage;
 	import starling.events.ResizeEvent;
 	import starling.events.TouchEvent;
 	
@@ -31,6 +31,7 @@ package com.croco2d
 		public static const EVENT_PRE_DRAW:String = "preDraw";
 		public static const EVENT_AFTER_DRAW:String = "afterDraw";
 		public static const EVENT_CHANGED_ROOT_GAME_OBJECT:String = "changedRootGameObject";
+		public static const EVENT_CHANGED_CAMERA:String = "changedCamera";
 		public static const EVENT_CANVAS_STAGE_TOUCH:String = "canvasStageTouch";
 		public static const EVENT_STAGE_RESIZE:String = "stageResize";
 		
@@ -75,7 +76,7 @@ package com.croco2d
 		//helper for reference.
 		public static var instance:CrocoEngine;
 		
-		public static var camera:CameraComponent;
+		public static var camera:GameObject;
 		public static var inputManager:InputManager;
 		public static var soundManager:SoundManager;
 		public static var globalAssetsManager:CrocoAssetsManager;
@@ -83,6 +84,10 @@ package com.croco2d
 		 *  u can consider the rootGameObject as Scene.
 		 */		
 		public static var rootGameObject:GameObject;
+		
+		
+		public static var stageWidth:int = 0;
+		public static var stageHeight:int = 0;
 
 		public static var debugGraphics:Graphics;
 		
@@ -158,6 +163,8 @@ package com.croco2d
 				
 				rootGameObject = value;
 				
+				if(!inited) return;
+				
 				if(rootGameObject)
 				{
 					rootGameObject.init();
@@ -165,6 +172,29 @@ package com.croco2d
 				}
 				
 				dispatchEvent(EVENT_CHANGED_ROOT_GAME_OBJECT, rootGameObject);
+			}
+		}
+		
+		public final function setMainCamera(value:GameObject):void
+		{
+			if(camera != value)
+			{
+				if(camera)
+				{
+					camera.deactive();
+				}
+				
+				camera = value;
+				
+				if(!inited) return;
+				
+				if(camera)
+				{
+					camera.init();
+					camera.active();
+				}
+				
+				dispatchEvent(EVENT_CHANGED_CAMERA, camera);
 			}
 		}
 		
@@ -179,6 +209,10 @@ package com.croco2d
 			
 			switch(component.name)
 			{
+				case AppConfig.KEY_CAMERA:
+					camera = GameObject(component);
+					break;
+				
 				case AppConfig.KEY_INPUT_MANAGER:
 					inputManager = InputManager(component);
 					break;
@@ -197,6 +231,10 @@ package com.croco2d
 		{
 			switch(component.name)
 			{
+				case AppConfig.KEY_CAMERA:
+					camera = null;
+					break;
+				
 				case AppConfig.KEY_INPUT_MANAGER:
 					inputManager = null;
 					break;
@@ -248,16 +286,24 @@ package com.croco2d
 		
 		protected function onStageResize(event:ResizeEvent = null):void
 		{
-			dispatchEvent(EVENT_STAGE_RESIZE, event);
+			stageWidth = event.width;
+			stageHeight = event.height;
+
+			dispatchEvent(EVENT_STAGE_RESIZE);
 		}
 		
 		override protected function onInit():void
 		{
 			debugGraphics = Starling.current.nativeOverlay.graphics;
 
+			var sStage:Stage = Starling.current.stage;
+			
 			__canvasStage = new CanvasStage();
 			__canvasStage.addEventListener(TouchEvent.TOUCH, __onCanvasStageTouchCallback);
-			Starling.current.stage.addChildAt(__canvasStage, 0);
+			sStage.addChildAt(__canvasStage, 0);
+
+			stageWidth = sStage.stageWidth;
+			stageHeight = sStage.stageHeight;
 
 			super.onInit();
 			
@@ -266,25 +312,24 @@ package com.croco2d
 		
 		override public function tick(deltaTime:Number):void
 		{
+			super.tick(deltaTime);
+			
 			if(rootGameObject && rootGameObject.__alive && rootGameObject.tickable)
 			{
 				rootGameObject.tick(deltaTime);
 			}
-			
-			super.tick(deltaTime);
 		}
 		
 		public function draw(support:RenderSupport, parentAlpha:Number):void
 		{
 			//displayDraw.
-			if(camera && camera.__alive)
+			if(camera && camera.__alive && camera.visible)
 			{
 				dispatchEvent(EVENT_PRE_DRAW);
-				
 				camera.draw(support, parentAlpha);
 				dispatchEvent(EVENT_AFTER_DRAW);
 			}
-			
+
 			//debug draw.
 			if(debug)
 			{
@@ -317,14 +362,14 @@ package com.croco2d
 		override public function dispose():void
 		{
 			super.dispose();
-			
+
 			__onAdvanceCallback = null;
 			__onStartEngineCallback = null;
 			__onStopEngineCallback = null;
 			__onEnterFrameCallback = null;
 			__onCanvasStageTouchCallback = null;
 			__onStageResizeCallback = null;
-			
+
 			if(__canvasStage)
 			{
 				__canvasStage.removeFromParent();
@@ -333,12 +378,22 @@ package com.croco2d
 				__canvasStage = null;
 			}
 			
+			if(camera)
+			{
+				camera.dispose();
+				camera = null;
+			}
+			
+			if(rootGameObject)
+			{
+				rootGameObject.dispose();
+				rootGameObject = null;
+			}
+			
 			//just clear the reference.
-			camera = null;
 			inputManager = null;
 			soundManager = null;
 			globalAssetsManager = null;
-			rootGameObject = null;
 		}
 		
 		override public function toString():String

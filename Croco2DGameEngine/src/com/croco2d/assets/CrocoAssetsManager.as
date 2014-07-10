@@ -36,7 +36,7 @@ package com.croco2d.assets
 		//=================================================================================================
 		
 		//tmx is tiled map editor export.
-		public static const TEXT_EXTENSIONS:Array = ["txt", "ini", "text", "js", "php", "asp", "py"];
+		public static const TEXT_EXTENSIONS:Array = ["txt", "ini", "text", "js", "lua"];
 		public static const XML_TYPE_EXTENTION:Array = ["xml", "tmx", "pex", "fnt"];
 		public static const JSON_TYPE_EXTENTION:Array = ["json"];
 		
