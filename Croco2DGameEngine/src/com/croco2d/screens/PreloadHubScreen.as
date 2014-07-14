@@ -38,13 +38,14 @@ package com.croco2d.screens
 		
 		protected function checkIsNeedTargetScreenAssetsPreload():Boolean
 		{
-			var targetScreenDirFile:File = AppConfig.findScreenResourceFile(ownerScreenID);
+			var targetScreenDirFile:File = AppConfig.findScreensResourceFile(ownerScreenID);
 			return targetScreenDirFile.exists;
 		}
 		
 		protected function onTargetScreenAssetsPreloadInit():void
 		{
 			targeScreenAssetsManager = new CrocoAssetsManager();
+			targeScreenAssetsManager.init();
 			
 			onTargetScreenAssetsQueueInit();
 			onTargetScreenAssetsPreloadStart();
@@ -52,7 +53,7 @@ package com.croco2d.screens
 		
 		protected function onTargetScreenAssetsQueueInit():void
 		{
-			var targetScreenDirFile:File = AppConfig.findScreenResourceFile(ownerScreenID);
+			var targetScreenDirFile:File = AppConfig.findScreensResourceFile(ownerScreenID);
 			
 			targeScreenAssetsManager.enqueue(targetScreenDirFile);
 		}
@@ -74,7 +75,7 @@ package com.croco2d.screens
 		{
 			var targetScreenItem:ScreenNavigatorItem = getScreenNavigatorItem(ownerScreenID);
 			
-			targetScreenItem.properties[AppConfig.KEY_SCREEN_ASSET_MANAGER] = targeScreenAssetsManager;
+			targetScreenItem.properties["assetsManager"] = targeScreenAssetsManager;
 			targeScreenAssetsManager = null;
 		
 			jump2OwnerScreen();

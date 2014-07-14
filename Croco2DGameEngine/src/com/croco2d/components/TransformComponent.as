@@ -1,15 +1,19 @@
 package com.croco2d.components
 {
+	import com.croco2d.core.GameObject;
 	import com.croco2d.utils.CrocoMathUtil;
 	import com.llamaDebugger.Logger;
 	
 	import flash.geom.Matrix;
+	import flash.geom.Point;
 
 	public class TransformComponent extends GameObjectComponent
 	{
 		public var moveAble:Boolean = true;
 		public var zoomAble:Boolean = true;
 		public var rotateAble:Boolean = true;
+		
+		public var bounds:Point = new Point();
 		
 		public var __transformMatrix:Matrix = new Matrix();
 		public var __transformMatrixDirty:Boolean = false; 
@@ -282,19 +286,36 @@ package com.croco2d.components
 			__transformMatrixDirty = true;
 		}
 		
-//		public function getWorldTransformMatrix(result:Matrix = null):Matrix
-//		{
-//			if(result) result.identity();
-//			else result = new Matrix();
-//			
-//			var gameObject:CrocoGameObject = owner as CrocoGameObject;
-//			while(gameObject)
-//			{
-//				result.concat(gameObject.transform.transformMatrix);
-//				gameObject = gameObject.owner as CrocoGameObject;
-//			}
-//
-//			return result;
-//		}
+		public function localToWorldMatrix(result:Matrix = null):Matrix
+		{
+			if(result) result.identity();
+			else result = new Matrix();
+			
+			var go:GameObject = owner as GameObject;
+			while(go)
+			{
+				result.concat(gameObject.transform.transformMatrix);
+				go = go.owner as GameObject;
+			}
+
+			return result;
+		}
+		
+		public function worldToLocalMatrix(result:Matrix = null):Matrix
+		{
+			if(result) result.identity();
+			else result = new Matrix();
+			
+			var go:GameObject = owner as GameObject;
+			while(go)
+			{
+				result.concat(gameObject.transform.transformMatrix);
+				go = go.owner as GameObject;
+			}
+			
+			result.invert();
+			
+			return result;
+		}
 	}
 }

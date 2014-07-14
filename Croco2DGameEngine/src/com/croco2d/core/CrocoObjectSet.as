@@ -243,6 +243,17 @@ package com.croco2d.core
 		{
 		}
 		
+		public function removeAllChildren(needDispose:Boolean = false):void
+		{
+			var child:CrocoObject = __childrenLinkList.moveFirst();
+			while(child)
+			{
+				removeChild(child, needDispose);
+				
+				child = __childrenLinkList.moveNext();
+			}
+		}
+		
 		public final function markChildrenOrderSortDirty():void
 		{
 			__childrenOrderSortDirty = true;

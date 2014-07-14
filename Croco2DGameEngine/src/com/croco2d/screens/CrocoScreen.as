@@ -24,6 +24,7 @@ package com.croco2d.screens
 			if(!assetsManager)
 			{
 				assetsManager = new CrocoAssetsManager();
+				assetsManager.init();
 			}
 		}
 		

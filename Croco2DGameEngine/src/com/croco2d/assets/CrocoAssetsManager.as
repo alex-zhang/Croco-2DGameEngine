@@ -25,7 +25,7 @@ package com.croco2d.assets
 		public static const IMAGE_TYPE:String = "image";
 		
 		public static const DATA_REPOSITORY_TYPE:String = "DataRepo";
-//		public static const CORAL_DIR_PACK_RES_TYPE:String = "coralDirPackRes";
+		public static const CORAL_ZIP_TYPE:String = "Zip";
 		public static const ANIMATION_SET_TYPE:String = "AnimationSet";
 		public static const SPRIT_SHEET_TYPE:String = "SpritSheet";
 		public static const PARTICLE_SET_TYPE:String = "ParticleSet";
@@ -47,7 +47,7 @@ package com.croco2d.assets
 		
 		public static const DATA_REPOSITORY_EXTENTION:String = "drp";
 		
-//		public static const CORAL_DIR_PACK_RES_EXTENTION:String = "crdirpacres";
+		public static const ZIP_EXTENSIONS:String = "zip";
 		public static const ANIMATION_SET_EXTENTION:String = "AnimationSet";
 		public static const SPRIT_SHEET_EXTENTION:String = "SpritSheet";
 		public static const PARTICLE_SET_EXTENTION:String = "ParticleSet";
@@ -202,8 +202,8 @@ package com.croco2d.assets
 			registAssetTypeClass(CrocoAssetsManager.DATA_REPOSITORY_TYPE, DataRepositoryAsset);
 			registAssetTypeExtention(CrocoAssetsManager.DATA_REPOSITORY_TYPE, CrocoAssetsManager.DATA_REPOSITORY_EXTENTION);
 			
-//			registAssetTypeClass(CrocoAssetsManager.CORAL_DIR_PACK_RES_TYPE, ZipPackAsset);
-//			registAssetTypeExtention(CrocoAssetsManager.CORAL_DIR_PACK_RES_TYPE, CrocoAssetsManager.CORAL_DIR_PACK_RES_EXTENTION);
+			registAssetTypeClass(CrocoAssetsManager.CORAL_ZIP_TYPE, ZipPackAsset);
+			registAssetTypeExtention(CrocoAssetsManager.CORAL_ZIP_TYPE, CrocoAssetsManager.ZIP_EXTENSIONS);
 			
 			registAssetTypeClass(CrocoAssetsManager.ANIMATION_SET_TYPE, AnimationSetAsset);
 			registAssetTypeExtention(CrocoAssetsManager.ANIMATION_SET_TYPE, CrocoAssetsManager.ANIMATION_SET_EXTENTION);
@@ -266,10 +266,10 @@ package com.croco2d.assets
 			return getAssetByTypeAndName(ANIMATION_SET_TYPE, name) as AnimationSetAsset;
 		}
 		
-//		public function getCoralDirPackAsset(name:String):ZipPackAsset
-//		{
-//			return getAssetByTypeAndName(CORAL_DIR_PACK_RES_TYPE, name) as ZipPackAsset;
-//		}
+		public function getZipAsset(name:String):ZipPackAsset
+		{
+			return getAssetByTypeAndName(CORAL_ZIP_TYPE, name) as ZipPackAsset;
+		}
 		
 		public function getSpriteSheetAsset(name:String):SpriteSheetAsset
 		{

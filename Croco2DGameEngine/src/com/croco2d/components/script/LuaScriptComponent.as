@@ -17,7 +17,7 @@ package com.croco2d.components.script
 			super();
 		}
 		
-		override protected function onInit():void 
+		override protected function onInit():void
 		{
 			__lua = new LuaAlchemy();
 			

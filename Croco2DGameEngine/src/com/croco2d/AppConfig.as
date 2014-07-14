@@ -8,6 +8,7 @@ package com.croco2d
 	import com.croco2d.screens.CrocoScreen;
 	import com.croco2d.screens.CrocoScreenNavigator;
 	import com.croco2d.screens.FlashBootStrapScreen;
+	import com.croco2d.screens.PreloadHubScreen;
 	import com.croco2d.screens.StarlingBootStrapScreen;
 	import com.croco2d.sound.SoundManager;
 	import com.croco2d.tmx.scene.ornaments.OrtAnimationSetSpriteEntity;
@@ -268,7 +269,6 @@ package com.croco2d
 		public static const KEY_SCREEN_ID:String = "screenID";
 		public static const KEY_HUB_SCREEN_ID:String = "hubScreenID";
 		public static const KEY_OWNER_SCREEN_ID:String = "ownerScreenID";
-		public static const KEY_SCREEN_ASSET_MANAGER:String = "screenAssetManager";
 		
 		public static const KEY_RENDER_COMPONENT:String = "renderComponent";
 		//----------------------------------------------------------------------
@@ -356,7 +356,7 @@ package com.croco2d
 		
 		public static var findScreensResourceFile:Function = function(screensRelativeURL:String):File 
 		{
-			return FILE_SHARED_DIR.resolvePath(screensRelativeURL);
+			return FILE_SCREENS_DIR.resolvePath(screensRelativeURL);
 		}
 		
 		public static var findScreenResourcePath:Function = function(screenName:String, screenRelativeURL:String):String 
@@ -395,7 +395,7 @@ package com.croco2d
 			return sceneDirFile.resolvePath(sceneRelativeURL);
 		}
 			
-			//----------------------------------------------------------------------
+		//----------------------------------------------------------------------
 		
 		//constractor.
 		//----------------------------------------------------------------------
@@ -412,6 +412,8 @@ package com.croco2d
 		CrocoScreen;
 		FlashBootStrapScreen;
 		StarlingBootStrapScreen;
+		
+		PreloadHubScreen;
 		
 		GameObject;
 		CameraRenderComponent;

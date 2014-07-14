@@ -1,6 +1,5 @@
 package com.croco2d.components.render
 {
-	import com.croco2d.CrocoEngine;
 	import com.croco2d.display.map.TileMap;
 	
 	import flash.geom.Rectangle;

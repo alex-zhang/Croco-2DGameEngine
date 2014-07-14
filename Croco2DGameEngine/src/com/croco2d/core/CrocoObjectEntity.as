@@ -18,7 +18,7 @@ package com.croco2d.core
 		public var eventEnable:Boolean = false;
 
 		public var __eventEmitter:EventEmitter;
-		
+
 		public var initComponents:Array = null;
 		
 		public var __onPluginComponentCallback:Function = onPluginComponent;
@@ -124,6 +124,11 @@ package com.croco2d.core
 			dispatchEvent(EVENT_PLUGOUT_COMPONENT, component);
 
 			if(needDispose) component.dispose();
+		}
+		
+		public final function plugOutAllComponent(needDispose:Boolean = false):void
+		{
+			__pluinComponentsGroup.removeAllChildren(needDispose);
 		}
 		
 		public final function markPluginComponentsOrderSortDirty():void

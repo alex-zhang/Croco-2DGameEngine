@@ -175,29 +175,6 @@ package com.croco2d
 			}
 		}
 		
-		public final function setMainCamera(value:GameObject):void
-		{
-			if(camera != value)
-			{
-				if(camera)
-				{
-					camera.deactive();
-				}
-				
-				camera = value;
-				
-				if(!inited) return;
-				
-				if(camera)
-				{
-					camera.init();
-					camera.active();
-				}
-				
-				dispatchEvent(EVENT_CHANGED_CAMERA, camera);
-			}
-		}
-		
 		public final function advance(elapsedTime:Number):void
 		{
 			__onAdvanceCallback(elapsedTime * timeScale, true);
@@ -306,6 +283,12 @@ package com.croco2d
 			stageHeight = sStage.stageHeight;
 
 			super.onInit();
+			
+			if(rootGameObject)
+			{
+				rootGameObject.init();
+				rootGameObject.active();
+			}
 			
 			Starling.current.stage.addEventListener(ResizeEvent.RESIZE, __onStageResizeCallback);
 		}

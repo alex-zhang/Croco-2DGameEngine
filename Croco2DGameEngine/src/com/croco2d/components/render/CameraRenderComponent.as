@@ -98,10 +98,5 @@ package com.croco2d.components.render
 		{
 			watchTarget = CrocoEngine.rootGameObject;
 		}
-		
-//		protected function stageResizeHandler(eventData:Object = null):void
-//		{
-//			
-//		}
 	}
 }

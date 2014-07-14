@@ -74,7 +74,7 @@ package com.croco2d.components.render
 		
 		override public function draw(support:RenderSupport, parentAlpha:Number):void
 		{
-			if(__dispalyObject)
+			if(__dispalyObject && __dispalyObject.hasVisibleArea)
 			{
 				//just the set the right matix in stage space.
 				__dispalyObject.transformationMatrix = GameObject(owner).transform.__lastModelViewMatrix;

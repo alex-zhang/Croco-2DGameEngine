@@ -8,54 +8,98 @@ package com.croco2d.components.collision
 
 	public class SimpleSpatialCollisionManager extends CrocoObject implements ISpatialCollisionManager
 	{
-		public var __spatialSceneEntitiesSet:CrocoObjectSet;
+		public var __spatialSpatialCollisionComponentSet:CrocoObjectSet;
 		
 		public function SimpleSpatialCollisionManager()
 		{
 			super();
 		}
 		
-//		public function addSceneEntity(sceneEntity:CrocoGameObject):CrocoGameObject
-//		{
-//			return __spatialSceneEntitiesSet.addChild(sceneEntity) as CrocoGameObject;
-//		}
-//		
-//		public function removeSceneEntity(sceneEntity:CrocoGameObject):CrocoGameObject
-//		{
-//			return __spatialSceneEntitiesSet.removeChild(sceneEntity) as CrocoGameObject;
-//		}
-//		
-//		public function hasSceneEntity(sceneEntity:CrocoGameObject):Boolean
-//		{
-//			return __spatialSceneEntitiesSet.hasChild(sceneEntity);
-//		}
-//		
-//		//return SceneEntities.
-//		public function queryEntitiesIsOverlapPoint(scenePosX:Number, scenePosY:Number, 
-//											 results:Array = null,
-//											 filterFunc:Function = null, 
-//											 isOneQuery:Boolean = false):Array
-//		{
-//			if(!results) results = [];
-//			
-//			var child:CrocoGameObject = __spatialSceneEntitiesSet.moveFirst() as CrocoGameObject;
-//			while(child)
-//			{
-//				if(child.__alive && child.__actived &&
+		override protected function onInit():void
+		{
+			__spatialSpatialCollisionComponentSet = new CrocoObjectSet();
+			__spatialSpatialCollisionComponentSet.init();
+		}
+		
+		override protected function onActived():void
+		{
+			__spatialSpatialCollisionComponentSet.active();
+		}
+		
+		override protected function onDeactive():void
+		{
+			__spatialSpatialCollisionComponentSet.deactive();
+		}
+		
+		//ISpatialCollisionManager Interface
+		public function addSpatialCollisionComponent(value:SpatialCollisionComponent):SpatialCollisionComponent
+		{
+			return __spatialSpatialCollisionComponentSet.addChild(value) as SpatialCollisionComponent;
+		}
+		
+		public function removeSpatialCollisionComponent(value:SpatialCollisionComponent):SpatialCollisionComponent
+		{
+			return __spatialSpatialCollisionComponentSet.removeChild(value) as SpatialCollisionComponent;
+		}
+		
+		public function hasSpatialCollisionComponent(value:SpatialCollisionComponent):Boolean
+		{
+			return __spatialSpatialCollisionComponentSet.hasChild(value);
+		}
+		
+		//return SpatialCollisionComponents.
+		public function querySpatialCollisionComponentsIsOverlapPoint(scenePosX:Number, scenePosY:Number, 
+															   results:Array = null,
+															   filterFunc:Function = null,
+															   isOneQuery:Boolean = false):Array
+		{
+			if(!results) results = [];
+			
+			var child:SpatialCollisionComponent = __spatialSpatialCollisionComponentSet.moveFirst() as SpatialCollisionComponent;
+			while(child)
+			{
+				if(child.__alive &&
 //					isSceneEntityOverlapPoint(child, scenePosX, scenePosY) && 
-//					(filterFunc == null || filterFunc(child)))
-//				{
-//					results.push(child);
-//					
-//					if(isOneQuery) return results;
-//				}
-//				
-//				child = __spatialSceneEntitiesSet.moveNext() as CrocoGameObject;
-//			}
-//			
-//			return results;
-//		}
-//		
+					(filterFunc == null || filterFunc(child)))
+				{
+					results.push(child);
+					
+					if(isOneQuery) return results;
+				}
+				
+				child = __spatialSpatialCollisionComponentSet.moveNext() as SpatialCollisionComponent;
+			}
+			
+			return results;
+		}
+		
+		//return SpatialCollisionComponents.
+		public function querySpatialCollisionComponentsIsOverlapRect(scenePosX:Number, scenePosY:Number, rectWidth:Number, rectHeight:Number,
+															  results:Array = null,
+															  filterFunc:Function = null,
+															  isOneQuery:Boolean = false):Array
+		{
+			return null;
+		}
+		
+		//return SpatialCollisionComponents.
+		public function querySpatialCollisionComponentsIsOverlapCircle(scenePosX:Number,  scenePosY:Number, circleRadius:Number,
+																results:Array = null,
+																filterFunc:Function = null, 
+																isOneQuery:Boolean = false):Array
+		{
+			return null;
+		}
+		
+		//return SpatialCollisionComponents.
+		public function querySpatialCollisionComponentsIsOverlapCustom(scenePosX:Number, scenePosY:Number, customType:int = 0, params:Array = null,
+																results:Array = null,
+																filterFunc:Function = null, 
+																isOneQuery:Boolean = false):Array
+		{
+			return null;
+		}
+		
 //		protected function isSceneEntityOverlapPoint(sceneEntity:CrocoGameObject, 
 //													 scenePosX:Number, scenePosY:Number):Boolean
 //		{

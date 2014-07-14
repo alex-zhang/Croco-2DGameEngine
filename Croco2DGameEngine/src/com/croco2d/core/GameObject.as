@@ -1,11 +1,11 @@
 package com.croco2d.core
 {
 	import com.croco2d.components.TransformComponent;
+	import com.croco2d.components.collision.ISpatialCollisionManager;
 	import com.croco2d.components.collision.SpatialCollisionComponent;
 	import com.croco2d.components.physics.ColliderComponent;
 	import com.croco2d.components.physics.PhysicsSpaceComponent;
 	import com.croco2d.components.physics.RigidbodyComponent;
-	import com.croco2d.components.render.CameraRenderComponent;
 	import com.croco2d.components.render.RenderComponent;
 	import com.croco2d.components.script.ScriptComponent;
 	import com.fireflyLib.utils.JsonObjectFactorUtil;
@@ -34,7 +34,7 @@ package com.croco2d.core
 //		public static const PROP_JOINT:String = "joint";
 		
 		public static const PROP_SCRIPT:String = "scriptComponent";
-		
+
 		public static function createEmpty():GameObject
 		{
 			return new GameObject();
@@ -47,14 +47,15 @@ package com.croco2d.core
 
 		//keep this not null
 		public var transform:TransformComponent;
+		
 		public var render:RenderComponent;
+		public var spatialCollisionManager:ISpatialCollisionManager;
 		public var spatialCollision:SpatialCollisionComponent;
 		
 		public var physicsSpace:PhysicsSpaceComponent;
 		public var rigidbody:RigidbodyComponent;
 		public var collider:ColliderComponent;
 		public var cameraRender:RenderComponent;
-//		public var joint:JointComponent;
 		
 		public var script:ScriptComponent;
 		
@@ -110,6 +111,11 @@ package com.croco2d.core
 			dispatchEvent(EVENT_REMOVE_GAME_OBJECT, gameObject);
 			
 			if(needDispose) gameObject.dispose();
+		}
+		
+		public final function removeAllGameObjects(needDispose:Boolean = false):void
+		{
+			__gameObjectsGroup.removeAllChildren(needDispose);
 		}
 		
 		public final function markChildrenGameObjectsOrderSortDirty():void
@@ -338,6 +344,14 @@ package com.croco2d.core
 			
 			render = null;
 			
+			spatialCollision = null;
+			physicsSpace = null;
+			rigidbody = null;
+			collider = null;
+			cameraRender = null;
+			
+			blendMode = null;
+
 			initChildrenGameObjects = null;
 			
 			if(__gameObjectsGroup)

@@ -99,7 +99,7 @@ package com.croco2d
 			//the appConfigConfig the before all.
 			ObjectFactoryUtil.create(appConfigCls, 
 				null, 
-				null, 
+				null,
 				{
 					appBootStrap:this
 				});

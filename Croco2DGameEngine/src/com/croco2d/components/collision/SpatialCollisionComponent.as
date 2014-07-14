@@ -9,6 +9,8 @@ package com.croco2d.components.collision
 		public function SpatialCollisionComponent()
 		{
 			super();
+
+			tickable = false;
 		}
 		
 		override protected function onActive():void
@@ -17,17 +19,17 @@ package com.croco2d.components.collision
 			
 			if(spatialManager)
 			{
-//				spatialManager.addSceneEntity(owner as CrocoGameObject);
+				spatialManager.addSpatialCollisionComponent(this);
 			}
 		}
 		
 		override protected function onDeactive():void
 		{
 			super.onDeactive();
-			
+
 			if(spatialManager)
 			{
-//				spatialManager.removeSceneEntity(owner as CrocoGameObject);
+				spatialManager.removeSpatialCollisionComponent(this);
 			}
 		}
 		
