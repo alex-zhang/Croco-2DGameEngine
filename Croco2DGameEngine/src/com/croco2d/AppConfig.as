@@ -54,7 +54,8 @@ package com.croco2d
 			startupLogger:true,
 			gravityX:0,
 			gravityY:980,
-			physicsStepTime: 1/ 20
+			physicsStepTime: 1/ 20,
+			systemIdleMode:null
 		}
 		
 		//system callback config

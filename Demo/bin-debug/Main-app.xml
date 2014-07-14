@@ -97,7 +97,7 @@
 
         <!-- Whether the app launches in full screen. Optional. Mobile only. Default false -->
 
-        <!-- <fullScreen></fullScreen> -->
+        <fullScreen>true</fullScreen>
 
         <!-- The render mode for the app (either auto, cpu, gpu, or direct). Optional. Default auto -->
 

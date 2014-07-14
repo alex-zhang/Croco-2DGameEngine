@@ -3,6 +3,7 @@ package com.croco2d
 	import com.croco2d.core.croco_internal;
 	import com.croco2d.screens.CrocoScreenNavigator;
 	import com.croco2d.screens.IBootStrapScreen;
+	import com.fireflyLib.utils.EVNUtil;
 	import com.fireflyLib.utils.GlobalPropertyBag;
 	import com.fireflyLib.utils.JsonObjectFactorUtil;
 	import com.fireflyLib.utils.ObjectFactoryUtil;
@@ -117,6 +118,11 @@ package com.croco2d
 			
 			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, appActivateHandler);
 			NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, appDeactivateHandler);
+			
+			if(globalEvnConfig.systemIdleMode)
+			{
+				NativeApplication.nativeApplication.systemIdleMode = globalEvnConfig.systemIdleMode;
+			}
 
 			stage.addEventListener(Event.RESIZE, stageResizeHandler);
 		}

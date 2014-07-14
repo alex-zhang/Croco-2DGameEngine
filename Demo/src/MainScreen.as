@@ -26,6 +26,8 @@ package
 			super.initialize();
 			
 			var ti:TextInput = new TextInput();
+			ti.width = 100;
+			ti.height = 30;
 			ti.text = "asdadadasdsadadasdsadadsad";
 			ti.x = 200;
 			ti.y = 300;
