@@ -10,35 +10,27 @@
     <target name="download_libs">
 
         <antcall target="download_file">
-        	<param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/Firefly-Lib/master/FireflyLib/bin/FireflyLib.swc"/>
+        	<param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/SWC-Libs-Repo/master/FireflyLib.swc"/>
         </antcall>
 
         <antcall target="download_file">
-            <param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/LlamaDebugger-Lib/master/LlamaDebugger/bin/LlamaDebugger.swc"/>
+            <param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/SWC-Libs-Repo/master/LlamaDebugger.swc"/>
         </antcall>
 
         <antcall target="download_file">
-            <param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/PonyMVC-Framework/master/PonyMVC/bin/PonyMVC.swc"/>
+            <param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/SWC-Libs-Repo/master/PonyMVC.swc"/>
         </antcall>
         
         <antcall target="download_file">
-            <param name="download_file_url" value="https://raw.githubusercontent.com/claus/fzip/master/bin/fzip.swc"/>
+            <param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/SWC-Libs-Repo/master/fzip.swc"/>
         </antcall>
 
         <antcall target="download_file">
-            <param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/as3corelib/dev/bin/as3corelib.swc"/>
+            <param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/SWC-Libs-Repo/master/as3corelib.swc"/>
         </antcall>
 
         <antcall target="download_file">
             <param name="download_file_url" value="http://napephys.com/nape-release.swc"/>
-        </antcall>
-
-        <antcall target="download_file">
-            <param name="download_file_url" value="https://raw.githubusercontent.com/StarlingGraphics/Starling-Extension-Graphics/master/extension/bin/Starling-Extension-Graphics.swc"/>
-        </antcall>
-
-        <antcall target="download_file">
-            <param name="download_file_url" value="https://raw.githubusercontent.com/StarlingGraphics/Starling-Extension-Graphics/master/extension/bin/Starling-Extension-Graphics.swc"/>
         </antcall>
 
         <!--

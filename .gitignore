@@ -18,3 +18,5 @@ html-template/
 .idea/
 archive/
 *.lnk
+/Croco2DGameEngine/libs
+/Croco2DGameEngine/bin
