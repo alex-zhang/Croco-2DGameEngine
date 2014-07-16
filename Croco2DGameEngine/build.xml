@@ -30,6 +30,10 @@
         </antcall>
 
         <antcall target="download_file">
+            <param name="download_file_url" value="https://raw.githubusercontent.com/alex-zhang/SWC-Libs-Repo/master/lua-alchemy-v0.3.2.swc"/>
+        </antcall>
+
+        <antcall target="download_file">
             <param name="download_file_url" value="http://napephys.com/nape-release.swc"/>
         </antcall>
 
