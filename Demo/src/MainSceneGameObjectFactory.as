@@ -6,6 +6,9 @@ package
 	import com.croco2d.components.render.ImageComponent;
 	import com.croco2d.core.GameObject;
 	import com.croco2d.screens.CrocoScreen;
+	
+	import starling.animation.Tween;
+	import starling.core.Starling;
 
 	public final class MainSceneGameObjectFactory
 	{
@@ -25,10 +28,54 @@ package
 					clsType:GameObject,
 					props:
 					{
-//						initChildrenGameObjects:
-//						[
-//							createImage()
-//						]
+						initChildrenGameObjects:
+						[
+							createImage()
+						]
+					}
+				}
+			);
+		}
+		
+		
+		public function createCamera():GameObject
+		{
+			return GameObject.createFromJsonConfig(
+				{
+					clsType:"(class)com.croco2d.core::GameObject",
+					
+					callback:function(go:GameObject):void
+					{
+						//							go.transform.setPivotPosition(100,100);
+						
+						var tween:Tween = new Tween(go.transform, 4);
+						tween.repeatCount = 0;
+						tween.animate("rotation", Math.PI * 2);
+						Starling.juggler.add(tween);
+					}
+					,
+					props:
+					{
+						debug:true,
+						initComponents:
+						[
+							{
+								clsType:"(class)com.croco2d.components.render::CameraRenderComponent",
+								props:
+								{
+									debug:true
+								}
+							}
+							,
+							{
+								clsType:PathMovingComponent,
+								callback:function(pc:PathMovingComponent):void
+								{
+									pc.followPath([{x:5370, y:3000}, {x:0, y:2000}], 200, 4);
+								}
+							}							
+							
+						]
 					}
 				}
 			);
@@ -39,6 +86,7 @@ package
 			return GameObject.createFromJsonConfig(
 				{
 					clsType:GameObject,
+					callback:function(go:GameObject):void {go.transform.scale(10)},
 					props:
 					{
 						initComponents:
@@ -50,14 +98,14 @@ package
 									texture:crocoAssetsManager.getImageAsset(AppConfig.findScreenResourcePath("MainScreen", "img1.png")).texture
 								}
 							}
-							,
-							{
-								clsType:PathMovingComponent,
-								callback:function(pc:PathMovingComponent):void
-								{
-									pc.followPath([{x:200, y:300}, {x:500, y:100}], 50, 4);
-								}
-							}
+//							,
+//							{
+//								clsType:PathMovingComponent,
+//								callback:function(pc:PathMovingComponent):void
+//								{
+//									pc.followPath([{x:200, y:300}, {x:500, y:100}], 50, 4);
+//								}
+//							}
 						]
 					}
 				}

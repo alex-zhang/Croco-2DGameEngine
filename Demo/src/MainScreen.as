@@ -6,6 +6,8 @@ package
 	
 	import feathers.controls.TextInput;
 	
+	import starling.animation.Tween;
+	import starling.core.Starling;
 	import starling.display.Image;
 
 	public class MainScreen extends SceneScreen
@@ -25,19 +27,24 @@ package
 			
 			super.initialize();
 			
-			var ti:TextInput = new TextInput();
-			ti.width = 100;
-			ti.height = 30;
-			ti.text = "asdadadasdsadadasdsadadsad";
-			ti.x = 200;
-			ti.y = 300;
-			ti.prompt = "as";
-			addChild(ti);
+//			var ti:TextInput = new TextInput();
+//			ti.width = 100;
+//			ti.height = 30;
+//			ti.text = "asdadadasdsadadasdsadadsad";
+//			ti.x = 200;
+//			ti.y = 300;
+//			ti.prompt = "as";
+//			addChild(ti);
 		}
 		
 		override protected function createScene():GameObject
 		{
+			CrocoEngine.instance.setCamera(mMainSceneGameObjectFactory.createCamera());
+			
 			var camera:GameObject = CrocoEngine.camera;
+			
+//			camera.transform.setPosition(200, 200);
+			
 			
 //			camera.addGameObejct(mMainSceneGameObjectFactory.createImage2());
 			

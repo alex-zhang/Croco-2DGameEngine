@@ -1,11 +1,13 @@
 package com.croco2d.components
 {
 	import com.croco2d.core.GameObject;
-    import com.fireflyLib.utils.MathUtil;
-    import com.llamaDebugger.Logger;
+	import com.fireflyLib.utils.MathUtil;
+	import com.llamaDebugger.Logger;
 	
 	import flash.geom.Matrix;
-    import flash.geom.Rectangle;
+	import flash.geom.Rectangle;
+	
+	import starling.utils.MatrixUtil;
 
     public class TransformComponent extends GameObjectComponent
 	{
@@ -309,6 +311,9 @@ package com.croco2d.components
             MathUtil.helperMatrix.copyFrom(transform.transformMatrix);
             MathUtil.helperMatrix.invert();
 
+			result.concat(MathUtil.helperMatrix);
+			
+			return result;
         }
 
         public function get width():Number

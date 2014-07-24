@@ -1,8 +1,7 @@
 package com.croco2d.components.render
 {
 	import com.croco2d.CrocoEngine;
-    import com.croco2d.components.TransformComponent;
-    import com.croco2d.core.CrocoObject;
+	import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.GameObject;
 	
 	import starling.core.RenderSupport;
@@ -21,7 +20,7 @@ package com.croco2d.components.render
 
 		override protected function onActive():void
 		{
-            gameObject.isCameraTransformMatrix = true;
+            gameObject.__isCameraTransformMatrix = true;
             gameObject.cameraRender = this;
 
             renderTarget = CrocoEngine.rootGameObject;
@@ -36,7 +35,7 @@ package com.croco2d.components.render
 		
 		override protected function onDeactive():void
 		{
-            gameObject.isCameraTransformMatrix = false;
+            gameObject.__isCameraTransformMatrix = false;
             gameObject.cameraRender = null;
 
             renderTarget = null;

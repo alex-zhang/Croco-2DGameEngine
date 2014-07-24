@@ -46,7 +46,7 @@ package com.croco2d.core
         }
 		//keep this not null
 		public var transform:TransformComponent;
-        public var isCameraTransformMatrix:Boolean = false;
+        public var __isCameraTransformMatrix:Boolean = false;
 
         public var render:RenderComponent;
         public var spatialCollisionManager:ISpatialCollisionManager;
@@ -247,7 +247,7 @@ package com.croco2d.core
 			//u will hard to break the parent matrix rule.
 			support.pushMatrix();
 
-            if(!isCameraTransformMatrix)
+            if(__isCameraTransformMatrix)
             {
                 MathUtil.helperMatrix.copyFrom(transform.transformMatrix);
                 MathUtil.helperMatrix.invert();
@@ -264,8 +264,8 @@ package com.croco2d.core
 				render.draw(support, parentAlpha);
 			}
 
-            //if isCameraTransformMatrix his children will not effect by his matrix.
-            if(isCameraTransformMatrix) support.popMatrix();
+            //if __isCameraTransformMatrix his children will not effect by his matrix.
+            if(__isCameraTransformMatrix) support.popMatrix();
             //record the render world modelViewMatrix.
             transform.__lastModelViewMatrix.copyFrom(support.modelViewMatrix);
 
@@ -281,7 +281,7 @@ package com.croco2d.core
 				child = __gameObjectsGroup.moveNext() as GameObject;
 			}
 
-            if(!isCameraTransformMatrix)  support.popMatrix();
+            if(!__isCameraTransformMatrix) support.popMatrix();
 
 			support.blendMode = lastBlendMode;
 		}
@@ -302,9 +302,9 @@ package com.croco2d.core
 				if(child.__alive)
 				{
 					MatrixUtil.transformCoords(child.transform.transformMatrix, localX, localY, 
-						MathUtil.helperFlashPoint);
+						MathUtil.helperPoint);
 					
-					hitTestTarget = child.hitTest(MathUtil.helperFlashPoint, forTouch);
+					hitTestTarget = child.hitTest(MathUtil.helperPoint, forTouch);
 					if(hitTestTarget) return hitTestTarget;
 				}
 				

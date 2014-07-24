@@ -33,8 +33,9 @@ package
 			{
 				timeScale:1.0,
 				tickDeltaTime:1.0 / 60,
-					maxTicksPerFrame:5
-			},
+				maxTicksPerFrame:5
+			}
+			,
 			
 			clsType:"(class)com.croco2d::CrocoEngine",
 			
@@ -43,31 +44,6 @@ package
 				debug:true,
 				initComponents:
 				[
-					{
-						clsType:"(class)com.croco2d.core::GameObject",
-
-						callback:function(go:GameObject):void
-						{
-//							go.transform.setPivotPosition(100,100);
-						}
-						,
-						props:
-						{
-							debug:true,
-							name:AppConfig.KEY_CAMERA,
-							initComponents:
-							[
-								{
-									clsType:"(class)com.croco2d.components.render::CameraRenderComponent",
-									props:
-									{
-										debug:true
-									}
-								}
-							]
-						}
-					},
-					
 					{
 						clsType:"(class)com.croco2d.input::InputManager",
 						props:

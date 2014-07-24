@@ -353,6 +353,11 @@ package com.croco2d
 		{
 			super.onDebugDraw();
 			
+			if(camera && camera.__alive && camera.debug)
+			{
+				camera.__onDebugDrawCallback();
+			}
+			
 			if(rootGameObject && rootGameObject.__alive && rootGameObject.debug)
 			{
 				rootGameObject.__onDebugDrawCallback();
