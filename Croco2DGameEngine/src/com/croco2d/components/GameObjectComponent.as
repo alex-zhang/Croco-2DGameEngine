@@ -21,22 +21,22 @@ package com.croco2d.components
 		{
 			return owner as GameObject;
 		}
-		
+
 		public final function get transform():TransformComponent
 		{
 			return gameObject.transform;
 		}
-		
+
 		public final function get render():RenderComponent
 		{
 			return gameObject.render;
 		}
-		
+
 		public final function get spatialCollision():SpatialCollisionComponent
 		{
 			return gameObject.spatialCollision;
 		}
-		
+
 		public final function get physicsSpace():PhysicsSpaceComponent
 		{
 			return gameObject.physicsSpace;

@@ -398,14 +398,7 @@ package com.croco2d
 			
 		//----------------------------------------------------------------------
 		
-		//constractor.
-		//----------------------------------------------------------------------
-		public function AppConfig()
-		{
-			super();
-		}
-		
-		//Strong Reference Clsses.
+		//Strong Reference Classes.
 		//----------------------------------------------------------------------
 		Starling;
 		CrocoScreenNavigator;

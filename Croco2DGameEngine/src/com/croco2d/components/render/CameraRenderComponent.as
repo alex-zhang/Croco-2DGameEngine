@@ -11,7 +11,7 @@ package com.croco2d.components.render
 
 	public class CameraRenderComponent extends RenderComponent
 	{
-		public var watchTarget:GameObject;
+		public var renderTarget:GameObject;
 
 		public function CameraRenderComponent()
 		{
@@ -21,30 +21,32 @@ package com.croco2d.components.render
 		override protected function onActive():void
 		{
 			GameObject(owner).cameraRender = this;
-			
-			watchTarget = CrocoEngine.rootGameObject;
-			
+
+            renderTarget = CrocoEngine.rootGameObject;
+
 			CrocoEngine.instance.addEventListener(CrocoEngine.EVENT_CANVAS_STAGE_TOUCH, canvasTouchHandler);
 			CrocoEngine.instance.addEventListener(CrocoEngine.EVENT_CHANGED_ROOT_GAME_OBJECT, rootGameObjectChangedHandler);
-//			CrocoEngine.instance.addEventListener(CrocoEngine.EVENT_STAGE_RESIZE, stageResizeHandler);
+            CrocoEngine.instance.addEventListener(CrocoEngine.EVENT_STAGE_RESIZE, stageResizeHandler);
+
+            transform.setPivotPosition(CrocoEngine.stageWidth * 0.5, CrocoEngine.stageHeight * 0.5);
 		}
 		
 		override protected function onDeactive():void
 		{
 			GameObject(owner).cameraRender = null;
-			
-			watchTarget = null;
+
+            renderTarget = null;
 			
 			CrocoEngine.instance.removeEventListener(CrocoEngine.EVENT_CANVAS_STAGE_TOUCH, canvasTouchHandler);
 			CrocoEngine.instance.removeEventListener(CrocoEngine.EVENT_CHANGED_ROOT_GAME_OBJECT, rootGameObjectChangedHandler);
-//			CrocoEngine.instance.addEventListener(CrocoEngine.EVENT_STAGE_RESIZE, stageResizeHandler);
+            CrocoEngine.instance.addEventListener(CrocoEngine.EVENT_STAGE_RESIZE, stageResizeHandler);
 		}
 		
 		override public function draw(support:RenderSupport, parentAlpha:Number):void
 		{
-			if(watchTarget && watchTarget.__alive && watchTarget.visible)
+			if(renderTarget && renderTarget.__alive && renderTarget.visible)
 			{
-				watchTarget.draw(support, parentAlpha);
+                renderTarget.draw(support, parentAlpha);
 			}
 		}
 		
@@ -78,7 +80,7 @@ package com.croco2d.components.render
 			{
 				touch = touches[i];
 				target = touch.target;
-				
+
 				if(target.myData.owner)
 				{
 					owner = target.myData.owner as CrocoObject;
@@ -96,7 +98,12 @@ package com.croco2d.components.render
 		
 		protected function rootGameObjectChangedHandler(rootGameObject:GameObject = null):void
 		{
-			watchTarget = CrocoEngine.rootGameObject;
+            renderTarget = CrocoEngine.rootGameObject;
 		}
+
+        protected function stageResizeHandler(event:Object = null):void
+        {
+            transform.setPivotPosition(CrocoEngine.stageWidth * 0.5, CrocoEngine.stageHeight * 0.5);
+        }
 	}
 }

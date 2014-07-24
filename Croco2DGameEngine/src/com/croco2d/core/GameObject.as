@@ -71,7 +71,7 @@ package com.croco2d.core
 		public var __gameObjectsGroup:CrocoObjectGroup;
 		public var __onAddGameObjectCallback:Function = onAddGameObject;
 		public var __onRemoveGameObjectCallback:Function = onRemoveGameObject;
-		
+
 		public function GameObject()
 		{
 			super();
@@ -239,23 +239,23 @@ package com.croco2d.core
 		public final function draw(support:RenderSupport, parentAlpha:Number):void
 		{
 			parentAlpha *= alpha;
-			
+
 			const lastBlendMode:String = support.blendMode;
-			
+            support.blendMode = blendMode;
+
 			//u will hard to break the parent matrix rule.
 			support.pushMatrix();
-			support.prependMatrix(transform.transformMatrix);
-			//record the render world modelViewMatrix.
-			
-			transform.__lastModelViewMatrix.copyFrom(support.modelViewMatrix);
 
-			support.blendMode = blendMode;
+			support.prependMatrix(transform.transformMatrix);
 
 			//u will hard to break the parent alpha rule.
 			if(render && render.__alive)
 			{
 				render.draw(support, parentAlpha);
 			}
+
+            //record the render world modelViewMatrix.
+            transform.__lastModelViewMatrix.copyFrom(support.modelViewMatrix);
 			
 			//children
 			var child:GameObject = __gameObjectsGroup.moveFirst() as GameObject;
@@ -270,6 +270,7 @@ package com.croco2d.core
 			}
 			
 			support.popMatrix();
+
 			support.blendMode = lastBlendMode;
 		}
 		

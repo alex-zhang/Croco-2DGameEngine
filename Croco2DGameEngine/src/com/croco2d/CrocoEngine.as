@@ -75,17 +75,17 @@ package com.croco2d
 		
 		//helper for reference.
 		public static var instance:CrocoEngine;
-		
-		public static var camera:GameObject;
+
+        public static var camera:GameObject;
+        /**
+         *  u can consider the rootGameObject as Scene.
+         */
+        public static var rootGameObject:GameObject;
+
 		public static var inputManager:InputManager;
 		public static var soundManager:SoundManager;
 		public static var globalAssetsManager:CrocoAssetsManager;
-		/**
-		 *  u can consider the rootGameObject as Scene.
-		 */		
-		public static var rootGameObject:GameObject;
-		
-		
+
 		public static var stageWidth:int = 0;
 		public static var stageHeight:int = 0;
 
@@ -160,7 +160,7 @@ package com.croco2d
 				{
 					rootGameObject.deactive();
 				}
-				
+
 				rootGameObject = value;
 				
 				if(!inited) return;
@@ -398,8 +398,8 @@ package com.croco2d
 }
 
 
+import com.croco2d.CrocoEngine;
 import flash.geom.Point;
-
 import starling.core.RenderSupport;
 import starling.display.DisplayObject;
 
@@ -412,11 +412,11 @@ final internal class CanvasStage extends DisplayObject
 	
 	override public function render(support:RenderSupport, parentAlpha:Number):void
 	{
-		com.croco2d.CrocoEngine.instance.draw(support, parentAlpha * alpha);
+		CrocoEngine.instance.draw(support, parentAlpha * alpha);
 	}
 	
 	override public function hitTest(localPoint:Point, forTouch:Boolean = false):DisplayObject
 	{
-		return com.croco2d.CrocoEngine.instance.hitTest(localPoint, forTouch); 
+		return CrocoEngine.instance.hitTest(localPoint, forTouch);
 	}
 }

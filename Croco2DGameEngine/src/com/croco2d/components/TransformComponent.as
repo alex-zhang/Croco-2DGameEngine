@@ -12,9 +12,8 @@ package com.croco2d.components
 		public var moveAble:Boolean = true;
 		public var zoomAble:Boolean = true;
 		public var rotateAble:Boolean = true;
-		
-		public var bounds:Point = new Point();
-		
+        public var sizeAble:Boolean = true;
+
 		public var __transformMatrix:Matrix = new Matrix();
 		public var __transformMatrixDirty:Boolean = false; 
 
@@ -28,6 +27,9 @@ package com.croco2d.components
 		public var __scaleY:Number = 1.0;
 
 		public var __rotation:Number = 0.0;
+
+        public var __width:Number = 0.0;
+        public var __height:Number = 0.0;
 
 		//record the cur ModelViewMatrix for later use.
 		public var __lastModelViewMatrix:Matrix = new Matrix();
@@ -123,7 +125,7 @@ package com.croco2d.components
 		{
 			return __pivotY;
 		}
-		
+
 		public function set pivotY(value:Number):void
 		{
 			setPivotPosition(__pivotX, value);
@@ -256,7 +258,7 @@ package com.croco2d.components
 		{
 			if(__transformMatrixDirty)
 			{
-				if(__rotation == 0)
+				if(__rotation == 0)//opt for rotation = 0;
 				{
 					__transformMatrix.setTo(__scaleX, 0.0, 0.0, __scaleY, 
 						__x - __pivotX * __scaleX, __y - __pivotY * __scaleY);
@@ -271,7 +273,7 @@ package com.croco2d.components
 					const d:Number   = __scaleY *  cos;
 					const tx:Number  = __x - __pivotX * a - __pivotY * c;
 					const ty:Number  = __y - __pivotX * b - __pivotY * d;
-					
+
 					__transformMatrix.setTo(a, b, c, d, tx, ty);
 				}
 				
@@ -317,5 +319,41 @@ package com.croco2d.components
 			
 			return result;
 		}
+
+        public function get width():Number
+        {
+            return __width;
+        }
+
+
+        public function set width(value:Number):void
+        {
+            setSize(value, __height);
+        }
+
+        public function get height():Number
+        {
+            return __height;
+        }
+
+        public function set height(value:Number):void
+        {
+            setSize(__width, value);
+        }
+
+        public function setSize(width:Number, height:Number):void
+        {
+            if(!sizeAble)
+            {
+                Logger.warn("TransformComponent sizeAble false!");
+                return;
+            }
+
+            if(__width != width || __height != height)
+            {
+                __width = width;
+                __height = height;
+            }
+        }
 	}
 }
