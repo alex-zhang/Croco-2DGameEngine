@@ -117,7 +117,7 @@ package com.croco2d.components.render
 		{
 			if(__ribbonTrail) 
 			{
-				__ribbonTrail(x0, y0, x1, y1, alpha);
+				__ribbonTrail.resetAllTo(x0, y0, x1, y1, alpha);
 			}
 		}
 		

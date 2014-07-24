@@ -1,7 +1,8 @@
 package com.croco2d.components.render
 {
 	import com.croco2d.CrocoEngine;
-	import com.croco2d.core.CrocoObject;
+    import com.croco2d.components.TransformComponent;
+    import com.croco2d.core.CrocoObject;
 	import com.croco2d.core.GameObject;
 	
 	import starling.core.RenderSupport;
@@ -20,7 +21,8 @@ package com.croco2d.components.render
 
 		override protected function onActive():void
 		{
-			GameObject(owner).cameraRender = this;
+            gameObject.isCameraTransformMatrix = true;
+            gameObject.cameraRender = this;
 
             renderTarget = CrocoEngine.rootGameObject;
 
@@ -29,11 +31,13 @@ package com.croco2d.components.render
             CrocoEngine.instance.addEventListener(CrocoEngine.EVENT_STAGE_RESIZE, stageResizeHandler);
 
             transform.setPivotPosition(CrocoEngine.stageWidth * 0.5, CrocoEngine.stageHeight * 0.5);
+            transform.setSize(CrocoEngine.stageWidth, CrocoEngine.stageHeight);
 		}
 		
 		override protected function onDeactive():void
 		{
-			GameObject(owner).cameraRender = null;
+            gameObject.isCameraTransformMatrix = false;
+            gameObject.cameraRender = null;
 
             renderTarget = null;
 			
@@ -73,7 +77,7 @@ package com.croco2d.components.render
 			
 			var touch:Touch;
 			var target:DisplayObject;
-			var owner:CrocoObject
+			var owner:CrocoObject;
 			var gameObject:GameObject;
 			
 			for(var i:int = 0; i < n; i++)
@@ -104,6 +108,7 @@ package com.croco2d.components.render
         protected function stageResizeHandler(event:Object = null):void
         {
             transform.setPivotPosition(CrocoEngine.stageWidth * 0.5, CrocoEngine.stageHeight * 0.5);
+            transform.setSize(CrocoEngine.stageWidth, CrocoEngine.stageHeight);
         }
 	}
 }

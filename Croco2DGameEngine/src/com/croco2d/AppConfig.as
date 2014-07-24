@@ -169,7 +169,20 @@ package com.croco2d
 			{
 				timeScale:1.0,
 				tickDeltaTime:1.0 / 60,
-				maxTicksPerFrame:5
+				maxTicksPerFrame:5,
+                camera:
+                {
+                    clsType:"(class)com.croco2d.core::GameObject",
+                    props:
+                    {
+                        initComponents:
+                        [
+                            {
+                                clsType:"(class)com.croco2d.components.render::CameraRenderComponent"
+                            }
+                        ]
+                    }
+                }
 			},
 
 			clsType:"(class)com.croco2d::CrocoEngine",
@@ -178,20 +191,6 @@ package com.croco2d
 			{
 				initComponents:
 				[
-					{
-						clsType:"(class)com.croco2d.core::GameObject",
-						props:
-						{
-							name:AppConfig.KEY_CAMERA,
-							initComponents:
-							[
-								{
-									clsType:"(class)com.croco2d.components.render::CameraRenderComponent"
-								}
-							]
-						}
-					},
-					
 					{
 						clsType:"(class)com.croco2d.input::InputManager",
 						props:
@@ -261,7 +260,7 @@ package com.croco2d
 		public static const KEY_APP_BOOTSTRAP:String = "appBootstrap";
 		public static const KEY_STARLING:String = "starling";
 		public static const KEY_CROCO_ENGINE:String = "crocoEngine";
-		public static const KEY_CAMERA:String = "camera";
+
 		public static const KEY_GLOBAL_ASSETS_MANAGER:String = "globalAssetsManager";
 		public static const KEY_INPUT_MANAGER:String = "inputManager";
 		public static const KEY_SOUND_MANAGER:String = "soundManager";

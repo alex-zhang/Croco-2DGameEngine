@@ -1,13 +1,13 @@
 package com.croco2d.components.script
 {
-	import com.croco2d.CrocoEngine;
-	import com.fireflyLib.utils.GlobalPropertyBag;
-	
-	import luaAlchemy.LuaAlchemy;
-	
-	import starling.core.Starling;
+    import com.croco2d.CrocoEngine;
+    import com.fireflyLib.utils.GlobalPropertyBag;
 
-	public class LuaScriptComponent extends ScriptComponent
+    import luaAlchemy.LuaAlchemy;
+
+    import starling.core.Starling;
+
+    public class LuaScriptComponent extends ScriptComponent
 	{
 		public var luaScriptStr:String;
 		public var __lua:LuaAlchemy;

@@ -1,13 +1,13 @@
 package com.croco2d.components
 {
 	import com.croco2d.core.GameObject;
-	import com.croco2d.utils.CrocoMathUtil;
-	import com.llamaDebugger.Logger;
+    import com.fireflyLib.utils.MathUtil;
+    import com.llamaDebugger.Logger;
 	
 	import flash.geom.Matrix;
-	import flash.geom.Point;
+    import flash.geom.Rectangle;
 
-	public class TransformComponent extends GameObjectComponent
+    public class TransformComponent extends GameObjectComponent
 	{
 		public var moveAble:Boolean = true;
 		public var zoomAble:Boolean = true;
@@ -154,17 +154,13 @@ package com.croco2d.components
 		
 		public function setPivotPosition(pivotX:Number, pivotY:Number):void
 		{
-			if(!moveAble)
-			{
-				Logger.warn("TransformComponent moveable false!");
-				return;
-			}
-			
+            //PivotPosition is inner Position, not limited by moveAble.
+
 			if(__pivotX != pivotX || __pivotY != pivotY)
 			{
 				__pivotX = pivotX;
 				__pivotY = pivotY;
-				
+
 				__transformMatrixDirty = true;
 			}
 		}
@@ -244,7 +240,7 @@ package com.croco2d.components
 				return;
 			}
 			
-			value = CrocoMathUtil.clampRadian(value);
+			value = MathUtil.clampRadian(value);
 			
 			if(__rotation != value)
 			{
@@ -288,7 +284,7 @@ package com.croco2d.components
 			__transformMatrixDirty = true;
 		}
 		
-		public function localToWorldMatrix(result:Matrix = null):Matrix
+		public function getWorldMatrix(result:Matrix = null):Matrix
 		{
 			if(result) result.identity();
 			else result = new Matrix();
@@ -303,22 +299,17 @@ package com.croco2d.components
 			return result;
 		}
 		
-		public function worldToLocalMatrix(result:Matrix = null):Matrix
-		{
-			if(result) result.identity();
-			else result = new Matrix();
-			
-			var go:GameObject = owner as GameObject;
-			while(go)
-			{
-				result.concat(gameObject.transform.transformMatrix);
-				go = go.owner as GameObject;
-			}
-			
-			result.invert();
-			
-			return result;
-		}
+		public function getCameraMatrix(cameraMatrix:Matrix, result:Matrix = null):Matrix
+        {
+            if(result) result.identity();
+            else result = new Matrix();
+
+            result = getWorldMatrix(result);
+
+            MathUtil.helperMatrix.copyFrom(transform.transformMatrix);
+            MathUtil.helperMatrix.invert();
+
+        }
 
         public function get width():Number
         {
@@ -354,6 +345,15 @@ package com.croco2d.components
                 __width = width;
                 __height = height;
             }
+        }
+
+        public function getBounds(matrix:Matrix = null, result:Rectangle = null):Rectangle
+        {
+            if(!matrix) matrix = transformMatrix;
+            if(!result) result = new Rectangle();
+
+            MathUtil.helperRect.setTo(0, 0, __width, __height);
+            return MathUtil.getBounds(MathUtil.helperRect, matrix, result);
         }
 	}
 }

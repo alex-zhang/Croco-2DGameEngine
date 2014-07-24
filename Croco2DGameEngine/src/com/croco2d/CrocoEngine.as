@@ -116,7 +116,7 @@ package com.croco2d
 			eventEnable = true;
 		}
 		
-		public final function start():void 
+		public final function start():void
 		{ 
 			if(__running) return;
 			
@@ -174,6 +174,30 @@ package com.croco2d
 				dispatchEvent(EVENT_CHANGED_ROOT_GAME_OBJECT, rootGameObject);
 			}
 		}
+
+
+        public final function setCamera(value:GameObject):void
+        {
+            if(camera != value)
+            {
+                if(camera)
+                {
+                    camera.deactive();
+                }
+
+                camera = value;
+
+                if(!inited) return;
+
+                if(camera)
+                {
+                    camera.init();
+                    camera.active();
+                }
+
+                dispatchEvent(EVENT_CHANGED_ROOT_GAME_OBJECT, camera);
+            }
+        }
 		
 		public final function advance(elapsedTime:Number):void
 		{
@@ -186,10 +210,6 @@ package com.croco2d
 			
 			switch(component.name)
 			{
-				case AppConfig.KEY_CAMERA:
-					camera = GameObject(component);
-					break;
-				
 				case AppConfig.KEY_INPUT_MANAGER:
 					inputManager = InputManager(component);
 					break;
@@ -208,10 +228,6 @@ package com.croco2d
 		{
 			switch(component.name)
 			{
-				case AppConfig.KEY_CAMERA:
-					camera = null;
-					break;
-				
 				case AppConfig.KEY_INPUT_MANAGER:
 					inputManager = null;
 					break;
@@ -283,6 +299,12 @@ package com.croco2d
 			stageHeight = sStage.stageHeight;
 
 			super.onInit();
+
+            if(camera)
+            {
+                camera.init();
+                camera.active();
+            }
 			
 			if(rootGameObject)
 			{
@@ -296,7 +318,12 @@ package com.croco2d
 		override public function tick(deltaTime:Number):void
 		{
 			super.tick(deltaTime);
-			
+
+            if(camera && camera.__alive && camera.tickable)
+            {
+                camera.tick(deltaTime);
+            }
+
 			if(rootGameObject && rootGameObject.__alive && rootGameObject.tickable)
 			{
 				rootGameObject.tick(deltaTime);

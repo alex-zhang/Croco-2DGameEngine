@@ -42,34 +42,35 @@ package com.croco2d.core
 		
 		public static function createFromJsonConfig(jsonConfig:Object):GameObject
 		{
-			return JsonObjectFactorUtil.createFromJsonConfig(jsonConfig);
-		}
-
+            return JsonObjectFactorUtil.createFromJsonConfig(jsonConfig);
+        }
 		//keep this not null
 		public var transform:TransformComponent;
-		
-		public var render:RenderComponent;
-		public var spatialCollisionManager:ISpatialCollisionManager;
+        public var isCameraTransformMatrix:Boolean = false;
+
+        public var render:RenderComponent;
+        public var spatialCollisionManager:ISpatialCollisionManager;
+
 		public var spatialCollision:SpatialCollisionComponent;
-		
-		public var physicsSpace:PhysicsSpaceComponent;
-		public var rigidbody:RigidbodyComponent;
-		public var collider:ColliderComponent;
+        public var physicsSpace:PhysicsSpaceComponent;
+        public var rigidbody:RigidbodyComponent;
+        public var collider:ColliderComponent;
+
 		public var cameraRender:RenderComponent;
-		
+
 		public var script:ScriptComponent;
-		
-		//we can control the tree's visible.
+        //we can control the tree's visible.
 		public var visible:Boolean = true;
-		//we can control the tree's alpha.
+        //we can control the tree's alpha.
 		public var alpha:Number = 1.0;
-		public var blendMode:String = BlendMode.AUTO;
+        public var blendMode:String = BlendMode.AUTO;
+
 		public var touchable:Boolean = true;
 
 		public var initChildrenGameObjects:Array;
+        public var __gameObjectsGroup:CrocoObjectGroup;
+        public var __onAddGameObjectCallback:Function = onAddGameObject;
 
-		public var __gameObjectsGroup:CrocoObjectGroup;
-		public var __onAddGameObjectCallback:Function = onAddGameObject;
 		public var __onRemoveGameObjectCallback:Function = onRemoveGameObject;
 
 		public function GameObject()
@@ -246,7 +247,16 @@ package com.croco2d.core
 			//u will hard to break the parent matrix rule.
 			support.pushMatrix();
 
-			support.prependMatrix(transform.transformMatrix);
+            if(!isCameraTransformMatrix)
+            {
+                MathUtil.helperMatrix.copyFrom(transform.transformMatrix);
+                MathUtil.helperMatrix.invert();
+                support.prependMatrix(MathUtil.helperMatrix);
+            }
+            else
+            {
+                support.prependMatrix(transform.transformMatrix);
+            }
 
 			//u will hard to break the parent alpha rule.
 			if(render && render.__alive)
@@ -254,9 +264,11 @@ package com.croco2d.core
 				render.draw(support, parentAlpha);
 			}
 
+            //if isCameraTransformMatrix his children will not effect by his matrix.
+            if(isCameraTransformMatrix) support.popMatrix();
             //record the render world modelViewMatrix.
             transform.__lastModelViewMatrix.copyFrom(support.modelViewMatrix);
-			
+
 			//children
 			var child:GameObject = __gameObjectsGroup.moveFirst() as GameObject;
 			while(child)
@@ -268,8 +280,8 @@ package com.croco2d.core
 				
 				child = __gameObjectsGroup.moveNext() as GameObject;
 			}
-			
-			support.popMatrix();
+
+            if(!isCameraTransformMatrix)  support.popMatrix();
 
 			support.blendMode = lastBlendMode;
 		}
