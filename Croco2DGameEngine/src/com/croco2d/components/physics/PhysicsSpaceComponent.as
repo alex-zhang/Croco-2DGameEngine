@@ -72,15 +72,20 @@ package com.croco2d.components.physics
 		
 		protected function onPhysicsSpaceInteractionBegin(interactionCallback:InteractionCallback):void
 		{
-//			var a:PhysicsObject = interactionCallback.int1.userData.entity;
-//			var b:PhysicsObject = interactionCallback.int2.userData.entity;
-//			
-//			if(a && a.__alive && a.physicsBeginContactCallEnabled) a.handleBeginContact(interactionCallback);
-//			if(b && b.__alive && b.physicsBeginContactCallEnabled) b.handleBeginContact(interactionCallback);
+			var a:RigidbodyComponent = interactionCallback.int1.userData.owner;
+			var b:RigidbodyComponent = interactionCallback.int2.userData.owner;
+
+			if(a && a.__alive && a.beginContactCallEnabled) a.__onBeginContactCallback(interactionCallback);
+			if(b && b.__alive && b.beginContactCallEnabled) b.__onBeginContactCallback(interactionCallback);
 		}
 		
 		protected function onPhysicsSpaceInteractionEnd(interactionCallback:InteractionCallback):void
 		{
+            var a:RigidbodyComponent = interactionCallback.int1.userData.owner;
+            var b:RigidbodyComponent = interactionCallback.int2.userData.owner;
+
+            if(a && a.__alive && a.endContactCallEnabled) a.__onBeginContactCallback(interactionCallback);
+            if(b && b.__alive && b.endContactCallEnabled) b.__onBeginContactCallback(interactionCallback);
 		}
 
 		override public function tick(deltaTime:Number):void
@@ -99,7 +104,13 @@ package com.croco2d.components.physics
 			}
 			
 			CrocoEngine.instance.removeEventListener(CrocoEngine.EVENT_AFTER_DRAW, globalAfterDrawHandler);
-			
+
+            if(__physicsDebug)
+            {
+                Starling.current.nativeOverlay.removeChild(__physicsDebug.display);
+                __physicsDebug = null;
+            }
+
 			if(__physicsSpace)
 			{
 				__physicsSpace.clear();

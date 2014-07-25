@@ -4,7 +4,8 @@ package com.croco2d.core
 	import com.croco2d.components.collision.ISpatialCollisionManager;
 	import com.croco2d.components.collision.SpatialCollisionComponent;
 	import com.croco2d.components.physics.ColliderComponent;
-	import com.croco2d.components.physics.PhysicsSpaceComponent;
+    import com.croco2d.components.physics.JointComponent;
+    import com.croco2d.components.physics.PhysicsSpaceComponent;
 	import com.croco2d.components.physics.RigidbodyComponent;
 	import com.croco2d.components.render.RenderComponent;
 	import com.croco2d.components.script.ScriptComponent;
@@ -31,7 +32,7 @@ package com.croco2d.core
 		public static const PROP_PHYSICS_SPACE:String = "physicsSpace";
 		public static const PROP_RIGID_BODY:String = "rigidbody";
 		public static const PROP_COLLIDER:String = "collider";
-//		public static const PROP_JOINT:String = "joint";
+		public static const PROP_JOINT:String = "joint";
 		
 		public static const PROP_SCRIPT:String = "scriptComponent";
 
@@ -55,6 +56,7 @@ package com.croco2d.core
         public var physicsSpace:PhysicsSpaceComponent;
         public var rigidbody:RigidbodyComponent;
         public var collider:ColliderComponent;
+        public var joint:JointComponent;
 
 		public var cameraRender:RenderComponent;
 
@@ -185,6 +187,10 @@ package com.croco2d.core
 					collider = component as ColliderComponent;
 					break;
 
+                case PROP_JOINT:
+                    joint = component as JointComponent;
+                    break;
+
 				case PROP_SCRIPT:
 					script = component as ScriptComponent;
 					break;
@@ -211,9 +217,9 @@ package com.croco2d.core
 					collider = null;
 					break;
 				
-//				case PROP_JOINT:
-//					joint = null;
-//					break;
+				case PROP_JOINT:
+					joint = null;
+					break;
 
 				case PROP_SCRIPT:
 					script = null;

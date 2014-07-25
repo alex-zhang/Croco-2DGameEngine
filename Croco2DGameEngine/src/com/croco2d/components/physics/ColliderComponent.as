@@ -8,9 +8,6 @@ package com.croco2d.components.physics
 
 	public class ColliderComponent extends GameObjectComponent
 	{
-		//refer
-		public var __rigidbodyComponent:RigidbodyComponent;
-		
 		public var __shape:Shape;
 		public var __material:Material;
 
@@ -42,16 +39,27 @@ package com.croco2d.components.physics
 		
 		override protected function onInit():void
 		{
-			__rigidbodyComponent = GameObject(owner).rigidbody;
-			
 			__shape = createShape();
 
-			if(__rigidbodyComponent)
+			if(rigidbody)
 			{
-				__shape.body = __rigidbodyComponent.__rigidbody;
+				__shape.body = rigidbody.__rigidbody;
 			}
 		}
-		
+
+        override protected function onActive():void
+        {
+            if(rigidbody)
+            {
+                __shape.body = rigidbody.__rigidbody;
+            }
+        }
+
+        override protected function onDeactive():void
+        {
+            __shape.body = null;
+        }
+
 		protected function createShape():Shape
 		{
 			return null;
@@ -60,8 +68,7 @@ package com.croco2d.components.physics
 		override public function dispose():void
 		{
 			super.dispose();
-			
-			__rigidbodyComponent = null;
+
 			__shape = null;
 		}
 	}

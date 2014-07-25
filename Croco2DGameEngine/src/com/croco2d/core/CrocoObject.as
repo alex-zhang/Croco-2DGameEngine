@@ -6,15 +6,14 @@ package com.croco2d.core
 	{
 		//the name of this CrocoObject
 		public var name:String = null;
-		
-		//the name of a group of CrocoObjects. 
+		//the name of a group of CrocoObjects.
 		public var type:String = null;
 		
 		//__alive true when new.
 		public var __alive:Boolean = true;
 		public var __inited:Boolean = false;
 		public var __actived:Boolean = false;
-		
+
 		public var tickable:Boolean = true;
 
 		public var parent:CrocoObject = null;

@@ -195,7 +195,7 @@ package com.croco2d
                     camera.active();
                 }
 
-                dispatchEvent(EVENT_CHANGED_ROOT_GAME_OBJECT, camera);
+                dispatchEvent(EVENT_CHANGED_CAMERA, camera);
             }
         }
 		

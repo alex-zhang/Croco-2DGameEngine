@@ -16,7 +16,7 @@ package com.croco2d.components
 		{
 			super();
 		}
-		
+
 		public final function get gameObject():GameObject
 		{
 			return owner as GameObject;
