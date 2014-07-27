@@ -3,6 +3,7 @@ package com.croco2d.components.physics
 	import com.croco2d.AppConfig;
 	import com.croco2d.CrocoEngine;
 	import com.croco2d.core.CrocoObject;
+	import com.croco2d.core.GameObject;
 	
 	import nape.callbacks.CbEvent;
 	import nape.callbacks.CbType;
@@ -19,7 +20,7 @@ package com.croco2d.components.physics
 
 	public class PhysicsSpaceComponent extends CrocoObject
 	{
-		public var timeStep:Number = AppConfig.globalEvnConfig.physicsStepTime;
+//		public var timeStep:Number = AppConfig.globalEvnConfig.physicsStepTime;
 		
 		/**
 		 * velocityIterations for the velocity constraint solver.
@@ -41,6 +42,8 @@ package com.croco2d.components.physics
 		public function PhysicsSpaceComponent()
 		{
 			super();
+			
+			this.name = GameObject.PROP_PHYSICS_SPACE;
 		}
 		
 		override protected function onInit():void
@@ -50,11 +53,11 @@ package com.croco2d.components.physics
 			__physicsSpace.listeners.add(new InteractionListener(CbEvent.BEGIN, InteractionType.ANY, CbType.ANY_BODY, 
 				CbType.ANY_BODY, 
 				onPhysicsSpaceInteractionBegin));
-			
+
 			__physicsSpace.listeners.add(new InteractionListener(CbEvent.END, InteractionType.ANY, CbType.ANY_BODY, 
 				CbType.ANY_BODY, onPhysicsSpaceInteractionEnd));
 			
-			__physicsDebug = new ShapeDebug(Starling.current.stage.stageWidth, Starling.current.stage.stageHeight);
+			__physicsDebug = new ShapeDebug(CrocoEngine.stageWidth, CrocoEngine.stageHeight);
 			Starling.current.nativeOverlay.addChild(__physicsDebug.display);
 			
 			CrocoEngine.instance.addEventListener(CrocoEngine.EVENT_AFTER_DRAW, globalAfterDrawHandler);
@@ -90,7 +93,7 @@ package com.croco2d.components.physics
 
 		override public function tick(deltaTime:Number):void
 		{
-			__physicsSpace.step(timeStep, velocityIterations, positionIterations);
+			__physicsSpace.step(deltaTime, velocityIterations, positionIterations);
 		}
 		
 		override public function dispose():void
@@ -103,7 +106,10 @@ package com.croco2d.components.physics
 				gravity = null;
 			}
 			
-			CrocoEngine.instance.removeEventListener(CrocoEngine.EVENT_AFTER_DRAW, globalAfterDrawHandler);
+			if(debug)
+			{
+				CrocoEngine.instance.removeEventListener(CrocoEngine.EVENT_AFTER_DRAW, globalAfterDrawHandler);
+			}
 
             if(__physicsDebug)
             {

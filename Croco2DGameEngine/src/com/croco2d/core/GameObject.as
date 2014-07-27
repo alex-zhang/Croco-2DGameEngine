@@ -1,11 +1,10 @@
 package com.croco2d.core
 {
+	import com.croco2d.CrocoEngine;
 	import com.croco2d.components.TransformComponent;
 	import com.croco2d.components.collision.ISpatialCollisionManager;
 	import com.croco2d.components.collision.SpatialCollisionComponent;
-	import com.croco2d.components.physics.ColliderComponent;
-    import com.croco2d.components.physics.JointComponent;
-    import com.croco2d.components.physics.PhysicsSpaceComponent;
+	import com.croco2d.components.physics.PhysicsSpaceComponent;
 	import com.croco2d.components.physics.RigidbodyComponent;
 	import com.croco2d.components.render.RenderComponent;
 	import com.croco2d.components.script.ScriptComponent;
@@ -31,8 +30,6 @@ package com.croco2d.core
 		public static const PROP_SPATIAL_COLLISION:String = "spatialCollisionComponent";
 		public static const PROP_PHYSICS_SPACE:String = "physicsSpace";
 		public static const PROP_RIGID_BODY:String = "rigidbody";
-		public static const PROP_COLLIDER:String = "collider";
-		public static const PROP_JOINT:String = "joint";
 		
 		public static const PROP_SCRIPT:String = "scriptComponent";
 
@@ -45,6 +42,7 @@ package com.croco2d.core
 		{
             return JsonObjectFactorUtil.createFromJsonConfig(jsonConfig);
         }
+		
 		//keep this not null
 		public var transform:TransformComponent;
         public var __isCameraTransformMatrix:Boolean = false;
@@ -55,8 +53,6 @@ package com.croco2d.core
 		public var spatialCollision:SpatialCollisionComponent;
         public var physicsSpace:PhysicsSpaceComponent;
         public var rigidbody:RigidbodyComponent;
-        public var collider:ColliderComponent;
-        public var joint:JointComponent;
 
 		public var cameraRender:RenderComponent;
 
@@ -83,8 +79,8 @@ package com.croco2d.core
 			transform = new TransformComponent();
 			transform.owner = this;
 			
-			//defualt is true, it will controll by global.
-			debug = true;
+			//defualt is controll by global.
+			debug = CrocoEngine.debug;
 		}
 		
 		public final function addGameObejct(gameObject:GameObject):GameObject
@@ -182,14 +178,6 @@ package com.croco2d.core
 				case PROP_RIGID_BODY:
 					rigidbody = component as RigidbodyComponent;
 					break;
-				
-				case PROP_COLLIDER:
-					collider = component as ColliderComponent;
-					break;
-
-                case PROP_JOINT:
-                    joint = component as JointComponent;
-                    break;
 
 				case PROP_SCRIPT:
 					script = component as ScriptComponent;
@@ -212,14 +200,6 @@ package com.croco2d.core
 				case PROP_RIGID_BODY:
 					rigidbody = null;
 					break;
-				
-				case PROP_COLLIDER:
-					collider = null;
-					break;
-				
-				case PROP_JOINT:
-					joint = null;
-					break;
 
 				case PROP_SCRIPT:
 					script = null;
@@ -241,6 +221,15 @@ package com.croco2d.core
 			super.onDebugDraw();
 			
 			__gameObjectsGroup.onDebugDraw();
+			
+			CrocoEngine.debugGraphics.lineStyle(1, 0x00FF00);
+			
+			var lineLenth:Number = 20;
+			
+			CrocoEngine.debugGraphics.moveTo(transform.x, transform.y - lineLenth);
+			CrocoEngine.debugGraphics.lineTo(transform.x, transform.y + lineLenth);
+			CrocoEngine.debugGraphics.moveTo(transform.x - lineLenth, transform.y);
+			CrocoEngine.debugGraphics.lineTo(transform.x + lineLenth, transform.y);
 		}
 		
 		public final function draw(support:RenderSupport, parentAlpha:Number):void
@@ -337,17 +326,30 @@ package com.croco2d.core
 			__gameObjectsGroup.__onRemoveChildCallback = onRemoveGameObject;
 			__gameObjectsGroup.init();
 			
-			
 			initChildrenGameObjects = null;
+		}
+		
+		override protected function onInited():void
+		{
+			if(script)
+			{
+				script.onGameObjectInited();
+			}
+			
+			super.onInited();
 		}
 		
 		override protected function onActive():void
 		{
+			super.onActive();
+			
 			__gameObjectsGroup.active();
 		}
 		
 		override protected function onDeactive():void
 		{
+			super.onDeactive();
+			
 			__gameObjectsGroup.deactive();
 		}
 		
@@ -366,7 +368,6 @@ package com.croco2d.core
 			spatialCollision = null;
 			physicsSpace = null;
 			rigidbody = null;
-			collider = null;
 			cameraRender = null;
 			
 			blendMode = null;

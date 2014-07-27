@@ -1,5 +1,6 @@
 package com.croco2d.components
 {
+	import com.croco2d.CrocoEngine;
 	import com.croco2d.core.GameObject;
 	import com.fireflyLib.utils.MathUtil;
 	import com.llamaDebugger.Logger;
@@ -301,12 +302,14 @@ package com.croco2d.components
 			return result;
 		}
 		
-		public function getCameraMatrix(cameraMatrix:Matrix, result:Matrix = null):Matrix
+		public function getCameraMatrix(result:Matrix = null):Matrix
         {
             if(result) result.identity();
             else result = new Matrix();
 
             result = getWorldMatrix(result);
+			
+//			MathUtil.helperMatrix.copyFrom(CrocoEngine.camera.transform.transformMatrix)
 
             MathUtil.helperMatrix.copyFrom(transform.transformMatrix);
             MathUtil.helperMatrix.invert();

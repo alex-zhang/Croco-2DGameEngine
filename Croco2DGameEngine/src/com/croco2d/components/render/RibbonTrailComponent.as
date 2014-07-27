@@ -12,11 +12,16 @@ package com.croco2d.components.render
 	public class RibbonTrailComponent extends RenderComponent
 	{
 		public var initTrailSegmentsCount:int = 10;
-		public var isAutoPlay:Boolean = true;
 		public var isUseWorldSpace:Boolean = true;//default is true.
 		
 		public var __texture:Texture;
 		public var __ribbonTrail:RibbonTrail;
+		
+		public var __followingEnable:Boolean = true;
+		public var __isPlaying:Boolean = true;
+		public var __followingRibbonSegmentLine:Vector.<RibbonSegment>;
+		public var __movingRatio:Number = 0.5;
+		public var __alphaRatio:Number = 0.95;
 		
 		public function RibbonTrailComponent()
 		{
@@ -39,39 +44,59 @@ package com.croco2d.components.render
 			}
 		}
 		
-		public function get followingEnable():Boolean { return __ribbonTrail ? __ribbonTrail.followingEnable : false; }
+		public function get followingEnable():Boolean { return __ribbonTrail ? __ribbonTrail.followingEnable : __followingEnable; }
 		public function set followingEnable(value:Boolean):void 
 		{ 
-			if(__ribbonTrail) 
+			if(__followingEnable != value)
 			{
-				__ribbonTrail.followingEnable = value;
+				__followingEnable = value;
+			
+				if(__ribbonTrail) 
+				{
+					__ribbonTrail.followingEnable = __followingEnable;
+				}
 			}
 		}
 		
 		public function get isPlaying():Boolean { return __ribbonTrail ? __ribbonTrail.isPlaying : false; }
 		public function set isPlaying(value:Boolean):void 
 		{
-			if(__ribbonTrail) 
+			if(__isPlaying != value)
 			{
-				__ribbonTrail.isPlaying = value;
+				__isPlaying = value;
+				
+				if(__ribbonTrail) 
+				{
+					__ribbonTrail.isPlaying = value;
+				}
 			}
 		}
 		
-		public function get movingRatio():Number { return __ribbonTrail ? __ribbonTrail.movingRatio : 0; }
+		public function get movingRatio():Number { return __ribbonTrail ? __ribbonTrail.movingRatio : __movingRatio; }
 		public function set movingRatio(value:Number):void 
-		{ 
-			if(__ribbonTrail) 
+		{
+			if(__movingRatio != value)
 			{
-				__ribbonTrail.movingRatio = value;
+				__movingRatio = value;
+				
+				if(__ribbonTrail) 
+				{
+					__ribbonTrail.movingRatio = __movingRatio;
+				}
 			}
 		}
 		
-		public function get alphaRatio():Number { return __ribbonTrail ? __ribbonTrail.alphaRatio : 0; }
+		public function get alphaRatio():Number { return __ribbonTrail ? __ribbonTrail.alphaRatio : __alphaRatio; }
 		public function set alphaRatio(value:Number):void 
 		{
-			if(__ribbonTrail) 
+			if(__alphaRatio != value)
 			{
-				__ribbonTrail.alphaRatio = value;
+				__alphaRatio = value;
+					
+				if(__ribbonTrail) 
+				{
+					__ribbonTrail.alphaRatio = __alphaRatio;
+				}
 			}
 		}
 		
@@ -103,11 +128,18 @@ package com.croco2d.components.render
 		 * @param followingRibbonSegmentLine
 		 * 
 		 */		
-		public function followTrailSegmentsLine(followingRibbonSegmentLine:Vector.<RibbonSegment>):void
+		public function get followingRibbonSegmentLine():Vector.<RibbonSegment>
 		{
-			if(__ribbonTrail) 
+			return __followingRibbonSegmentLine;
+		}
+		
+		public function set followingRibbonSegmentLine(value:Vector.<RibbonSegment>):void
+		{
+			__followingRibbonSegmentLine = value;
+
+			if(__ribbonTrail)
 			{
-				__ribbonTrail.followTrailSegmentsLine(followingRibbonSegmentLine);
+				__ribbonTrail.followTrailSegmentsLine(__followingRibbonSegmentLine);
 			}
 		}
 		
@@ -130,11 +162,11 @@ package com.croco2d.components.render
 			}
 
 			__ribbonTrail = new RibbonTrail(__texture, initTrailSegmentsCount);
-			
-			if(isAutoPlay)
-			{
-				this.isPlaying = true;
-			}
+			__ribbonTrail.isPlaying = __isPlaying;
+			__ribbonTrail.followingEnable = __followingEnable;
+			__ribbonTrail.movingRatio = __movingRatio;
+			__ribbonTrail.alphaRatio = __alphaRatio;
+			__ribbonTrail.followTrailSegmentsLine(__followingRibbonSegmentLine);
 		}
 		
 		override public function tick(deltaTime:Number):void

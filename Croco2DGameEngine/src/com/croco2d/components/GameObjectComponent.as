@@ -1,7 +1,6 @@
 package com.croco2d.components
 {
 	import com.croco2d.components.collision.SpatialCollisionComponent;
-	import com.croco2d.components.physics.ColliderComponent;
 	import com.croco2d.components.physics.PhysicsSpaceComponent;
 	import com.croco2d.components.physics.RigidbodyComponent;
 	import com.croco2d.components.render.RenderComponent;
@@ -45,11 +44,6 @@ package com.croco2d.components
 		public final function get rigidbody():RigidbodyComponent
 		{
 			return gameObject.rigidbody;
-		}
-		
-		public final function get collider():ColliderComponent
-		{
-			return gameObject.collider;
 		}
 		
 		public final function get cameraRender():RenderComponent

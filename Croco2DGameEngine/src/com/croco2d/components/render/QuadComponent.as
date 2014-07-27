@@ -8,6 +8,9 @@ package com.croco2d.components.render
 		public var __quad:Quad;
 		public var __color:uint = 0xFFFFFF;//default;
 		
+		public var width:Number = 100;//default
+		public var height:Number = 100;//default
+		
 		public function QuadComponent()
 		{
 			super();
@@ -39,7 +42,7 @@ package com.croco2d.components.render
 		
 		override protected function onInit():void
 		{
-			__quad = new Quad(100, 100, __color);
+			__quad = new Quad(width, height, __color);
 			
 			super.dispalyObject = __quad;
 		}

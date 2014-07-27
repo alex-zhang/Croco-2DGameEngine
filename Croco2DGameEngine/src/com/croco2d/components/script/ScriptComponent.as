@@ -12,5 +12,9 @@ package com.croco2d.components.script
 			//default.
 			this.name = GameObject.PROP_SCRIPT;
 		}
+		
+		public function onGameObjectInited():void
+		{
+		}
 	}
 }

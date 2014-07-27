@@ -56,17 +56,16 @@ package com.croco2d.components.render
 		override public function onDebugDraw():void
 		{
 			CrocoEngine.debugGraphics.lineStyle(1, 0xFF0000);
-			
-			CrocoEngine.debugGraphics.drawRect(0, 0, CrocoEngine.stageWidth - 1, CrocoEngine.stageHeight);
+			CrocoEngine.debugGraphics.drawRect(1, 1, CrocoEngine.stageWidth - 2, CrocoEngine.stageHeight - 2);
 
-			var lineLenth:Number = 20;
-			var halfWidth:Number = CrocoEngine.stageWidth * 0.5;
-			var halfHeight:Number = CrocoEngine.stageHeight * 0.5;
-			
-			CrocoEngine.debugGraphics.moveTo(halfWidth, halfHeight - lineLenth);
-			CrocoEngine.debugGraphics.lineTo(halfWidth, halfHeight + lineLenth);
-			CrocoEngine.debugGraphics.moveTo(halfWidth - lineLenth, halfHeight);
-			CrocoEngine.debugGraphics.lineTo(halfWidth + lineLenth, halfHeight);
+//			var lineLenth:Number = 20;
+//			var halfWidth:Number = CrocoEngine.stageWidth * 0.5;
+//			var halfHeight:Number = CrocoEngine.stageHeight * 0.5;
+//			
+//			CrocoEngine.debugGraphics.moveTo(halfWidth, halfHeight - lineLenth);
+//			CrocoEngine.debugGraphics.lineTo(halfWidth, halfHeight + lineLenth);
+//			CrocoEngine.debugGraphics.moveTo(halfWidth - lineLenth, halfHeight);
+//			CrocoEngine.debugGraphics.lineTo(halfWidth + lineLenth, halfHeight);
 		}
 		
 		protected function canvasTouchHandler(event:TouchEvent = null):void

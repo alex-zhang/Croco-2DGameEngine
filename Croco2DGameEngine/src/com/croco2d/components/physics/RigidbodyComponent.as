@@ -3,21 +3,20 @@ package com.croco2d.components.physics
 	import com.croco2d.components.GameObjectComponent;
 	import com.croco2d.components.TransformComponent;
 	import com.croco2d.core.GameObject;
-
-    import nape.callbacks.InteractionCallback;
-
-    import nape.constraint.ConstraintList;
+	
+	import nape.callbacks.InteractionCallback;
+	import nape.constraint.ConstraintList;
 	import nape.dynamics.ArbiterList;
 	import nape.geom.AABB;
 	import nape.geom.Vec2;
 	import nape.geom.Vec3;
 	import nape.phys.Body;
 	import nape.phys.BodyType;
-	import nape.phys.Compound;
-    import nape.phys.GravMassMode;
-    import nape.phys.InertiaMode;
-    import nape.phys.MassMode;
-    import nape.shape.ShapeList;
+	import nape.phys.GravMassMode;
+	import nape.phys.InertiaMode;
+	import nape.phys.MassMode;
+	import nape.shape.Shape;
+	import nape.shape.ShapeList;
 
     public class RigidbodyComponent extends GameObjectComponent
 	{
@@ -32,13 +31,15 @@ package com.croco2d.components.physics
 		
 		public var __rigidbody:Body;
 		public var __bodyType:BodyType = BodyType.DYNAMIC;//default
+		public var __shape:Shape;
 		public var __physicsSpaceComponent:PhysicsSpaceComponent;
 		
 		public var __allowMovement:Boolean = true;
 		public var __allowRotation:Boolean = true;
 		public var __angularVel:Number = 0.0;
-		public var __compound:Compound;
 		public var __disableCCD:Boolean = false;
+		
+		public var __position:Vec2;
 		
 		public var __transform:TransformComponent;
 		
@@ -48,7 +49,30 @@ package com.croco2d.components.physics
 			
 			name = GameObject.PROP_RIGID_BODY;
 		}
+		
+		public function get shape():Shape
+		{
+			return __shape;
+		}
+		
+		public function set shape(value:Shape):void
+		{
+			if(__shape != value)
+			{
+				if(__shape)
+				{
+					__shape.body = null;
+				}
 
+				__shape = value;
+				
+				if(__shape)
+				{
+					__shape.body = __rigidbody;
+				}
+			}
+		}
+		
 		public function get physicsSpaceComponent():PhysicsSpaceComponent
 		{
 			return __physicsSpaceComponent;
@@ -62,7 +86,7 @@ package com.croco2d.components.physics
 				
 				if(__rigidbody)
 				{
-					__rigidbody.space = __physicsSpaceComponent.__physicsSpace;
+					__rigidbody.space = __physicsSpaceComponent ? __physicsSpaceComponent.__physicsSpace : null;
 				}
 			}
 		}
@@ -129,24 +153,6 @@ package com.croco2d.components.physics
         public function get bounds():AABB
         {
             return __rigidbody ? __rigidbody.bounds : null;
-        }
-
-        public function get compound():Compound
-        {
-            return __compound;
-        }
-
-        public function set compound(value:Compound):void
-        {
-            if(__compound != value)
-            {
-                __compound = value;
-
-                if(__rigidbody)
-                {
-                    __rigidbody.compound = __compound;
-                }
-            }
         }
 
         public function get constraintInertia():Number
@@ -336,11 +342,13 @@ package com.croco2d.components.physics
 
         public function get position():Vec2
         {
-            return __rigidbody ? __rigidbody.position : null;
+            return __rigidbody ? __rigidbody.position : __position;
         }
 
         public function set position(value:Vec2):void
         {
+			__position = value;
+			
             if(__rigidbody)
             {
                 __rigidbody.position = value;
@@ -452,6 +460,8 @@ package com.croco2d.components.physics
             {
                 __rigidbody.applyImpulse(impulse, pos, sleepable);
             }
+			
+			return this;
         }
 
         public function buoyancyImpulse(rigidbodyComponent:RigidbodyComponent = null):Vec3
@@ -467,13 +477,14 @@ package com.croco2d.components.physics
 
         override protected function onInit():void
 		{
-			__transform = GameObject(owner).transform;
+			__transform = transform;
 			
-			__rigidbody = new Body(__bodyType, Vec2.weak(__transform.x, __transform.y));
+			__rigidbody = new Body(__bodyType, __position);
+			if(__shape) __shape.body = __rigidbody;
 			__rigidbody.allowMovement = __allowMovement;
 			__rigidbody.allowRotation = __allowRotation;
 			__rigidbody.angularVel = __angularVel;
-			__rigidbody.compound = __compound;
+//			__rigidbody.compound = __compound;
 			__rigidbody.disableCCD = __disableCCD;
 			__rigidbody.space = __physicsSpaceComponent ? __physicsSpaceComponent.__physicsSpace : null;
 			__rigidbody.userData.owner = this;//keep the ref.

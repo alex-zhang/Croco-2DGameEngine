@@ -45,16 +45,16 @@ package com.croco2d
 			//1.3333~ 1.777 ratio.
 			designWidth:960,
 			designHeight:600,
-			backgroundColor:0xFFFFFF,
-			frameRate:60,
+			backgroundColor:0x00,
+			frameRate:30,
 			textureScaleFactor:1.0,
 			textureUseMipmaps:false,
 			pauseEngineWhenDeActivated:true,
 			pauseRenderingWhenDeActivated:true,
 			startupLogger:true,
 			gravityX:0,
-			gravityY:980,
-			physicsStepTime: 1/ 20,
+			gravityY:600,
+			physicsStepTime: 1 / 20,
 			systemIdleMode:null
 		}
 		
@@ -175,10 +175,15 @@ package com.croco2d
                     clsType:"(class)com.croco2d.core::GameObject",
                     props:
                     {
+						debug:CrocoEngine.debug,
                         initComponents:
                         [
                             {
-                                clsType:"(class)com.croco2d.components.render::CameraRenderComponent"
+                                clsType:"(class)com.croco2d.components.render::CameraRenderComponent",
+								props:
+								{
+									debug:CrocoEngine.debug
+								}
                             }
                         ]
                     }
@@ -189,6 +194,7 @@ package com.croco2d
 			
 			props:
 			{
+				debug:CrocoEngine.debug,
 				initComponents:
 				[
 					{

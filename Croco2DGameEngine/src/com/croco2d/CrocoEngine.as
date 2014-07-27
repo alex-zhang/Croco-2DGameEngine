@@ -114,6 +114,7 @@ package com.croco2d
 			
 			name = AppConfig.KEY_CROCO_ENGINE;
 			eventEnable = true;
+			debug = CrocoEngine.debug;
 		}
 		
 		public final function start():void
@@ -293,7 +294,6 @@ package com.croco2d
 			
 			__canvasStage = new CanvasStage();
 			__canvasStage.addEventListener(TouchEvent.TOUCH, __onCanvasStageTouchCallback);
-			sStage.addChildAt(__canvasStage, 0);
 
 			stageWidth = sStage.stageWidth;
 			stageHeight = sStage.stageHeight;
@@ -341,7 +341,7 @@ package com.croco2d
 			}
 
 			//debug draw.
-			if(debug)
+			if(CrocoEngine.debug)
 			{
 				CrocoEngine.debugGraphics.clear();
 				__onDebugDrawCallback();
@@ -431,7 +431,9 @@ package com.croco2d
 
 
 import com.croco2d.CrocoEngine;
+
 import flash.geom.Point;
+
 import starling.core.RenderSupport;
 import starling.display.DisplayObject;
 

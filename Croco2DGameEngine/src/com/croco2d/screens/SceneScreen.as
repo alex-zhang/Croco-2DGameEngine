@@ -42,12 +42,22 @@ package com.croco2d.screens
 		
 		protected function onActiveScene():void
 		{
+			if(CrocoEngine.__canvasStage.parent != this)
+			{
+				this.addChild(CrocoEngine.__canvasStage);
+			}
+			
 			CrocoEngine.instance.setRootGameObject(scene);
 		}
 		
 		protected function onDeactiveScene():void
 		{
 			scene.deactive();
+			
+			if(CrocoEngine.__canvasStage.parent == this)
+			{
+				this.removeChild(CrocoEngine.__canvasStage);
+			}
 			
 			CrocoEngine.instance.setRootGameObject(null);
 		}

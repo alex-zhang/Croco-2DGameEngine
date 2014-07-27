@@ -511,7 +511,7 @@ package com.croco2d.components.render
 														  <startColorVariance red="0.00" green="0.00" blue="0.00" alpha="0.00"/>
 														  <finishColor red="1.00" green="0.31" blue="0.00" alpha="0.00"/>
 														  <finishColorVariance red="0.00" green="0.00" blue="0.00" alpha="0.00"/>
-														  <maxParticles value="500"/>
+														  <maxParticles value="200"/>
 														  <startParticleSize value="70.00"/>
 														  <startParticleSizeVariance value="49.53"/>
 														  <finishParticleSize value="10.00"/>
