@@ -52,6 +52,7 @@ package com.croco2d
 			pauseEngineWhenDeActivated:true,
 			pauseRenderingWhenDeActivated:true,
 			startupLogger:true,
+			startupLoggerConfigCallback:null,
 			gravityX:0,
 			gravityY:600,
 			physicsStepTime: 1 / 20,
@@ -63,31 +64,39 @@ package com.croco2d
 		{
 			preInitCallbackConfig:
 			{
-				onAppPreInitedCallback:null,
-				onGlobalPropertyBagInitedCallback:null,
-				onStarlingInitedCallback:null,
-				onAppPreInitCompletedCallback:null
+				onAppPreInitCallback:null,
+				onLlamaDebuggerInitCallback:null,
+				onGlobalPropertyBagInitCallback:null,
+				onStarlingInitCallback:null,
+				onAppPreInitCompleteCallback:null
 			},
 			
 			initCallbackConfig:
 			{
-				onAppInitedCallback:null,
-				onBootStrapScreenInitedCallback:null,
-				onScreensInitedCallback:null,
-				onFeathersInitedCallback:null,
-				onCrocoEngineInitedCallback:null,
-				onAppAssetsPreloadInitedCallback:null,
-				onAppAssetsPreloadStartedCallback:null,
-				onAppAssetsPreloadCompletedCallback:null,
-				onAppInitCompletedCallback:null
+				onAppInitCallback:null,
+				onFeathersInitCallback:null,
+				onBootStrapScreenInitCallback:null,
+				onScreensInitCallback:null,
+				onCrocoEngineInitCallback:null,
+				
+				//preloads
+				onCheckIsNeedAppAssetsPreloadCallback:null,//needs return true/false.
+				onAppAssetsPreloadInitCallback:null,
+				onAppAssetsPreloadStartCallback:null,
+				onAppAssetsPreloadProgressCallback:null,//args progress(0-1)
+				onAppAssetsPreloadCompleteCallback:null,
+				
+				onAppInitCompleteCallback:null
 			},
 			
 			systemEventCallbackConfig:
 			{
-				onAppBootStrapCompletedCallback:null,
-				onStarlingContextLostCallback:null,//event
-				onAppActivatedCallback:null,//event
-				onAppDeActivatedCallback:null//event
+				onAppBootStrapCompleteCallback:null,
+				onAppBootStrapCompletedThenReady2EntryScreenCallback:null,
+				
+				onStarlingContextLostCallback:null,//args event
+				onAppActivatedCallback:null,//args event
+				onAppDeActivatedCallback:null//args event
 			}
 		}
 		

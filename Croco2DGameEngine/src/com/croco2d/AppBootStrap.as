@@ -61,32 +61,33 @@ package com.croco2d
 		//this is first init, there will be another init after the staling root created.
 		croco_internal function preInit():void
 		{
+			onAppConfigInit();
+			
 			var preInitCallbackConfig:Object = AppConfig.systemCallbackConfig.preInitCallbackConfig;
 			
-			onAppPreInit();
-			if(preInitCallbackConfig.onAppPreInitedCallback)
-			{
-				preInitCallbackConfig.onAppPreInitedCallback.call(null);
-			}
-
-			globalPropertyBagInit();
-			if(preInitCallbackConfig.onGlobalPropertyBagInitedCallback)
-			{
-				preInitCallbackConfig.onGlobalPropertyBagInitedCallback.call(null);
-			}
+			var onAppPreInitCallback:Function = preInitCallbackConfig.onAppPreInitCallback || onAppPreInit;
+			onAppPreInitCallback();
 			
-			onStarlingInit();
-			if(preInitCallbackConfig.onStarlingInitedCallback)
-			{
-				preInitCallbackConfig.onStarlingInitedCallback.call(null);
-			}
+			//LlamaDebugger
+			var onLlamaDebuggerInitCallback:Function = preInitCallbackConfig.onLlamaDebuggerInitCallback || onLlamaDebuggerInit;
+			onLlamaDebuggerInitCallback();
+			
+			//GlobalPropertyBag
+			var onGlobalPropertyBagInitCallback:Function = preInitCallbackConfig.onGlobalPropertyBagInitCallback || onGlobalPropertyBagInit;
+			onGlobalPropertyBagInitCallback();
+			
+			//Starling
+			var onStarlingInitCallback:Function = preInitCallbackConfig.onStarlingInitCallback || onStarlingInit;
+			onStarlingInitCallback();
 			
 			//the preInit last step.
-			onAppPreInitComplete();
-			if(preInitCallbackConfig.onAppPreInitCompletedCallback != null)
-			{
-				preInitCallbackConfig.onAppPreInitCompletedCallback.call(null);
-			}
+			var onAppPreInitCompleteCallback:Function = preInitCallbackConfig.onAppPreInitCompleteCallback || onAppPreInitComplete;
+			onAppPreInitCompleteCallback();
+		}
+		
+		protected function onAppConfigInit():void
+		{
+			Logger.info("onAppConfigInit");
 		}
 		
 		protected function onAppPreInit():void
@@ -102,11 +103,9 @@ package com.croco2d
 			stage.color = globalEvnConfig.backgroundColor;
 			stage.frameRate = globalEvnConfig.frameRate;
 			
-			if(globalEvnConfig.startupLogger) Logger.startup();
-			
 			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, appActivateHandler);
 			NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, appDeactivateHandler);
-			
+
 			if(globalEvnConfig.systemIdleMode)
 			{
 				NativeApplication.nativeApplication.systemIdleMode = globalEvnConfig.systemIdleMode;
@@ -115,9 +114,18 @@ package com.croco2d
 			stage.addEventListener(Event.RESIZE, stageResizeHandler);
 		}
 		
-		protected function globalPropertyBagInit():void
+		protected function onLlamaDebuggerInit():void
 		{
-			Logger.info("globalPropertyBagInit");
+			Logger.info("onLlamaDebuggerInit");
+			
+			var globalEvnConfig:Object = AppConfig.globalEvnConfig;
+			
+			if(globalEvnConfig.startupLogger) Logger.startup(globalEvnConfig.startupLoggerConfigCallback);
+		}
+		
+		protected function onGlobalPropertyBagInit():void
+		{
+			Logger.info("onGlobalPropertyBagInit");
 			
 			var globalPropertyBagConfig:Object = AppConfig.globalPropertyBagConfig;
 
@@ -166,50 +174,30 @@ package com.croco2d
 		{
 			var initCallbackConfig:Object = AppConfig.systemCallbackConfig.initCallbackConfig;
 			
-			onAppInit();
-			if(initCallbackConfig.onAppInitedCallback)
-			{
-				initCallbackConfig.onAppInitedCallback.call(null);
-			}
+			var onAppInitCallback:Function = initCallbackConfig.onAppInitCallback || onAppInit;
+			onAppInitCallback();
 			
-			onFeathersInit();
-			if(initCallbackConfig.onFeathersInitedCallback)
-			{
-				initCallbackConfig.onFeathersInitedCallback.call(null);
-			}
+			var onFeathersInitCallback:Function = initCallbackConfig.onFeathersInitCallback || onFeathersInit;
+			onFeathersInitCallback();
 			
-			onBootStrapScreenInit();
-			if(initCallbackConfig.onBootStrapScreenInitedCallback)
-			{
-				initCallbackConfig.onBootStrapScreenInitedCallback.call(null);
-			}
+			var onBootStrapScreenInitCallback:Function = initCallbackConfig.onBootStrapScreenInitCallback || onBootStrapScreenInit;
+			onBootStrapScreenInitCallback();
 			
-			onScreensInit();
-			if(initCallbackConfig.onScreensInitedCallback)
-			{
-				initCallbackConfig.onScreensInitedCallback.call(null);
-			}
+			var onScreensInitCallback:Function = initCallbackConfig.onScreensInitCallback || onScreensInit;
+			onScreensInitCallback();
 			
-			onCrocoEngineInit();
-			if(initCallbackConfig.onCrocoEngineInitedCallback)
-			{
-				initCallbackConfig.onCrocoEngineInitedCallback.call(null);
-			}
-
-			var isNeedAppAssetsPreload:Boolean = checkIsNeedAppAssetsPreload();
+			var onCrocoEngineInitCallback:Function = initCallbackConfig.onCrocoEngineInitCallback || onCrocoEngineInit;
+			onCrocoEngineInitCallback();
+			
+			var onCheckIsNeedAppAssetsPreloadCallback:Function = initCallbackConfig.onCheckIsNeedAppAssetsPreloadCallback || onCheckIsNeedAppAssetsPreload;
+			var isNeedAppAssetsPreload:Boolean = onCheckIsNeedAppAssetsPreloadCallback();
 			if(isNeedAppAssetsPreload)
 			{
-				onAppAssetsPreloadInit();
-				if(initCallbackConfig.onAppAssetsPreloadInitedCallback)
-				{
-					initCallbackConfig.onAppAssetsPreloadInitedCallback.call(null);
-				}
+				var onAppAssetsPreloadInitCallback:Function = initCallbackConfig.onAppAssetsPreloadInitCallback || onAppAssetsPreloadInit;
+				onAppAssetsPreloadInitCallback();
 				
-				onAppAssetsPreloadStart();
-				if(initCallbackConfig.onAppAssetsPreloadStartedCallback)
-				{
-					initCallbackConfig.onAppAssetsPreloadStartedCallback.call(null);
-				}
+				var onAppAssetsPreloadStartCallback:Function = initCallbackConfig.onAppAssetsPreloadStartCallback || onAppAssetsPreloadStartCallback;
+				onAppAssetsPreloadStartCallback();
 			}
 			else
 			{
@@ -219,11 +207,8 @@ package com.croco2d
 				}	
 			}
 			
-			onAppInitComplete();
-			if(initCallbackConfig.onAppInitCompletedCallback != null)
-			{
-				initCallbackConfig.onAppInitCompletedCallback.call(null);
-			}
+			var onAppInitCompleteCallback:Function = initCallbackConfig.onAppInitCompleteCallback || onAppInitComplete;
+			onAppInitCompleteCallback();
 			
 			//no BootStrapScreen and No preload, just go.
 			if(!isNeedAppAssetsPreload && !__bootStrapScreen)
@@ -310,7 +295,7 @@ package com.croco2d
 			}
 		}
 		
-		protected function checkIsNeedAppAssetsPreload():Boolean
+		protected function onCheckIsNeedAppAssetsPreload():Boolean
 		{
 			return AppConfig.FILE_PRELOAD_DIR.exists;
 		}
@@ -326,7 +311,11 @@ package com.croco2d
 		{
 			Logger.info("onAppAssetsPreloadStart");
 			
-			CrocoEngine.globalAssetsManager.loadQueue(onAppAssetsPreloadProgress);
+			var initCallbackConfig:Object = AppConfig.systemCallbackConfig.initCallbackConfig;
+			
+			var onAppAssetsPreloadProgressCallback:Function = initCallbackConfig.onAppAssetsPreloadProgressCallback || onAppAssetsPreloadProgress;
+			
+			CrocoEngine.globalAssetsManager.loadQueue(onAppAssetsPreloadProgressCallback);
 		}
 		
 		protected function onAppInitComplete():void
@@ -336,16 +325,14 @@ package com.croco2d
 		
 		//assets preload part.
 		//----------------------------------------------------------------------
-		private function onAppAssetsPreloadProgress(progress:Number):void
+		protected function onAppAssetsPreloadProgress(progress:Number):void
 		{
 			if(progress == 1)
 			{
-				onAppAssetsPreloadComplete();
 				var initCallbackConfig:Object = AppConfig.systemCallbackConfig.initCallbackConfig;
-				if(initCallbackConfig.onAppAssetsPreloadCompletedCallback != null)
-				{
-					initCallbackConfig.onAppAssetsPreloadCompletedCallback.call(null);
-				}
+				
+				var onAppAssetsPreloadCompleteCallback:Function = initCallbackConfig.onAppAssetsPreloadCompleteCallback || onAppAssetsPreloadComplete; 
+				onAppAssetsPreloadCompleteCallback()
 
 				//if there is no BootStrapScreen and progress equal 1. just go.
 				//or will wait the BootStrapScreen to dispatch the event.
@@ -379,6 +366,7 @@ package com.croco2d
 					__crocoEngine.stop();
 				}
 			}
+			
 			if(__starling) 
 			{
 				if(globalEvnConfig.pauseRenderingWhenDeActivated)
@@ -390,7 +378,7 @@ package com.croco2d
 			var systemEventCallbackConfig:Object = AppConfig.systemCallbackConfig.systemEventCallbackConfig;
 			if(systemEventCallbackConfig.onAppDeActivatedCallback != null)
 			{
-				systemEventCallbackConfig.onAppDeActivatedCallback.call(null, event);
+				systemEventCallbackConfig.onAppDeActivatedCallback(event);
 			}
 		}
 
@@ -405,7 +393,7 @@ package com.croco2d
 					__crocoEngine.start();
 				}
 			}
-			if(__starling) 
+			if(__starling)
 			{
 				if(globalEvnConfig.pauseRenderingWhenDeActivated)
 				{
@@ -416,16 +404,19 @@ package com.croco2d
 			var systemEventCallbackConfig:Object = AppConfig.systemCallbackConfig.systemEventCallbackConfig;
 			if(systemEventCallbackConfig.onAppActivatedCallback != null)
 			{
-				systemEventCallbackConfig.onAppActivatedCallback.call(null, event);
+				systemEventCallbackConfig.onAppActivateCallback(event);
 			}
 		}
 		
 		protected function stageResizeHandler(event:Event):void
 		{
-			if(__starling) updateStarlingViewPort();
+			if(__starling)
+			{
+				onUpdateStarlingViewPort();
+			}
 		}
 		
-		protected function updateStarlingViewPort():void
+		protected function onUpdateStarlingViewPort():void
 		{
 			var viewPortX:Number = 0;
 			var viewPortY:Number = 0;
@@ -481,14 +472,16 @@ package com.croco2d
 		{
 			this.removeEventListener(EVENT_BOOT_STRAP_COMPLETE, appBootStrapCompleteHandler);
 			
-			onAppBootStrapComplete();
 			var systemEventCallbackConfig:Object = AppConfig.systemCallbackConfig;
-			if(systemEventCallbackConfig.onAppBootStrapCompletedCallback != null)
-			{
-				systemEventCallbackConfig.onAppBootStrapCompletedCallback.call(null);
-			}
 			
-			onAppBootStrapCompletedThenReady2EntryScreen();
+			var onAppBootStrapCompleteCallback:Function = systemEventCallbackConfig.onAppBootStrapCompleteCallback || onAppBootStrapComplete;
+			onAppBootStrapCompleteCallback();
+
+			var onAppBootStrapCompletedThenReady2EntryScreenCallback:Function = systemEventCallbackConfig.onAppBootStrapCompletedThenReady2EntryScreenCallback || 
+				onAppBootStrapCompletedThenReady2EntryScreen;
+			onAppBootStrapCompletedThenReady2EntryScreenCallback();
+			
+			//no coonfig for this below.
 			onAppBootStrapCompletedAndClearSomethingsBefor();
 		}
 		
