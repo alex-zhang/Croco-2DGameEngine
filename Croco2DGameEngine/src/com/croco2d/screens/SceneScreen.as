@@ -29,6 +29,8 @@ package com.croco2d.screens
 		{
 			super.initialize();
 			
+			beforCreateScene();
+			
 			if(!scene)
 			{
 				scene = createScene();
@@ -38,6 +40,18 @@ package com.croco2d.screens
 			{
 				onActiveScene();
 			}
+			
+			afterCreateScene();
+		}
+		
+		protected function beforCreateScene():void
+		{
+			
+		}
+		
+		protected function afterCreateScene():void
+		{
+			
 		}
 		
 		protected function onActiveScene():void

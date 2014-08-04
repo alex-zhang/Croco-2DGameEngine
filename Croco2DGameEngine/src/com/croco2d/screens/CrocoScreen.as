@@ -19,8 +19,6 @@ package com.croco2d.screens
 		
 		override protected function initialize():void
 		{
-			super.initialize();
-			
 			if(!assetsManager)
 			{
 				assetsManager = new CrocoAssetsManager();

@@ -1,22 +1,25 @@
 package com.croco2d.screens
 {
+	import com.croco2d.AppBootStrap;
 	import com.croco2d.AppConfig;
 	
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.Sprite;
-	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.filesystem.File;
 	import flash.net.URLRequest;
-	import flash.utils.getTimer;
-	import com.croco2d.AppBootStrap;
+	
+	import starling.animation.Tween;
+	import starling.core.Starling;
 
 	public class FlashBootStrapScreen extends Sprite implements IBootStrapScreen
 	{
-		public var launchImage:String;
+		public var launchImage:Object;//String, Class(bitmap), instance....
+		public var fadeoutDelayTime:Number = 0;
 		public var fadeoutTime:Number = 0;
+		public var fadeoutProps:Object;
 		
 		protected var mLaunchImageLoader:Loader;
 		protected var mBootStrap:AppBootStrap;
@@ -24,12 +27,7 @@ package com.croco2d.screens
 		protected var mLaunchImageLoaded:Boolean = false;
 		protected var mAssetsPreloaded:Boolean = false;
 		
-		protected var mFadeoutLastTime:int = 0;
-		protected var mFadeoutCurTime:Number = 0;
-		
 		protected var mLaunchImage:DisplayObject;
-		
-		protected var mStage:Stage;
 		
 		public function FlashBootStrapScreen()
 		{
@@ -44,49 +42,47 @@ package com.croco2d.screens
 		//step1.
 		public function launch():void
 		{
-			mAssetsPreloaded = false;
+			onLaunchImageLoadStart();
 			
-			var launchImageURL:String = AppConfig.findAppResourcePath(launchImage);
-			var launchImageFile:File = File.applicationDirectory.resolvePath(launchImageURL);
+			this.stage.addEventListener(Event.RESIZE, stageResizeHandler);
+		}
+		
+		protected function onLaunchImageLoadStart():void
+		{
+			if(launchImage is Class) launchImage = new launchImage();
 			
-			if(launchImageFile.exists)
+			if(launchImage is DisplayObject)
 			{
-				mLaunchImageLoader = new Loader();
+				mLaunchImage = launchImage as DisplayObject;
+				onLaunchImageLoaded();
+			}
+			else if(launchImage is String)
+			{
+				var launchImageURL:String = AppConfig.findAppResourcePath(launchImage);
+				var launchImageFile:File = File.applicationDirectory.resolvePath(launchImageURL);
 				
-				mLaunchImageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, launchImageLoaderLoadCompletedHandler);
-				mLaunchImageLoaded = false;
-				mLaunchImageLoader.load(new URLRequest(launchImageURL));
+				if(launchImageFile.exists)
+				{
+					mLaunchImageLoader = new Loader();
+					mLaunchImageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, launchImageLoaderLoadCompletedHandler);
+					mLaunchImageLoader.load(new URLRequest(launchImageURL));
+				}
+				else
+				{
+					onLaunchImageLoaded();
+				}
 			}
 			else
 			{
-				mLaunchImageLoaded = true;
-			}
-			
-			mStage = this.stage;
-			mStage.addEventListener(Event.RESIZE, stageResizeHandler);
-		}
-		
-		protected function stageResizeHandler(event:Event):void
-		{
-			layout(stage.stageWidth, stage.stageHeight);
-		}
-		
-		protected function layout(stageWidth:int, stageHeight):void
-		{
-			if(mLaunchImage)
-			{
-				mLaunchImage.x = (mStage.stageWidth - mLaunchImage.width) * 0.5;
-				mLaunchImage.y = (mStage.stageHeight - mLaunchImage.height) * 0.5;
+				onLaunchImageLoaded();
 			}
 		}
 		
-		private function launchImageLoaderLoadCompletedHandler(event:Event):void
+		protected function launchImageLoaderLoadCompletedHandler(event:Event):void
 		{
 			mLaunchImageLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, launchImageLoaderLoadCompletedHandler);
-			mLaunchImageLoaded = true;
-			
-			layout(stage.stageWidth, stage.stageHeight);
-			
+
+			mLaunchImage = mLaunchImageLoader.content;
 			onLaunchImageLoaded();
 		}
 		
@@ -102,9 +98,13 @@ package com.croco2d.screens
 		
 		protected function onLaunchImageLoaded():void
 		{
-			mLaunchImage = mLaunchImageLoader.content;
-			addChild(mLaunchImage);
-			layout(stage.stageWidth, stage.stageHeight);
+			mLaunchImageLoaded = true;
+			
+			if(mLaunchImage)
+			{
+				addChild(mLaunchImage);
+				layout(stage.stageWidth, stage.stageHeight);
+			}
 			
 			if(mAssetsPreloaded)
 			{
@@ -123,12 +123,22 @@ package com.croco2d.screens
 		//step2.
 		protected function fadeoutBootStrapScreen():void
 		{
-			if(fadeoutTime > 0)
+			if(fadeoutDelayTime > 0)
 			{
-				mFadeoutCurTime = 0.0;
-				mFadeoutLastTime = getTimer();
-				
-				this.addEventListener(Event.ENTER_FRAME, fadeoutEffectEnterframeHandler);
+				Starling.juggler.delayCall(onFadeoutEffectStart, fadeoutDelayTime);
+			}
+			else
+			{
+				onFadeoutEffectStart();
+			}
+		}
+		
+		protected function onFadeoutEffectStart():void
+		{
+			if(fadeoutTime > 0 && fadeoutProps != null)
+			{
+				var tween:Tween = Starling.juggler.tween(this, fadeoutTime, fadeoutProps) as Tween;
+				tween.onComplete = onFadeoutEffectCompleted;
 			}
 			else
 			{
@@ -136,47 +146,34 @@ package com.croco2d.screens
 			}
 		}
 		
-		protected function fadeoutEffectEnterframeHandler(event:Event):void
-		{
-			var curTime:int = getTimer();
-			var deltaTimer:Number = (curTime - mFadeoutLastTime) * 0.001; 
-			mFadeoutLastTime = curTime;
-			
-			mFadeoutCurTime += deltaTimer;
-			if(mFadeoutCurTime >= fadeoutTime)
-			{
-				mFadeoutCurTime = 0.0;
-				
-				this.removeEventListener(Event.ENTER_FRAME, fadeoutEffectEnterframeHandler);
-				
-				onFadeoutEffectCompleted();
-			}
-			else
-			{
-				this.alpha = 1- mFadeoutCurTime / fadeoutTime;
-			}
-		}
-		
 		protected function onFadeoutEffectCompleted():void
 		{
-			this.stage.removeEventListener(Event.RESIZE, stageResizeHandler);
-			
-			dispatchBootStrapCompleteEvent();
+			onBootStrapComplete();
 		}
 		
-		protected function dispatchBootStrapCompleteEvent():void
+		protected function onBootStrapComplete():void
 		{
+			stage.removeEventListener(Event.RESIZE, stageResizeHandler);
+			
 			mBootStrap.dispatchEvent(new Event(AppBootStrap.EVENT_BOOT_STRAP_COMPLETE));
+		}
+		
+		protected function stageResizeHandler(event:Event):void
+		{
+			layout(stage.stageWidth, stage.stageHeight);
+		}
+		
+		protected function layout(stageWidth:int, stageHeight):void
+		{
+			if(mLaunchImage)
+			{
+				mLaunchImage.x = (this.stage.stageWidth - mLaunchImage.width) * 0.5;
+				mLaunchImage.y = (this.stage.stageHeight - mLaunchImage.height) * 0.5;
+			}
 		}
 
 		public function dispose():void
 		{
-			if(mStage)
-			{
-				mStage.removeEventListener(Event.RESIZE, stageResizeHandler);
-				mStage = null;
-			}
-			
 			if(mLaunchImageLoader)
 			{
 				mLaunchImageLoader.unloadAndStop(false);

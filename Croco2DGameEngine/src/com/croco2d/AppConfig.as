@@ -166,7 +166,9 @@ package com.croco2d
 			props:
 			{
 				launchImage:"launchImage.png",
-				fadeoutTime:2
+				fadeoutDelayTime:2,
+				fadeoutTime:2,
+				fadeoutProps:{alpha:0}
 			}
 		}
 		

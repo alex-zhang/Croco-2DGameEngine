@@ -196,7 +196,7 @@ package com.croco2d
 				var onAppAssetsPreloadInitCallback:Function = initCallbackConfig.onAppAssetsPreloadInitCallback || onAppAssetsPreloadInit;
 				onAppAssetsPreloadInitCallback();
 				
-				var onAppAssetsPreloadStartCallback:Function = initCallbackConfig.onAppAssetsPreloadStartCallback || onAppAssetsPreloadStartCallback;
+				var onAppAssetsPreloadStartCallback:Function = initCallbackConfig.onAppAssetsPreloadStartCallback || onAppAssetsPreloadStart;
 				onAppAssetsPreloadStartCallback();
 			}
 			else
